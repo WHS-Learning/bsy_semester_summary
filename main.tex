@@ -1,5 +1,10 @@
 \documentclass[11pt, oneside]{report}
 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{positioning, decorations.pathreplacing, calligraphy, calc}
+
 \include{config/globals}
 \usepackage{config/style}
 \usepackage{config/code}
@@ -23,24 +28,17 @@
 
 	\pagenumbering{arabic}
 
-	\part{Basics}
-	\include{chapters/example_text}
-
-	\part{Examples}
-	\include{chapters/example_math}
-	\include{chapters/example_code}
-	\include{chapters/example_citation}
-	\include{chapters/example_table}
+	\include{chapters/einführung}
 
 	\pagestyle{empty}
 	\pagenumbering{roman}
 	\setcounter{page}{1}
 
-	\part{Extra}
-	\phantomsection
-	\addcontentsline{toc}{chapter}{Bibliography}
-	\printbibliography
+	% \part{Extra}
+	% \phantomsection
+	% \addcontentsline{toc}{chapter}{Bibliography}
+	% \printbibliography
 
-	\include{appendices}
+	% \include{appendices}
 
 \end{document}
