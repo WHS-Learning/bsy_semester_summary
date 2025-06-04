@@ -199,7 +199,7 @@ Der Gedanke eines Betriebssystems für alle Anwendungsfälle klingt erst einaml 
 
 \subsection{Betriebssysteme für Großrechner}
 
-Systeme enormer größe, welche ein ganzen Raum beanspruchen können. Sie besitzen eine enorme \texttt{I/O} Leistung mit 1000 oder mehr Festplatten. Ihr ziel ist es, viele Prozesse gleichzeitig auszuführen. Hier sind typische Betriebssysteme OS/390, OS/360 und Linux
+Systeme enormer größe, welche ein ganzen Raum beanspruchen können. Sie besitzen eine enorme \texttt{I/O} Leistung mit 1000 oder mehr Festplatten. Ihr ziel ist es, viele Prozesse gleichzeitig auszuführen. Hier sind typische Betriebssysteme OS/390, OS/360 und Linux.
 
 \subsection{Betriebssysteme für Server}
 
@@ -207,3 +207,98 @@ Server sollen viele Nutzer gleichzeitig über das Netzwerk bedienen. Sie verteil
 
 \subsection{Betriebssysteme für Multiprozessorsysteme}
 
+Multiprozessorsysteme sind Rechner mit mehreren Prozessoren. Das größte Problem solcher Rechnern sind Anwendungen, die Prarallelisiert werden müssen. Betriebssysteme sind hier beispielsweise Windows und Linux.
+
+\subsection{Betriebssysteme für PCs}
+
+Das Betriebssystem muss bei Betriebssystemen für PCs den Anwender sehr gut unterstützen. Auf PCs wird eine große vielfalt an Anwendungen ausgeführt, wie z.B. Tabellenkalkulation, Textverarbeitung, Spiele uvm. Hier sind Typische Betriebssysteme Linux, FreeBSD, Windows und OS X.
+
+\subsection{Betriebssysteme für Handheld Computer}
+
+Handheld Computer sind Smartphones, Tablets, PDAs u.ä. Diese Computer besitzen meist Mehrkern-CPUs, Kameras, Sensoren und begrenzten Speicherplatz. Hier werden viele Anwendungen von Drittanbietern installiert $\Rightarrow$ Apps. Übliche Betriebssysteme sind hier Android, ISO und Blackberry OS.
+
+\subsection{Betriebssysteme für eingebettete Systeme}
+
+Eigebettete Systeme steuern andere Geräte wie z.B. Mikrowellen, TVs, Autos, Waschmaschinen uvm. Der Benutzer darf hier keine eigene Software installieren, dementsprechend wird nur vertrauenswürdige Software ausgeführt. Eingebettete Systeme haben aus diesem keine Schutzmechanismen zwischen den Anwendungen, da dies den Entwurf des Betriebssystems vereinfacht. Beispiele sind hier Embedded Linux, UNX und VxWorks.
+
+\subsection{Betriebssysteme für Sensorknoten}
+
+Sensorknoten sind winzige, aber vollständige Rechner mit Sensoren. Sie werden beispielsweise für Gebäudeschutz und Temperaturmessungen eingesetzt. Auf ihnen ist eine kleine Anzahl an Programmen Vorinstalliert. Ein Typisches Betriebssystem ist hier TinyOS.
+
+\subsection{Echtzeitbetriebssysteme}
+
+Bei Echtzeitbetriebssystemen wird zwischen \textit{Harten Echtzeitbetriebssystemen} und \textit{Weichen Echtzeitbetriebssystemen} unterschieden.
+
+\subsubsection*{Harte Echtzeitbetriebssysteme}
+
+Bei Harten Echtzeitbetriebssystemen müssen die Aktionen innerhalb eines bestimmten Zeitraumes passieren. Wenn die Aktion verzögert kommt, wird das Betriebssystem ein Fehler werfen und den Prozess beenden. Hier gibt es kein Schutz zwischen den Software Teilen. Ein Beispiel wäre eCos.
+
+\subsubsection*{Weiche Echtzeitbetriebssysteme}
+
+Bei Weichen Echtzeitbetriebssystemen ist ein verpassen der Deadline nicht erwünscht, wird aber tolleriert. Dies ist beispielsweise bei Audio- und Multimediasystemen der Fall. Ein Beispiel hier ist OS9.
+
+\subsection{Betriebssysteme für Smartcards}
+
+Smartcards haben meist die Größe von Kreditkarten. Sie besitzen einen eigenen Prozessor und werden meist über Induktion mit dem Lesegerät mit Strom versorgt. Sie haben meist nur eine oder wenige Funktionen.
+
+\section{Speicherverwaltung}
+
+Das Betriebssystem versorgt Prozesse mit Betriebsmitteln. Es schützt Prozesse vor gegenseitigen Storungen. Dies erfolgt durch \nameref{swapping} und \nameref{paging}.
+
+\subsection{Swapping}
+
+Das Speicherabbild eines Prozesses besteht aus Segmenten. Diese sind die Speicherzellen zwischen Anfangs- und End-Adresse. Diese Segmente können bei bedarf vollständig in den Massenspeicher übertragen werden. Die Anzahl dieser Segmente ist idr. klein, wohingegen die größe dieser Segmente beliebig groß sein kann.
+
+\subsection{Paging}
+
+Das Speicherabbild eines Prozesses besteht aus Seiten. Alle Seiten haben eine feste größe (z.B. $4KB$). Es müssen nur die benötigten Seiten im Speicher sein. Die Seitengröße ist idr. klein, wohingegen die Anzahl der Seiten größ ist. Nicht geladene Seiten, welche Addressiert werden, müssen nachgeladen werden.
+
+\subsubsection{Virtuelle Adressen}
+
+Jeder Prozess darf alle Adressen verwenden, die auf grund der Hardware möglich sind. Unabhängig von der größe des Arbeitsspeichers. Beispielsweise kann der Adressraum $256TB$ betragen, wärend der tatsächliche Physikalischer Speicher nur $8GB$ beträgt.
+
+\subsubsection{Reele Adressierung}
+
+Jeder Prozess bekommt sein eigenen Speichersegment zugewiesen. Dieser darf nur die Adressen in seinem Segment benutzen. Bei mehreren Prozessen wird der Hauptspeicher in mehreren Segmente aufgeteilt. Jeder Prozess bekommt sein eigenes Segment. 
+
+\section{Dateien}
+
+Dateien verbergen die Einzelheiten des Platten bzw. \texttt{I/O} Zugriffs. \textbf{Daten $\neq$ Dateien}, Daten sind der Inhalt von Dateien.
+
+Um eine Datei zu lesen oder zu schreiben, muss sie geöffnet werden. Vor dem öffnen einer Datei werden berechtigungen überprüft. Der Systemaufruf zum Datei öffnen liefert einen ganzzahligen Dateideskriptor oder einen Fehlercode. 
+
+Eingebundene Dateisysteme wie beispielsweise Wechseldatenträger müssen vor verwendung gemounted werden. Nach dem mount sind Dateien teil der Dateihierarchie. 
+
+\subsection{Verzeichnisse}
+
+Verzeichnisse gruppieren Dateien. Diese geben den Ort der Datei an. 
+
+\subsection{\texttt{I/O} unter UNIX}
+
+\texttt{I/O} Geräte sind unter Unix Spezialdateien. Auf sie kann über den selben Systemaufruf wie für Dateien zugegriffen werden. Diese Spezialdateien liegen im \texttt{/dev}-Verzeichnis. Es gibt zwei Arten von Spezialdateien
+
+\begin{enumerate}
+    \item \textbf{Blockdateien}: Blockdateien sammeln Daten in einem Block, bis dieser voll ist. Blöcke haben eine feste größe. Diese sind beispielsweise Plattenlaufwerke oder Bandgeräte
+    \item \textbf{Zeichendateien}: Zeichendateien schicken ihre Daten direkt an das Betriebssystem. Diese sind beispielsweise die Maus und die Tastatur.
+\end{enumerate}
+
+\subsection{Schutzmechanismen}
+
+Dateien müssen vor anderen Personen am Computer vor unbefugten Zugriff geschützt werden. Unter UNIX besteht der Schutz Code aus \textit{drei Bits}: \texttt{rwx}. Diese stehen für Eigentümer, Gruppe und Andere. Beispielsweise steht der Schutzcode \texttt{rwxr--x}, dass der Eigentümer Lesen, Schreiben und Ausführen, Mitglieder der Gruppe nur Lesen und Ausführen, und andere nur Ausführen dürfen.
+
+\section{Pipes}
+
+Eine Pipe ist eine Pseudodatei. Sie verbindet zwei Prozesse miteinander, sodass diese miteinander kommunizieren werden. Vor der Kommunikation zwischen Dateien muss der Kanal eingerichtet werden. Der Prozess A schickt seine Ausgabe als eingabe an den Prozess B.
+
+\section{Shell}
+
+Die Shell dient zur ausführung von Benutzerkomandos. die Shell ist \textit{kein} teil des Betriebssystems. Sie wird nach dem Login gestartet und nutzt ein Terminal als standard Ein- und Ausgabe. Bei der eingabe erzeugt die Shell einen Kindprozess und wartet auf dessen Terminierung. Nachdem der erzeugte Kindprozess terminiert, wird wieder zur Eingabe aufgefordert.
+
+\subsection*{Typische Shell-Funktionen}
+
+\begin{itemize}
+    \item \textbf{Umlenkung von Ausgabe}: \texttt{\$ date > file}
+    \item \textbf{Umlenkung von Ein- und Ausgabe}: \newline\texttt{\$ sort < file1 > file2}
+    \item \textbf{Pipe}: \texttt{\$ cat file1 file2 file3 | sort > /dev/lp}
+    \item \textbf{Hintergrundbearbeitung}: \newline\texttt{cat file1 file2 file3 | sort > /dev/lp \&}
+\end{itemize}

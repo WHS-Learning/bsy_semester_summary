@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{tikz}
-\usetikzlibrary{positioning, decorations.pathreplacing, calligraphy, calc}
+\usetikzlibrary{positioning, decorations.pathreplacing, calligraphy, calc, positioning, arrows.meta}
 
 \include{config/globals}
 \usepackage{config/style}
@@ -28,7 +28,14 @@
 
 	\pagenumbering{arabic}
 
+	\part{Semesterzusammenfassung}
+
 	\include{chapters/einführung}
+
+	\part{Übungsaufgaben}
+	\include{chapters/uebungsblatt_1}
+	\include{chapters/uebungsblatt_2}
+	\include{chapters/uebungsblatt_3}
 
 	\pagestyle{empty}
 	\pagenumbering{roman}
