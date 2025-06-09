@@ -1,10 +1,10 @@
-\chapter{Einführung}
+\chapter{Kapitel 1}
 
 Was ist ein Betriebssystem überhaupt? Diese Frage klingt zunächst trivial, ist aber gar nicht so einfach zu beantworten. Wesentlich einfacher lässt sich die Frage nach den Aufgaben eines Betriebssystems beantworten. Die direkte Interaktion mit Hardware ist oft komplex und wenig intuitiv, besonders wenn es um die Programmierung geht. Aus diesem Grund sollen Betriebssysteme die \textit{Hardwarekomplexität abstrahieren und verbergen}.
 
 Betriebssysteme haben zudem die Aufgabe, \textit{Ressourcen zu verwalten} und \textit{Interessenkonflikte zu lösen}. Wenn beispielsweise mehrere Benutzer gleichzeitig Dokumente drucken möchten, wäre es ineffizient und chaotisch, alle Seiten gleichzeitig zu drucken. Das Betriebssystem muss hier entscheiden, welcher Druckauftrag zuerst ausgeführt wird und welche warten müssen. Es sorgt also für eine geordnete und faire Zuteilung von Systemressourcen.
 
-\section{Aufbau eines Rechners}
+\section{Einführung}
 
 \begin{tikzpicture}[
     node distance=0mm,
@@ -65,7 +65,18 @@ Betriebssysteme haben zudem die Aufgabe, \textit{Ressourcen zu verwalten} und \t
 
 Die Abbildung 1.1 illustriert den schichtweisen Aufbau eines typischen Rechnersystems. Ganz unten befindet sich die Hardware-Ebene, die aus den physischen Geräten (z.B. CPU, Speicher, Festplatten), der Mikroarchitektur und der Maschinensprache besteht. Direkt darüber liegt das Betriebssystem. Es bildet die Schnittstelle zwischen der Hardware und der darüberliegenden Software. Auf dem Betriebssystem setzen die Systemprogramme auf. Dazu gehören Werkzeuge wie Compiler, Editoren und Kommando-Interpreter, die für die Entwicklung und Ausführung von Software notwendig sind. Die oberste Schicht bilden die Anwendungsprogramme, wie beispielsweise Bankensysteme, Flugbuchungssysteme oder Web-Browser, mit denen der Endbenutzer interagiert. Diese hierarchische Struktur ermöglicht eine klare Trennung der Zuständigkeiten und Abstraktionsebenen.
 
-\section{Was ist ein Betriebssystem?}
+\subsection{Betriebssystemarten}
+
+Man unterscheidet verschiedene Arten von Betriebssystemen anhand ihrer primären Einsatzgebiete und Funktionsweisen. Zu den grundlegenden Kategorien gehören:
+
+\begin{itemize}
+\item \textbf{Dialogsysteme:} Diese Systeme sind auf die kontinuierliche Interaktion mit dem Benutzer ausgelegt. Sie stellen eine grafische Benutzeroberfläche (GUI) oder eine Kommandozeilenschnittstelle (CLI) bereit und ermöglichen eine direkte Steuerung und Rückmeldung. Typische Beispiele sind Desktop-Betriebssysteme wie Windows, macOS und Linux-Distributionen sowie mobile Betriebssysteme wie Android und iOS.
+\item \textbf{Stapelverarbeitungssysteme (Batch-Betriebssysteme):} Bei diesen Systemen wird eine Folge von Aufträgen (Jobs), die jeweils aus Programmen und Daten bestehen, sequenziell und ohne direkte Benutzerinteraktion abgearbeitet. Früher wurden solche Systeme häufig mit Lochkartenstapeln gespeist. Heutzutage finden sich Prinzipien der Stapelverarbeitung noch in der automatisierten Ausführung von Hintergrundaufgaben oder bei der Verarbeitung großer Datenmengen.
+\item \textbf{Echtzeitbetriebssysteme (Real-Time Operating Systems, RTOS):} Diese Betriebssysteme sind darauf spezialisiert, Aufgaben innerhalb garantierter Zeitgrenzen (Deadlines) zu erledigen. Sie sind essenziell für zeitkritische Anwendungen, bei denen eine verspätete Reaktion zu Systemversagen oder schwerwiegenden Fehlern führen kann. Beispiele hierfür sind Steuerungsanlagen in der Industrie (z.B. bei Robotern, in der Prozessautomatisierung), medizinische Geräte oder Systeme in der Luft- und Raumfahrt.
+\end{itemize}
+
+
+\subsection{Was ist ein Betriebssystem?}
 
 Ein Betriebssystem (BS) ist eine Softwareschicht, die grundlegende, hardwarespezifische Dienste bereitstellt und diese für Anwendungsprogramme abstrahiert und zugänglich macht. Eine zentrale Aufgabe des Betriebssystems ist der Schutz von Benutzerdaten und Systemressourcen vor unberechtigtem Zugriff und fehlerhaften Operationen. Es \textit{verwaltet den Speicher} effizient, indem es Speicherbereiche Prozessen zuweist und wieder freigibt, und schützt den Speicherbereich eines Prozesses vor Zugriffen durch andere Prozesse oder Benutzer.
 
@@ -77,49 +88,39 @@ Darüber hinaus ist ein Betriebssystem für die \textit{Fehlererkennung und -beh
 \item \textbf{Rechenfehler:} z.B. eine Division durch Null oder arithmetische Überläufe.
 \end{itemize}
 
-Ein Betriebssystem ermöglicht zudem den \textit{Mehrbenutzerbetrieb} (Multi-User-System), sodass mehrere Benutzer gleichzeitig und voneinander isoliert am selben Rechnersystem arbeiten können. Es unterstützt ferner die \textit{parallele bzw. quasi-parallele Ausführung mehrerer Programme} (Multitasking/Multiprogramming), wodurch die Systemauslastung optimiert und die wahrgenommene Produktivität der Benutzer gesteigert wird.
-
-\section{Betriebssystemarten}
-
-Man unterscheidet verschiedene Arten von Betriebssystemen anhand ihrer primären Einsatzgebiete und Funktionsweisen. Zu den grundlegenden Kategorien gehören:
-
-\begin{itemize}
-\item \textbf{Dialogsysteme:} Diese Systeme sind auf die kontinuierliche Interaktion mit dem Benutzer ausgelegt. Sie stellen eine grafische Benutzeroberfläche (GUI) oder eine Kommandozeilenschnittstelle (CLI) bereit und ermöglichen eine direkte Steuerung und Rückmeldung. Typische Beispiele sind Desktop-Betriebssysteme wie Windows, macOS und Linux-Distributionen sowie mobile Betriebssysteme wie Android und iOS.
-\item \textbf{Stapelverarbeitungssysteme (Batch-Betriebssysteme):} Bei diesen Systemen wird eine Folge von Aufträgen (Jobs), die jeweils aus Programmen und Daten bestehen, sequenziell und ohne direkte Benutzerinteraktion abgearbeitet. Früher wurden solche Systeme häufig mit Lochkartenstapeln gespeist. Heutzutage finden sich Prinzipien der Stapelverarbeitung noch in der automatisierten Ausführung von Hintergrundaufgaben oder bei der Verarbeitung großer Datenmengen.
-\item \textbf{Echtzeitbetriebssysteme (Real-Time Operating Systems, RTOS):} Diese Betriebssysteme sind darauf spezialisiert, Aufgaben innerhalb garantierter Zeitgrenzen (Deadlines) zu erledigen. Sie sind essenziell für zeitkritische Anwendungen, bei denen eine verspätete Reaktion zu Systemversagen oder schwerwiegenden Fehlern führen kann. Beispiele hierfür sind Steuerungsanlagen in der Industrie (z.B. bei Robotern, in der Prozessautomatisierung), medizinische Geräte oder Systeme in der Luft- und Raumfahrt.
-\end{itemize}
-
-\section{Prozesssynchronisation und -kommunikation}
+\subsubsection{Prozesssynchronisation und -kommunikation}
 
 In modernen Betriebssystemen werden oft mehrere Aufgaben scheinbar gleichzeitig durch verschiedene Prozesse oder Threads ausgeführt. Um eine korrekte und effiziente Zusammenarbeit dieser nebenläufigen Ausführungseinheiten zu gewährleisten, müssen Mechanismen zur \textit{Prozesssynchronisation} und \textit{Prozesskommunikation} (Inter-Process Communication, IPC) bereitgestellt werden. Die Synchronisation dient dazu, den Zugriff auf gemeinsame Ressourcen zu koordinieren und Race Conditions zu vermeiden. Die Kommunikation ermöglicht den Austausch von Daten und Steuersignalen zwischen Prozessen. Gängige Techniken hierfür umfassen beispielsweise Pipes, Shared Memory, Nachrichtenwarteschlangen und Semaphore. Eine detailliertere Betrachtung dieser Mechanismen ist für das Verständnis komplexer Systeminteraktionen unerlässlich.
 
-\section{Das Betriebssystem als erweiterte Maschine}
+Ein Betriebssystem ermöglicht zudem den \textit{Mehrbenutzerbetrieb} (Multi-User-System), sodass mehrere Benutzer gleichzeitig und voneinander isoliert am selben Rechnersystem arbeiten können. Es unterstützt ferner die \textit{parallele bzw. quasi-parallele Ausführung mehrerer Programme} (Multitasking/Multiprogramming), wodurch die Systemauslastung optimiert und die wahrgenommene Produktivität der Benutzer gesteigert wird.
 
-Die Architektur eines Rechners ist auf Hardwareebene zwar fundamental strukturiert, die direkte Programmierung dieser Hardware ist jedoch äußerst komplex. Beispielsweise kann die Programmierdokumentation für eine moderne Schnittstelle wie \texttt{SATA} (Serial AT Attachment) mehrere hundert Seiten umfassen. Ohne eine Abstraktionsschicht müsste jeder Anwendungsentwickler diese Details verstehen und für jede Lese- oder Schreiboperation implementieren. An dieser Stelle treten \textit{Gerätetreiber} und andere Betriebssystemkomponenten in Kraft. Sie bilden eine Schnittstelle, die die Komplexität der Hardware verbirgt und Programmierern eine vereinfachte und standardisierte Sicht auf die Systemressourcen bietet. Das Betriebssystem erweitert somit die "nackte" Hardware zu einer leistungsfähigeren und einfacher zu bedienenden virtuellen Maschine.
+\subsection{Das Betriebssystem als erweiterte Maschine - Top-down-Sicht}
 
-\subsection{Sichtweisen auf das Betriebssystem}
+Die Architektur der meisten Rechner ist sehr simpel, aber gleichzeitig sehr komplex zu programmieren. Insbesondere \texttt{I/O} Geräte, welche ca. 450 Seiten spezifikation für Programmierer der S-ATA Schnittstelle haben. Treiber helfen, Hardwarekomplexität zu verbergen. Es wird eine Abstraktion der Maschine auf hohem Niveau (z.B. Festplatte enthält Dateien und keine Spuren und Sektoren) erwartet.
 
-Abhängig von der Rolle und den Aufgaben unterscheidet man verschiedene Perspektiven auf ein Betriebssystem:
+Das Betriebssystem soll dem Benutzer eine virtuelle Maschine präsentieren, welche eine schöne schnittstelle ist und die hässliche hardware hinter dieser verbirgt. Nutzer des Betriebssystems können dann in drei Arten unterteilt werden
 
-\subsubsection{Systemprogrammierer}
+\subsubsection*{Systemprogrammierer}
 Ein Systemprogrammierer entwickelt, wartet und erweitert Komponenten des Betriebssystems selbst oder systemnahe Software wie Compiler und Treiber. Die Perspektive ist stark hardwareorientiert und erfordert detaillierte Kenntnisse der Betriebssysteminterna sowie exzellente Hardwarekenntnisse.
 
-\subsubsection{Anwendungsprogrammierer}
+\subsubsection*{Anwendungsprogrammierer}
 Ein Anwendungsentwickler (oder Applikationsentwickler) konzipiert und implementiert Anwendungen, die von Endbenutzern verwendet werden. Die Interaktion mit dem Betriebssystem erfolgt primär über dessen Programmierschnittstelle (API, Application Programming Interface), wie z.B. Systemaufrufe. Die Details der Hardwareimplementierung sind für den Anwendungsprogrammierer weitgehend abstrahiert.
 
-\subsubsection{Anwender}
+\subsubsection*{Anwender}
 Ein Anwender interagiert mit den vom Anwendungsprogrammierer erstellten Programmen. Die Schnittstelle zum System ist hier typischerweise eine grafische Benutzeroberfläche (GUI) oder eine Kommandozeile (CLI), die von der jeweiligen Anwendung oder dem Betriebssystem bereitgestellt wird. Der Anwender hat in der Regel keine direkte Einsicht in die Funktionsweise des Betriebssystems oder der Hardware.
 
-\subsection{Mehrfach genutzte Betriebsmittel (Ressourcen)}
+\subsection{Betriebssystem als Ressourcenverwalter - Bottom-up-Sicht}
 
-Ein Betriebssystem verwaltet den Zugriff auf verschiedene Betriebsmittel, die von mehreren Prozessen oder Benutzern geteilt werden. Man unterscheidet hierbei grundsätzlich zwei Arten der Mehrfachnutzung:
+Das Betriebssystem verwaltet alle komplexen Bestandteile eines komplexen Systems. Bei modernen Betriebssystemen können mehrere Programme von mehreren Nutzern gleichzeitig im Speicher sein und ausgeführt werden. Das Betriebssystem weist die Ressourcen den Programmen zu und schützt Programme und Nutzer vor gegenseitiger störung.
 
-\begin{itemize}
-\item \textbf{Zeitlich mehrfach genutzte Betriebsmittel (Time-Multiplexed Resources):} Mehrere Programme oder Benutzer wechseln sich bei der Nutzung dieser Ressourcen ab. Die Ressource wird immer nur einem Nutzer oder Prozess zu einem bestimmten Zeitpunkt exklusiv zugewiesen, jedoch in schnellem Wechsel. Beispiele hierfür sind die CPU (Central Processing Unit) oder ein Drucker.
-\item \textbf{Räumlich mehrfach genutzte Betriebsmittel (Space-Multiplexed Resources):} Jedem Programm oder Benutzer wird ein eigener, abgegrenzter Teil der Ressource zugewiesen, der parallel zu anderen Teilen genutzt werden kann. Beispiele hierfür sind der Arbeitsspeicher (RAM), der unter verschiedenen Prozessen aufgeteilt wird, oder die Festplatte, auf der verschiedene Benutzer ihre eigenen Dateibereiche haben.
-\end{itemize}
+Die Ressourcenverwaltung beinhaltet mehrfach genutzte Betriebsmittel. Hier unterscheidet man zwischen zwei:
 
-\section{Generationen (nur passiv prüfungsrelevant)}
+\begin{enumerate}
+    \item \textbf{Zeitlich mehrfach genutzte}: Programme/Anwender wechseln sich bei der Benutzung ab, z.B. CPU, Drucker.
+    \item \textbf{Räumlich mehrfach genutzte}: Jedes Programm/Anwender bekommt einen Teil der Ressource zugeteilt, z.B. Arbeitsspeicher, Festplatte
+\end{enumerate}
+
+\section{Geschickte der Betriebssysteme (nur passiv prüfungsrelevant)}
 
 \begin{quotation}
 I think there is a world market for maybe five computers.
@@ -241,15 +242,34 @@ Bei Weichen Echtzeitbetriebssystemen ist ein verpassen der Deadline nicht erwün
 
 Smartcards haben meist die Größe von Kreditkarten. Sie besitzen einen eigenen Prozessor und werden meist über Induktion mit dem Lesegerät mit Strom versorgt. Sie haben meist nur eine oder wenige Funktionen.
 
-\section{Speicherverwaltung}
+\section{Betriebssystemkonzepte}
+
+\subsection{Prozesse}
+
+Der Prozess ist das Schlüsselkonzept in allen Betriebssystemen. Ein Prozess ist ein Programm in ausführung. Zu einem Prozess gehören:
+
+\begin{itemize}
+    \item Das ausführbare Programm
+    \item Programmdaten
+    \item Stack-Bereich
+    \item CPU-Register einschließlich Programmzähler und Stackpointer
+    \item eine Liste von geöffneten Dateien
+    \item offene Fehlersignale
+    \item eine Liste von verbundenen Prozessen
+    \item Zusatzinformationen
+\end{itemize}
+
+Diese Informationen werden auch Kontext genannt. Ein Prozess besteht aus Adressraum und einem Prozesstabelleneintrag.
+
+\subsection{Speicherverwaltung}
 
 Das Betriebssystem versorgt Prozesse mit Betriebsmitteln. Es schützt Prozesse vor gegenseitigen Storungen. Dies erfolgt durch \nameref{swapping} und \nameref{paging}.
 
-\subsection{Swapping}
+\subsubsection{Swapping}
 
 Das Speicherabbild eines Prozesses besteht aus Segmenten. Diese sind die Speicherzellen zwischen Anfangs- und End-Adresse. Diese Segmente können bei bedarf vollständig in den Massenspeicher übertragen werden. Die Anzahl dieser Segmente ist idr. klein, wohingegen die größe dieser Segmente beliebig groß sein kann.
 
-\subsection{Paging}
+\subsubsection{Paging}
 
 Das Speicherabbild eines Prozesses besteht aus Seiten. Alle Seiten haben eine feste größe (z.B. $4KB$). Es müssen nur die benötigten Seiten im Speicher sein. Die Seitengröße ist idr. klein, wohingegen die Anzahl der Seiten größ ist. Nicht geladene Seiten, welche Addressiert werden, müssen nachgeladen werden.
 
@@ -261,7 +281,7 @@ Jeder Prozess darf alle Adressen verwenden, die auf grund der Hardware möglich 
 
 Jeder Prozess bekommt sein eigenen Speichersegment zugewiesen. Dieser darf nur die Adressen in seinem Segment benutzen. Bei mehreren Prozessen wird der Hauptspeicher in mehreren Segmente aufgeteilt. Jeder Prozess bekommt sein eigenes Segment. 
 
-\section{Dateien}
+\subsection{Dateien}
 
 Dateien verbergen die Einzelheiten des Platten bzw. \texttt{I/O} Zugriffs. \textbf{Daten $\neq$ Dateien}, Daten sind der Inhalt von Dateien.
 
@@ -269,11 +289,11 @@ Um eine Datei zu lesen oder zu schreiben, muss sie geöffnet werden. Vor dem öf
 
 Eingebundene Dateisysteme wie beispielsweise Wechseldatenträger müssen vor verwendung gemounted werden. Nach dem mount sind Dateien teil der Dateihierarchie. 
 
-\subsection{Verzeichnisse}
+\subsubsection{Verzeichnisse}
 
 Verzeichnisse gruppieren Dateien. Diese geben den Ort der Datei an. 
 
-\subsection{\texttt{I/O} unter UNIX}
+\subsubsection{\texttt{I/O} unter UNIX}
 
 \texttt{I/O} Geräte sind unter Unix Spezialdateien. Auf sie kann über den selben Systemaufruf wie für Dateien zugegriffen werden. Diese Spezialdateien liegen im \texttt{/dev}-Verzeichnis. Es gibt zwei Arten von Spezialdateien
 
@@ -286,13 +306,9 @@ Verzeichnisse gruppieren Dateien. Diese geben den Ort der Datei an.
 
 Dateien müssen vor anderen Personen am Computer vor unbefugten Zugriff geschützt werden. Unter UNIX besteht der Schutz Code aus \textit{drei Bits}: \texttt{rwx}. Diese stehen für Eigentümer, Gruppe und Andere. Beispielsweise steht der Schutzcode \texttt{rwxr--x}, dass der Eigentümer Lesen, Schreiben und Ausführen, Mitglieder der Gruppe nur Lesen und Ausführen, und andere nur Ausführen dürfen.
 
-\section{Pipes}
+\subsection{Shell}
 
-Eine Pipe ist eine Pseudodatei. Sie verbindet zwei Prozesse miteinander, sodass diese miteinander kommunizieren werden. Vor der Kommunikation zwischen Dateien muss der Kanal eingerichtet werden. Der Prozess A schickt seine Ausgabe als eingabe an den Prozess B.
-
-\section{Shell}
-
-Die Shell dient zur ausführung von Benutzerkomandos. die Shell ist \textit{kein} teil des Betriebssystems. Sie wird nach dem Login gestartet und nutzt ein Terminal als standard Ein- und Ausgabe. Bei der eingabe erzeugt die Shell einen Kindprozess und wartet auf dessen Terminierung. Nachdem der erzeugte Kindprozess terminiert, wird wieder zur Eingabe aufgefordert.
+Die Shell dient zur ausführung von Benutzerkomandos. Die Shell ist \textit{kein} teil des Betriebssystems. Sie wird nach dem Login gestartet und nutzt ein Terminal als standard Ein- und Ausgabe. Bei der eingabe erzeugt die Shell einen Kindprozess und wartet auf dessen Terminierung. Nachdem der erzeugte Kindprozess terminiert, wird wieder zur Eingabe aufgefordert.
 
 \subsection*{Typische Shell-Funktionen}
 
@@ -302,3 +318,63 @@ Die Shell dient zur ausführung von Benutzerkomandos. die Shell ist \textit{kein
     \item \textbf{Pipe}: \texttt{\$ cat file1 file2 file3 | sort > /dev/lp}
     \item \textbf{Hintergrundbearbeitung}: \newline\texttt{cat file1 file2 file3 | sort > /dev/lp \&}
 \end{itemize}
+
+\subsubsection{Pipes}
+
+Eine Pipe ist eine Pseudodatei. Sie verbindet zwei Prozesse miteinander, sodass diese miteinander kommunizieren werden. Vor der Kommunikation zwischen Dateien muss der Kanal eingerichtet werden. Der Prozess A schickt seine Ausgabe als eingabe an den Prozess B.
+
+\subsection{Systemaufrufe}
+
+Ein Systemaufruf ist ein Dienst des Betriebssystems, welche durch Benutzerprogramme angefordert werden können. Ablauf eines Systemaufrufes:
+
+\begin{enumerate}
+    \item Programm ruft eine Biliotheksprozedur auf
+    \item Prozedur schreibt Parameter an eine bestimmte Stelle
+    \item durch Software-Interrupt (Trap) erfolgt eine Verzweigung in das Betriebssystem
+    \item Betriebssystem bearbeitet den Aufruf
+    \item Rückkehr, unter Umständen mit Parametern in die Prozedur
+    \item Prozedur bearbeitet Rückgabeparameter für Rücksprung in das Hauptprogramm
+    \item Rücksprung aus Prozedur
+\end{enumerate}
+
+Bibliotheksprozeduren kommen von dem Compiler. Durch eine Bibliotheksprozedur werden details der Trap-Funktion versteckt. 
+
+\section{Betriebssystemstrukturen}
+
+Strukturen von Betriebssystemen beleuchten den inneren Aufbau von Betriebssystemen.
+
+\subsection{Monolithische Systeme}
+
+Das Betriebssystem läuft als einziges Programm im Kernmodus. Das Betriebssystem besteht aus einer Menge von Prozeduren. Jede Prozedur ist für jede andere sichtbar. Monolithische Systeme sind sehr effizient, können unter Umständen jedoch sehr kkomplex werden. Ein Fehler in einer Prozedur kann zum Absturz des gesammten Betriebssystems führen.
+
+\subsection{Geschichtete Systeme}
+
+Betriebssystem besteht aus einer Hierarchie von Schichten. Jede Ebene ruft nächsttiefere auf. Tiefere Ebenen werden vor Übergriffen durch höhere geschützt. Die unterste Ebene teilt die CPU zu.
+
+\begin{tabular}{ | c | c | }
+    \hline
+    Schicht & Funktion \\\hline
+    5 & Der Operator \\
+    4 & Benutzerprogramm \\
+    3 & \texttt{I/O}-Verwaltung \\
+    2 & Operator-Prozess-Kommunikation \\
+    1 & Speicherverwaltung \\
+    0 & Prozessorzuteulung und Multiprogrammierung \\\hline
+\end{tabular}
+
+\subsection{Mikrokerne}
+
+Monolitische Betriebssysteme bestehen aus ca. $5 Millionen$ Code Zeilen. Man rechnet mit 2 bis 10 Fehlern pro $1000$ Zeilen Code. Dies führt zu $10000$ bis $50000$ Fehlern. Programmfehler im Kern führen zu Absturz des gesamten Programms. Deshalb wird bei Mikrokernen das Betriebssystem in kleine Modelle aufgeteilt. Nur ein Modul wird im Kernmodus ausgeführt. Stürzt beispielsweise ein Gerätetreiber ab, so stürzt nicht das gesamte System ab. 
+
+\subsection{Client-Server-Modell}
+
+Server stellt Dienste zur verfügung, der Client nutzt diese. Client und Server können über Nachrichtenaustausch miteinander kommunizieren. Client und Server können, müssen aber nicht auf einer maschine sein.
+
+\subsection{Virtuelle Maschinen}
+\label{virtuelle_maschine}
+
+Virtuelle Maschinen sind durch Programme realisierte Duplikate von realen Mschinen. Sie werden durch den \textit{VM-Monitor} realisiert.
+
+\subsection{Exokerne}
+
+Jedem Benutzer wird eine Teilmenge der Betriebsmittel zugeteilt. Auf der untersten Ebene läuft ein Programm im Kernmodus, der Exokern. Dieser belegt den einzelnen Maschinen ressourcen und passtauf, dass keine \nameref{virtuelle_maschine} die Ressourcen einer anderer nutzt.
