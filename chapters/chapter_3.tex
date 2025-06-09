@@ -270,6 +270,12 @@ Die Seitengröße sollte nicht zufällig gewählt werden. Bei kleinen Seiten gib
 \subsubsection*{Mathematische Analyse}
 
 \begin{align*}
+    s := \text{Durchschnittliche Prozessgröße in Byte} \\
+    p := \text{Seitengröße in Byte} \\
+    e := \text{Seiteneintragsgröße in Byte} \\
+    \frac{s}{p} := \text{Anzahl der seiten pro Prozess} \\
+    \frac{s \cdot e}{p} := \text{Größe der Seitentabelle} \\
+    \frac{p}{2} := \text{Verschwendeter Raum durch interne Fragmentierun} \\
     Overhead(p) = \frac{s \cdot e}{p} + \frac{p}{2} \\
     Overhead'(p) = \frac{- s \cdot e}{p^2} + \frac{1}{2} = 0 \Rightarrow p_{opt} = \sqrt{2 \cdot s \cdot e}
 \end{align*}
