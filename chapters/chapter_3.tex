@@ -257,11 +257,11 @@ Beim einführen von Paging gibt es mehrere dinge die betrachtet werden müssen.
 
 \subsection{Pagefaultfrequency Algorithmus}
 
-Der Pagefaultfrequency Algorithmus (PFF-Algorithmus) versucht, die Seitenfehler pro Sekunde zwischen einem Minimum und Maximum zu behalten. 
+Der Pagefaultfrequency Algorithmus (PFF-Algorithmus) versucht, die Seitenfehler pro Sekunde zwischen einem Minimum und Maximum zu behalten.  Die Seitenfehler pro Sekunde sollten nicht zu hoch sein, da sonst die Leistung leidet. Sie sollte aber auch niht zu niedrig sein, da sonst unnötig viel Speicher verschwendet wird.
 
 \subsection{Lastkontrolle}
 
-Trotz gutem Seitenersetzungsalgorithmus und optimaler globaler SPeicherzuteilung können viele Seitenfehler auftreten. Der Arbeitsbereich aller Prozesse ist also grö0er als der verfügbare Arbeitsspeicher. Um dies zu verhindern, kann ein gesammter Prozess ausgelagert werden, sodass Seitenflattern verhindert wird.
+Trotz gutem Seitenersetzungsalgorithmus und optimaler globaler Speicherzuteilung können viele Seitenfehler auftreten. Der Arbeitsbereich aller Prozesse ist also größer als der verfügbare Arbeitsspeicher. Um dies zu verhindern, kann ein gesammter Prozess ausgelagert werden, sodass Seitenflattern verhindert wird.
 
 \subsection{Seitengröße}
 
@@ -281,3 +281,79 @@ Die Seitengröße sollte nicht zufällig gewählt werden. Bei kleinen Seiten gib
 \end{align*}
 
 Für s = 1MB und e = 8 Byte ist also die Optimale Seitengröße 4KB. In heutigen Rechnern ist eine Seitengröße von 512 Byte bis 64KB typisch.
+
+\subsection{Memory-Mapped-Dateien}
+
+Ein Prozess kann über einen Systemaufruf eine Datei in einen Teilbereich seines virtuellen Adressraums einblenden. Seiten werden also nicht zum zeitpunkt des Einblendens, sondern nach Anforderung eingelagert.  Wenn der Prozess terminiert oder explizit die Datei wieder ausblendet, werden veränderte Seiten zurück in die Datei auf der Platte geschrieben.
+
+\subsection{Bereinigungsstrategien}
+
+Beim paging sollten immer einige freie Seitenrahmen vorhanden sein. Der Paging-Dämon ist ein Hintergrundprozess, welcher periodisch aktiv wird. Er Inspiziert den Zustand des Speichers. Mit hilfe eines Seitenersetzungsalgorithmus werden Seiten frei gemacht.
+
+\pagebreak
+
+\section{Implementierungsaspekte}
+
+Beim auftreten eines Seitenfehlers werden die folgenden Ereignisse aus\-ge\-führt:
+
+\begin{enumerate}
+    \item Hardware spingt in Betriebssystem Kern und sichert Befehlszähler auf den Stack
+    \item Assembler-Routine sichert Prozesskontext. Routine ruft Be\-triebs\-sys\-tem als Prozedur auf
+    \item Betriebssystem entdeckt Seitenfehler und ermittelt benötigte Seite
+    \item Nachdem virtuelle Adresse bekannt ist, überprüft Betriebssystem gültigkeit der Adresse und Schutzattribute\newline Fehler: Signale senden oder Abbrechen \newline kein Fehler: Seitenrahmen aus freier liste
+    \item Wenn ein Seitenrahmen ausgelagert werden muss und dieser modifiziert wurde, wird dieser weggeschrieben Seite zum Transfer auf die Platte einreihen. Kontextwechsel bis Transfer abgeschlossen. Seite wird als belegt makiert
+    \item Wenn der Seitenrahmen sauber ist, sucht das Betriebssystem die Plattenadresse der Seite. Plattenoperation zum einlagern der Seite wird angestoßen. 
+    \item Plattenunterbrechung signalisiert den Eingang der Seite. Seitentabelle wird aktualisiert. Seitenrahmen wird als normal makiert
+    \item Fehlgeschlagene Instruktion (welche den Pagefault verursacht hat) wird restauriert
+    \item Fehlerhafter Pozess wird wieder zur Ausführung gewählt. Betriebssystem kehrt in Assemblerprogramm zurück, das es aufgerufen hat
+    \item Routine stellt Kontext wieder her und kehrt in Benutzerprogramm zurück. Anwendung wird fortgesetzt, als sei kein Fehler passiert
+\end{enumerate}
+
+\subsection{Sicherung von unterbrochenen Befehlen (restaurieren)}
+
+Führt ein Befehl zu einen Seitenfehler, so muss dieser nachdem die Seite geholt wurde, erneut ausgeführt werden. Probleme die hier auftreten könnten werden durch die CPU oder das Betriebssystem gelöst.
+
+\subsection{Sperren von Seiten im Speicher}
+
+Seiten, welche mit \texttt{I/O} verbunden sind, dürfen nicht ausgelagert werden. Gemeinsam genutzte Seiten sollten auch nicht ausgelagert werden, solange sie zu mehr als einem Prozess gehören. Seiten, welche nicht ausgelagert werden sollen, können gesperrt werden. Dies nennt man \textit{Pinning}.
+
+\subsection{Hintergrundspeicher}
+
+seiten, welche ausgelagert werden sollen, brauchen bestimmten Platz auf der Platte. Unter Unix gibt es einen Festgelegten Swap-Bereich. Im Speicher wird für jeden Prozess die Position und Größe innerhalb des Swap-Bereichs gestgehalten. Beim Start eines Prozesses wird ein Teil des Swap Bereichs in der Größe des Prozesses reserviert. Mit jedem Prozess ist die Plattenadresse seines Swap-Bereichs verbunden. 
+
+\includegraphics[width=\textwidth]{hintergrundspeicher.png}
+
+Der festgelegte Swap bereich kann statisch (a) oder dynamisch (b) sein. 
+
+Beim Prozessspezifischen Swap-Bereich erhält jeder Prozess seinen eigenen Swap-Bereich. Dieser wird im vorraus nicht reserviert. Für jede einzelne auszulagernde Seite wird ein Block auf der platte für den Prozess reserviert und nach Einlagerung wieder freigegeben. Es ist nicht immer möglich, Swap Partitionen fester Größe zuzuordnen. Normale Dateiein im normalen Dateisystem reservieren PLattenplatz für das Swapping. 
+
+\section{Segmentierung}
+
+Bisher wurde der Virtuelle Speicher immer als eindimensionaler Raum von 0 bis max betrachtet. Dieser kann jedoch auch in voneinander unabhängige Adressräume, sogenannte \textit{Segmente} aufgeteilt werden. Die Segmente werden durch eine lineare Sequenz von Adressen adressiert. Die Länge der Segmente kann sich wärend der Ausführung ändern. 
+
+Da jedes Segment einen eigenen Adressraum bildet, können sie nicht kollidieren. Aufgrunddessen können sie unabhängig voneinaner wachsen oder schrumpfen. Eine Adresse im segmentierten Speicher besteht aus zwei Teilen: einer Segmentnummer und einer Adresse innerhalb des Segmentes.
+
+\subsection{Vorteile von Segmentierung}
+
+Die Segmentierung vereinfacht die gemeinsame Nutzung von Programmcode oder daten durch mehrere Prozesse. Unterschiedliche Segmente eines Programms können individuell geschützt werden.
+
+\subsection{Implementierung von Segmentierung}
+
+Im vergleich zu Paging haben die Seiten bei der Segmentierung eine beliebige größe. Das Ein- und Auslagern von Segmenten führt zu Checkerboarding oder Externer Fragmentierung. Um dies zu vermeiden, muss der Speicher verdichtet werden.
+
+\subsection{Segmentierung mit Paging}
+
+Eine Kombination von Paging und Segmentierung klingt Sinnvoll, um die Vorteile beider zu nutzen. Der Intel x86-32 Hat dies unterstützt. Es wurden 16K große unabhängige Segmente mit bis zu eine Milliarde 32 Bit Worte genutzt. Der \textit{Local Descriptor Table} (LDT) beschreibt die lokalen Segmente zu jedem Programm. Der \textit{Global Descriptor Table} (GDT) beschreibt Segmente einschließlich dem Betriebssystem selbst. Jedes Programm hat sein eigenes LDT, aber es gibt nur ein GDT das gemeinsam von allen Prozessen genutzt wird.
+
+Um auf Segmente zuzugreifen, lädt der x86-32 zunächst einen Sektor für das Segment in ein Segmentregister. Jeder Sektor ist eine 16-Bit Zahl. Ein Sektor Bit bestimmt ob das Segment Lokal (LDT) oder global (GDT) ist. Zwei Bits sind für den Schutzcode. 13 Bits enthalten die Nummer des Eintrags in der LDT oder GDT.
+
+Wird ein Sektor in ein Segmentregister geladen, wird der zugehörigte Deskriptor aus der LDT/GDT geholt und in ein Mikroprogrammregister geladen. Der Dateideskriptor besteht aus 8 Bytes und enthält die Basisadresse des Segments, die Größe und weitere Informationen.
+
+\subsubsection{Zugriff auf Deskriptor}
+
+Die Auswahl der LDT bzw GDT basiert auf dem Selektor Bit. Der Selektor wird in ein internes Register kopiert und die niederwertigen drei Bits werden auf Null gesetzt. LDT- bzw GDT-Adresse wird auf den Wert des Selektors addiert, um Zeiger auf Deskriptor zu erhalten. 
+
+\subsubsection{Erzeugung der Physikalsichen Adresse durch verwendung eines (Selektor, Offset)- Paars}
+
+Mikroprogramme erkennen, auf welchem logischen Segment durch verwendung des entsprechenden Segmentregisters zugegriffen wird. Entsprechender Deskriptor wird aus dem internen Registern geholt. Falls der Deskriptor nicht existiert oder ausgelagert ist, löst das Mikroprogramm einen einsprung in das Betriebssystem aus. Die Hardware benutzt das Limit-Feld, um zu überprüfen, ob der Offset innerhalb des Segmentes liegt.
+
