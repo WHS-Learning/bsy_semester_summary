@@ -1,0 +1,170 @@
+\chapter{Kapitel 4}
+
+\section{Dateien}
+
+Ein Dateisystem ist nötig aus drei wesentlichen gründen:
+
+\begin{enumerate}
+    \item Es muss möglich sein, sehr große Mengen von Informationen zu speichern, für welche der Hauptspeicher nicht ausreicht.
+    \item Informationen müssen die Terminierung von Prozessen überstehen. Wenn Daten also erzeugt werden und der PC neugestartet wird, müssen diese Daten weiterhin erhalten bleiben.
+    \item Es muss für mehrere Prozesse möglich sein, gleichzeitig auf die In\-for\-mation\-en zuzugreifen. Mehrere Prozesse können beispielswesie auf die selben Dateien zugreifen.s
+\end{enumerate}
+
+Eine Datei ist eine logische Information von Daten.
+
+Dateien werden vom Betriebssystem verwaltet. Der teil des Betriebssystems, der für die Dateien zuständig ist, wird Dateisystem genannt. Beim entwurf von Dateisystemen müssen folgende Themen betrachtet werden:
+
+\begin{itemize}
+    \item Strukturierung
+    \item Benennung
+    \item Zugriff
+    \item Benutzung
+    \item Schutz
+\end{itemize}
+
+\subsection{Benennung}
+
+Eine Datei ist ein Abstraktionsmechanismus für Daten. Es sollen keine Kentnisse über die Implementierung vorausgesetzt werden. Informationen wie und wo Dateien gespeichert sind, sollten irrelevant sein.
+
+Regeln für die Benennung von Dateien variieren. Uniter Unix dürfen Dateien bis zu 255 Zeichen lang sein. Außerdem wird in Unix zwischen Groß und Klein-schreibung unterschieden. Unter Windoes ist Groß- und Kleinschreibung irrelevant. Unter Dos durfte der Name nur 1-8 Zeichen und die Dateiendung nur 1-3 Zeichen lang sein.
+
+Unter Unix ist die verwendung von einer oder mehrerer Dateiendungen zulässig. Beispielsweise ist der Name \texttt{index.html.zip} in Unix zulässig. Datei\-namens\-er\-weiterungen sind also nur Konvention. Beispielsweise kann die Datei \texttt{file.txt} genausogut eine Ausführbare Datei sein. Trotzdem erwarten einige Programme eine gewisse Dateiendung. Der C-Compiler erwartet eine Datei mit der Endung \texttt{.c}.
+
+Unter Windows haben Dateiendungen eine feste Wirkung. Die Dateiendung legt hier fest, mit welchem Programm dateien beispielswesie geöffnet werden sollen.
+
+\subsection{Dateistrukturen}
+
+Dateien müssen strukturiert werden. Hierfür gibt es viele möglichkeiten.
+
+Eine Datei ist eine Folge von Bytes. Das Betriebssystem kennt den Inhalt nicht. Die Interpretation der Daten geschieht auf Anwendungsebene.
+
+Die Dateien besitzen eine Folge von Datensätzen fester größe. Beispielsweise besteht eine Datei aus n Datensätzen, welche je m bytes beinhalten dürfen.
+
+Eine Datei besteht aus einem Baum von Datensätzen mit unterschiedlicher länge. Hier entscheidet nicht der Benutzer, welche Struktur die Dateien haben, sondern das Betriebssystem tut dies.
+
+\subsection{Dateitypen}
+
+Reguläre Dateien sind entweder ASCII-Dateien, also Dateien die Lesbar, editirbar und Druckbar sind, oder Dateien können Binär Dateien sein. Sie enthalten Prozessorinstruktionen oder Binärdekodierte Daten. In Unix haben Ausführbare Programme die Struktur Kopf, Text, Daten, Relokationsbit, Symboltabelle. 
+
+\subsection{Dateizugriff}
+
+Wenn auf Dateien zugegriffen werden soll, gibt es zwei Möglichkeiten:
+
+\begin{itemize}
+    \item Sequentieller Zugriff: Es wird auf eine Datei zugegriffen und Die gesammte Datei wird gelesen, bis die gewünschte Stelle gefunden wird. Dies wird heute nicht mehr gemacht.
+    \item Wahlfreier Zugriff: Es kann in beliebiger Reihenfolge auf Bytes oder Sätze in der Datei zugegriffen werden.
+\end{itemize}
+
+Der Lese/Schreibe Kopf muss über den \texttt{seek} Systemaufruf an die gewünschte stelle geschoben werden.
+
+\subsection{Dateiattribute}
+
+In den Dateiattrubiten sind Informationen wie Besitzer, Ersteller, Schutzinfos und vieles weitere gespeichert. 
+
+\subsection{Dateioperationen}
+
+Das Betriebssystem muss die Ressource Datei verwalten. Es stellt viele Systemaufrufe für Dateien bereit.
+
+\begin{itemize}
+    \item create: es wird eine neue Datei ohne Daten erzeugt. Hier werden, obwohl kein Inhalt in der Datei ist, einige Dateiattribute gesetzt.
+    \item delete: löscht eine Datei
+    \item open: Öffnet eine Datei. Hier muss festgelegt werden, ob die Datei zum lesen und oder schreiben geöffnet werden soll.
+    \item close: schließt eine Datei. Gibt den Tabellenplatz der Datei wieder frei.
+    \item read: von der AKtuellen Position wird gelesen
+    \item write: von der aktuellen Position wird geschrieben
+    \item append: es wird hinten an der Datei etwas angefühgt.
+    \item seek: Ausgabe des SChreib/Lesekopf Position
+    \item Get attributes: Prozess benötigt die Dateiattribute. Beispiel make
+    \item Set attributes: Prozesse können eigene Attribute setzen
+    \item rename: Dateiname wird geändert
+\end{itemize}
+
+Es gibt noch sehr viele weitere Systemaufrufe für Dateien.
+
+\section{Verzeichnisse}
+
+Ein Verzeichnis ist eine Ordnungsstruktur auf das Dateisystem. Es gibt Dateisysteme, die keine Ordnungsstruktur hatten, z.B: frühere PCs, eingebettete Systeme oder einige tragbare Musikplayer. Dies hat den Vorteil dass das Dateisystem schnell und einfach ist.
+
+\subsection{Hierarchie Verzeichnissysteme}
+
+Gängige Verzeichnishierarchien können Dateien in Ordnern in Ordnern in Ordnern... haben. Dies ist eine Baumstruktur. Wenn auf eine Datei zugegriffen werden soll, dann muss der gesammte Pfad vom Wurzelverzeichnis angegeben werden. Unterschiedliche Betriebssysteme haben unterschiedliche Pfadangaben. Uniter Unix wird mit dem \texttt{/} (slash) zwischen Unterverzeichnissen getrennt, unter Windows wird das \texttt{\\} (backslash) verwendet.
+
+Mit Relativen Pfaden kann im aktuellen Arbeitsverzeichnis eine Datei genutzt werden \texttt{./ast/mailbox} sucht im Aktuellen Verzeichnis nach der Datei \texttt{ast/mailbox}. \texttt{..} bezieht sich auf das übergeordnete Verzeichnis.
+
+\subsection{Operationen auf Verzeichnisse (Prüfungshinweis)}
+
+Für Verzeichniswe stellt das Betirebssystem einge Systemaufrufe bereit
+
+\begin{itemize}
+    \item create: es wird ein neues Verzeichnis erzeugt.
+    \item delete: Es wird ein Verzeichnis gelöscht
+    \item opendir: es wird ein Verzeichnis geöffnet.
+    \item closedir: Es wird ein Verzeichnis geschlossen
+    \item ....: Liest die nächste Datei aus dem geöffneten Verzeichnis
+    \item rename: benennt ein Verzeichnis um
+    \item link: Linken erlaubt es, eine Datei in mehr als einem verzeichnis erscheinen zu lassen
+    \item unlink: hebt ein Link auf.
+\end{itemize}
+
+Es gibt zwei Arten von Links (prüfungsrelevant):
+
+\begin{itemize}
+    \item Symbolische Links: Wenn auf eine Datei zugegriffen wird, wird der Pfad der Datei einfach mit dem Pfad der originalen Datei verwendet.
+    \item Harte Links: Verweist auf den Inode des Dateisystems. Es kann sofort auf die Datei zugegriffen werden, ohne dass auf den Verzeichnisbaum zugegriffen werden. Dies funktioniert nicht über das Netzwerk.
+\end{itemize}
+
+\section{Implementierung von Dateisystemen}
+
+\subsection{Layout eines Dateisystems}
+
+Das Dateisystem wird auf der Festplatte gespeichert. Alle Informationen, welche nebnötigt werden, um das Dateisystem aufzubauen muss auch auf der Festplatte gespeichert werden. Es kann nichts im Haupspeicher gespeichert bleiben, da dieser leer ist, wenn der Rechner aus ist.
+
+Die Festplatte wird in Partitionen aufgeteilt, welche voneinander unabhängige Dateisysteme sind. In jeder Partition kann ein unterschiedliches Dateisystem vorhanden sein. Wie diese PArtitionen aufgebaut sind, steht in dem Sogenannten Sektor 0, dem Master Book Record (MBR). Am Ende des MBR steht die Partitionstabelle mit anfangs und endadresse jeder Partition. Eine dieser Partition ist aks aktiv makiert, die Boot-Partition.
+
+Beim Hochfahren des Rechners liest das BIOS das MBR ein. Dieses lokalisiert als erstes die Aktive Partition, liest den ersten Block ein (den Boot-Block) und führt ihn aus. Das Programm im Boot-Block lädt das Betriebssystem, das in der Partition gespeichert ist. \textbf{Jede} Partition beginnt mit einen Boot-Block.
+
+Im Super Block, welcher sich unmittelbar nach dem Boot Block befindet, werden Schlüsselparameter des Dateisystems geladen. Die Freispeicherverwaltung gibt an, welche stellen im Speicher noch frei sind. Die I-Notes geben die vorhandenen Dateien an. Das Wurzelverzeichnis gibt das Wurzelverzeichnis des Dateisystems an.
+
+\subsection{Implementierung von Dateien}
+
+Das Hauptproblem bei der Implementierung ist die Allokation und Freigabe von Plattenblöcken. Es muss geschaut werden, welche Plattenblöcke frei sind und welche nicht. Hierfür gibt es einige verfahren
+
+\subsubsection{Zusammenhängende BElegung}
+
+Jede Datei wird als eine Zusammenhängende MEnge von Plattenblöcken gespeichert. Es muss hier nur der vorderste Plattenblock gemerkt werden, da alle nachfolgenden Blöcke zu der selben Datei gehören. Die Leseperformance ist hier ausgezeichnet. 
+
+Der Nachteil an diesem System sit, dass Dateien nur gespeichert werden können, wenn man genau weiß wie groß diese sind. Bei der Löschung von Dateien entstehen löcher, wodurch die Interne Fragmentierung wieder ein Problem wird.
+
+Dieses Verfahren wird heute bei CDs, DVDs und Blu-rays verwendet, da der Inhalt dieser idr. nciht verändert wird.
+
+\subsubsection{Belegung durch verkettete Listen}
+
+Es existiert in jedem Block ein ZEiger auf den folgenden Block. Es kann jeder Block in jeder beliebigen Reihenfolge verwendet werden. Es gibt keine INterne Fragmentierung. Es muss nur der Start Block gemerkt werden. 
+
+Für Zufällige zugriffe ist dieses verfahren jedoch sehr langsam. Wenn an die letzte Stelle gesprungen werden will, muss durch die gesammte Liste gesprungen werden. 
+
+\subsection{Belegung durch Verkettete Liste mit Tabelle im Arbeitsspeicher}
+
+Es werden die Zeiger jedes Plattenblocks in einer Datei-allokations-tabelle (FAT) im arbeitsspeicher gespeichert. Zufälliger Zugriff ist heir einfach, da die Tabelle sich im Arbeitsspeicher befindet. Der Verzeichniseintrag besteht hier nur aus der Startblocknummer.
+
+Jedoch kann die Tabelle sehr groß werden. Bei beispielsweise eienr 1TB festplatte, 4KB Blöcken und 3 bytes je Eintrag führt dies zu einer 3GB Tabelle im Hauptspeicher.
+
+\subsubsection{I-Nodes}
+
+Die I-Nodes werden in UNIX verwendet. In I-Nodes werden Attribute eienr Datei gespeichert. Sie enthält auch die Plattenadressen der Datei. Wenn eine I-Note nicht reicht, dann wird auf eine weitere I-Node verwiesen. 
+
+Ähnlich funktioniert auch das NTFS Dateisystem von Windows.
+
+\section{Implementierung von Verzeichnissen}
+
+\subsection{Verzeichnisse unter MS-DOS}
+
+Unter MS-Dos ist ein Verzeichniseintrag wie folgt aufgebaut: die ersten 8 Bit sind für den Dateinamen reserviert. Die nächsten 3 für die Erweiterun..
+
+\subsection{Verzeichnisse unter Unix}
+
+Ein Verzeichniseintrag ist aufgebaut mit dem Dateinamen und der I-Node nummer. Die ersten 2 byte stehen für die I-Node nummer. die verbleibenden 14 Byte für den Dateinamen.
+
+Wird beispielsweise nach dem Verzeichnis usr gesucht, so wird das Wurzelverzeichnis durchsucht. Dies kann beispielsweise zu der I-Node Nummer 6 führen. In diesem steht neben einigen Attributen der Block 132. Der Block 132 wird dann nach ast durchsucht. Dort steht, dass der Inhalt im I-Node 32 zu finden ist.
+
+\section{Dateisyystemverwaltung und -optimierung}

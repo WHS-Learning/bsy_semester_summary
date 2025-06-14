@@ -4,11 +4,23 @@
 
 Was versteht man unter Relokation und Schutz? Welche Lösungsmöglichkeiten gibt es?
 
+Relokation ist das verschieben bzw umverteilen von pages. Hierfür werden die Adressen entweder Dynamisch übersetzt oder sie werden beim Laden über den Loader direkt überserzt. 
+
+Der Schutz stellt sichet, dass die Adressen nicht über den für das Programm vorhergesehenen ADressbereich gehen. Wenn eine Adresse, welche über dem Adressbereiches des Programms hinausgeht, aufgerufen wird, wird ein Fehler gewrofen.
+
 \section{Aufgabe 2}
 
 Wie funktioniert das Verfahren der Speicherverwaltung mit Bitmaps? Wie funktioniert das Verfahren der Speicherverwaltung mit einer verketteten Liste? Vergleichen Sie die Verfahren. Gegeben sei folgende Speicherbelegung:
 
 \includegraphics[width=\textwidth]{assets/uebungsblatt_3_task_2.png}
+
+Das Verfahren mit einer Bitmap erzeugt eine Bitmap, welche die Bits mapt. Es wird eine Liste generiert, wobei 1 angibt, dass die Speicherstellen belegt sind und 0, dass die Speicherstelle frei ist.
+
+\begin{tabular}{ | c | }
+  1 1 1 1 1 1 1 0 0 0 1 1 1 1 0 0 1 1 0 0 0 1 1 1
+\end{tabular}
+
+[P, 3] -> [P, 4] -> [L, 3] -> [P, 2] -> [P, 2] -> [L, 2] -> [P, 2] -> [L, 3] -> [P, 3]
 
 \section{Aufgabe 3}
 

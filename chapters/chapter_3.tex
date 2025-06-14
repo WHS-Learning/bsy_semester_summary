@@ -300,18 +300,18 @@ Beim auftreten eines Seitenfehlers werden die folgenden Ereignisse aus\-ge\-füh
     \item Hardware spingt in Betriebssystem Kern und sichert Befehlszähler auf den Stack
     \item Assembler-Routine sichert Prozesskontext. Routine ruft Be\-triebs\-sys\-tem als Prozedur auf
     \item Betriebssystem entdeckt Seitenfehler und ermittelt benötigte Seite
-    \item Nachdem virtuelle Adresse bekannt ist, überprüft Betriebssystem gültigkeit der Adresse und Schutzattribute\newline Fehler: Signale senden oder Abbrechen \newline kein Fehler: Seitenrahmen aus freier liste
+    \item Nachdem virtuelle Adresse bekannt ist, überprüft Betriebssystem gül\-tig\-keit der Adresse und Schutzattribute\newline Fehler: Signale senden oder Abbrechen \newline kein Fehler: Seitenrahmen aus freier liste, wenn es keine gibt wird eine über den Seitenersetzungsalgorithmus ersetzt.
     \item Wenn ein Seitenrahmen ausgelagert werden muss und dieser modifiziert wurde, wird dieser weggeschrieben Seite zum Transfer auf die Platte einreihen. Kontextwechsel bis Transfer abgeschlossen. Seite wird als belegt makiert
-    \item Wenn der Seitenrahmen sauber ist, sucht das Betriebssystem die Plattenadresse der Seite. Plattenoperation zum einlagern der Seite wird angestoßen. 
+    \item Wenn der Seitenrahmen sauber ist, sucht das Betriebssystem die Platt\-en\-ad\-res\-se der Seite. Plattenoperation zum einlagern der Seite wird angestoßen. 
     \item Plattenunterbrechung signalisiert den Eingang der Seite. Seitentabelle wird aktualisiert. Seitenrahmen wird als normal makiert
     \item Fehlgeschlagene Instruktion (welche den Pagefault verursacht hat) wird restauriert
-    \item Fehlerhafter Pozess wird wieder zur Ausführung gewählt. Betriebssystem kehrt in Assemblerprogramm zurück, das es aufgerufen hat
+    \item Fehlerhafter Pozess wird wieder zur Ausführung gewählt. Be\-triebs\-sys\-tem kehrt in Assemblerprogramm zurück, das es aufgerufen hat
     \item Routine stellt Kontext wieder her und kehrt in Benutzerprogramm zurück. Anwendung wird fortgesetzt, als sei kein Fehler passiert
 \end{enumerate}
 
 \subsection{Sicherung von unterbrochenen Befehlen (restaurieren)}
 
-Führt ein Befehl zu einen Seitenfehler, so muss dieser nachdem die Seite geholt wurde, erneut ausgeführt werden. Probleme die hier auftreten könnten werden durch die CPU oder das Betriebssystem gelöst.
+Führt ein Befehl zu einen Seitenfehler, so muss dieser nachdem die Seite geholt wurde, erneut ausgeführt werden. Probleme die hier auftreten könnten werden durch die CPU oder das Betriebssystem gelöst. Ein einziger Befehl kann an mehreren Stellen einen Seitenfehler auslösen, beispielswesie kann \texttt{MOVE.L \#6, 2} an drei Stellen einen Seitenfehler verursachen. Es muss herausgefunden werden, ob der Befehl, der erste Operant oder der zweite Operant den Seitenfehler ausgelöst hat.
 
 \subsection{Sperren von Seiten im Speicher}
 
@@ -325,23 +325,25 @@ seiten, welche ausgelagert werden sollen, brauchen bestimmten Platz auf der Plat
 
 Der festgelegte Swap bereich kann statisch (a) oder dynamisch (b) sein. 
 
-Beim Prozessspezifischen Swap-Bereich erhält jeder Prozess seinen eigenen Swap-Bereich. Dieser wird im vorraus nicht reserviert. Für jede einzelne auszulagernde Seite wird ein Block auf der platte für den Prozess reserviert und nach Einlagerung wieder freigegeben. Es ist nicht immer möglich, Swap Partitionen fester Größe zuzuordnen. Normale Dateiein im normalen Dateisystem reservieren PLattenplatz für das Swapping. 
+Die Adresse des Swap Bereichs wird errechnet über [Formel von Seite 101 einfügen]
+
+Beim Prozessspezifischen Swap-Bereich erhält jeder Prozess seinen eigenen Swap-Bereich. Dieser wird im vorraus nicht reserviert. Für jede einzelne auszulagernde Seite wird ein Block auf der platte für den Prozess reserviert und nach Einlagerung wieder freigegeben. Es ist nicht immer möglich, Swap Partitionen fester Größe zuzuordnen. Normale Dateiein im normalen Datei\-system reservieren Plattenplatz für das Swapping. 
 
 \section{Segmentierung}
 
 Bisher wurde der Virtuelle Speicher immer als eindimensionaler Raum von 0 bis max betrachtet. Dieser kann jedoch auch in voneinander unabhängige Adressräume, sogenannte \textit{Segmente} aufgeteilt werden. Die Segmente werden durch eine lineare Sequenz von Adressen adressiert. Die Länge der Segmente kann sich wärend der Ausführung ändern. 
 
-Da jedes Segment einen eigenen Adressraum bildet, können sie nicht kollidieren. Aufgrunddessen können sie unabhängig voneinaner wachsen oder schrumpfen. Eine Adresse im segmentierten Speicher besteht aus zwei Teilen: einer Segmentnummer und einer Adresse innerhalb des Segmentes.
+Da jedes Segment einen eigenen Adressraum bildet, können sie nicht ko\-lli\-die\-ren. Aufgrunddessen können sie unabhängig voneinaner wachsen oder schrumpfen. Eine Adresse im segmentierten Speicher besteht aus zwei Teilen: einer Seg\-ment\-nummer und einer Adresse innerhalb des Segmentes.
 
 \subsection{Vorteile von Segmentierung}
 
-Die Segmentierung vereinfacht die gemeinsame Nutzung von Programmcode oder daten durch mehrere Prozesse. Unterschiedliche Segmente eines Programms können individuell geschützt werden.
+Die Segmentierung vereinfacht die gemeinsame Nutzung von Programmcode oder daten durch mehrere Prozesse. Unterschiedliche Segmente eines Pro\-gramms können individuell geschützt werden. Beispielsweise kann der Pro\-gramm\-code als Read-Only deklariert werden, wärend die Daten als Read-Write deklariert wird.
 
 \subsection{Implementierung von Segmentierung}
 
 Im vergleich zu Paging haben die Seiten bei der Segmentierung eine beliebige größe. Das Ein- und Auslagern von Segmenten führt zu Checkerboarding oder Externer Fragmentierung. Um dies zu vermeiden, muss der Speicher verdichtet werden.
 
-\subsection{Segmentierung mit Paging}
+\subsection{Segmentierung mit Paging (Nicht prüfungsrelevant)}
 
 Eine Kombination von Paging und Segmentierung klingt Sinnvoll, um die Vorteile beider zu nutzen. Der Intel x86-32 Hat dies unterstützt. Es wurden 16K große unabhängige Segmente mit bis zu eine Milliarde 32 Bit Worte genutzt. Der \textit{Local Descriptor Table} (LDT) beschreibt die lokalen Segmente zu jedem Programm. Der \textit{Global Descriptor Table} (GDT) beschreibt Segmente einschließlich dem Betriebssystem selbst. Jedes Programm hat sein eigenes LDT, aber es gibt nur ein GDT das gemeinsam von allen Prozessen genutzt wird.
 
