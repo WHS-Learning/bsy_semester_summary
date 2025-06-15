@@ -1,0 +1,200 @@
+\chapter{Kapitel 5}
+
+\section{Grundlagen der Ein- /Ausgabehardware}
+
+Man unterscheidet bei Ein- und Ausgabegeräten zwischen Block- und
+Zeichenorientierten Geräten. \texttt{I/O} Geräte haben sehr unterschiedliche
+Geschwindigkeiten. Von Tastaturen mit Datenraten von 10 Bytes pro Sekunde bis
+hin zu SONET OC-768 mit 5GB pro Sekunde.
+
+\subsection{Controller}
+
+\texttt{I/O} Geräte sind in Mechanik und Elektronische Komponenten aufgebaut.
+Die elektronischen Komponenten heißen \textbf{Steuerwerk}. Sie verwalten nahezu
+identische geräte. In PCs sind sie oft auf der Hauptplatine oder als Steckkarte.
+Das Betriebssystem ist immer mit dem Steuerwerk beschäftigt. Die Schnittstelle
+zwischen Steuerwerk und Gerät befindet sich auf einer niedrigen Ebene.
+
+\subsection{Memory-Mapped-Ein-/Ausgabe}
+
+Das Steuerwerk besitzt eigene Register zur Kommunikation mit der CPU. Kommandos
+werden direkt in Steuerweksregister geschrieben. Es gibt einen Speziellen
+Adressbrereich für die \texttt{I/O}, auf den nur das Betriebssystem zugriff
+hat. Kontrollregister können auch in den Arbeitsspeicher eingeblendet werden.
+
+\subsection{Direct Memory Access}
+
+\textbf{Arbeitsweise ohne Direct Memory Access:}
+
+\begin{enumerate}
+    \item Leseanfrage.
+    \item Steuerwerk liest einen gesamten Block Byte für Byte ein.
+    \item Prüfsumme wird berechnet, um Lesefehler auszuschließen.
+    \item Steuerwerk löst Unterbrechung aus.
+    \item Betriebssystem liest Block aus Puffer des Controllers und kopiert ihn
+          zeichen-/wortweise in den Hauptspeicher.
+\end{enumerate}
+
+\textbf{Arbeitsweise mit Direct Memory Access:}
+
+\begin{enumerate}
+    \item Betriebssystem übergibt Blockadresse, Speicheradresse und Anzahl der zu
+          lesenden Bytes an den DMA-Controller.
+    \item Kommando wird an den Platten-Controller ausgegeben, damit er die Daten von der
+          Platte einliest und verifiziert.
+    \item Direct Memory Access Controller leitet Datentransfer mit einem Lesebefeh über
+          den Bus zum Platten-Controller ein.
+    \item Steuerwek schreibt Zeichen direkt in den Hauptspeicher.
+    \item Nach dem Schreiben wird vom Platten-Controller an den Direct Memory Access
+          Controller ein Fertigsignal gesendet.
+    \item Schritt 2 bis 4 werden so lange wiederholt bis alle Daten im Hauptspeicher
+          sind.
+    \item Wenn alle Daten im Hauptspeicher sind löst Direct Memory Access Controller
+          Interrupt aus. Fertigmeldung.
+\end{enumerate}
+
+\subsection{Interrupts}
+
+Sobald ein \texttt{I/O} Gerät eine Aufgabe beendet hat, erzeugt es über den
+Interrupt-Controller einen Interrupt. Dieser enthält eine Nummer die als Index
+für den Interrupt-Vektor dient. Nachdem die Interrupt-Verarbeitung durch die
+CPU begonnen wurde, wird der Interrupt beim Interrupt-Controller bestätigt.
+
+\section{Grundlagen der Ein- /Ausgabesoftware}
+
+\texttt{I/O} Geräte sollten von Geräten unabhängig funktionieren. Programme sollten auf unterschiedlichen Geräten gleich funktionieren. Fehler sollten möglichst immer an der Fehlerquelle behandelt werden.
+
+\texttt{I/O} kann über drei Ansätze durchgeführt werden:
+
+\begin{enumerate}
+    \item Programmierte \texttt{I/O}
+    \item Interruptgesteuerte \texttt{I/O}
+    \item \texttt{I/O} mit Direct Memory Access
+\end{enumerate}
+
+\subsection{Programmierte \texttt{I/O}}
+
+Das \texttt{I/O} Gerät wird vom Benutzerprozess reserviert. Das Betriebssystem
+kopiert dann die auszugebenen Daten in einen Puffer im Kernardressbereich. Die
+Daten können dann (einzeln) ins \texttt{I/O} Gerät kopiert werden. Der
+Prozessor ist hier komplett belegt, bis die gesamte \texttt{I/O} beendet ist.
+Aktives warten ist hier u.u. nötig.
+
+\begin{lstlisting}[language=C]
+copy_from_user(buffer, p, count);
+for (i = 0; i < count; i++) {
+    while (*printer_status_reg != READY);
+    *printer_status_reg = p[i];
+}
+return_to_user();
+\end{lstlisting}
+
+\subsection{Interruptgesteuerte \texttt{I/O}}
+
+Wenn auf ein \texttt{I/O} Gerät gewartet werden muss, findet ein Prozesswechsel
+statt. Das \texttt{I/O} Gerät wird u.u. erst vom Benutzerprozess reserviert.
+Das Betriebssystem kopiert dann die auszugebenen Daten in einen Puffer im
+Kernardressbereich. Das Erste Zeichen wird zum \texttt{I/O} Gerät geschickt,
+sobald dieses bereit ist. Der Scheduler scheduled einen anderen Prozess. Der
+Prozess, der das Drucken der Zeichenkette beauftragt hat, wird so lange
+blockiert, bis die gesamte Ausgabe beendet ist.
+
+\subsection{\texttt{I/O} mit Direct Memory Access}
+
+Bei der Interruptgesteuerten \texttt{I/O} werden sehr viele Interrupts erzeugt,
+welche viel CPU-Zeit inanspruch nehmen. Der Direct Memory Access Controller
+kann die Kopieroperation übernehmen, um CPU-Zeit zu sparen. Es kommt dadurch
+nur zu einem Interrupt pro Puffer. Der Direct Memory Access Controller ist
+jedoch deutlich langsamer, als die CPU, wodurch es sinnvoll sein kann, die CPU
+zu nutzen, wenn \texttt{I/O} per Direct Memory Access Controller zu langsam
+ist.
+
+\section{Schichten der Ein- /Ausgabesoftware}
+
+\texttt{I/O} Software wird in vier Schichten aufgeteilt, welche jeweilts zu den angrenzenden Schichten Schnittstellen besitzen. Die Funktionalität und Schnittstellen sind Betriebssystem abhängig.
+
+\begin{enumerate}
+    \item \texttt{I/O}-Software der benutzerebene
+    \item Geräteunabhängige Betriebssystemsoftware
+    \item Gerätetreiber
+    \item Unterbrechungsroutinen
+\end{enumerate}
+
+\subsection{Unterbrechungsroutinen}
+
+Interrupts sollten möglichs im inneren des Betriebssystems verborgen sein. Der
+Treiber, der die \texttt{I/O} gestartet hat, kann blockiert werden, bis die
+Operation beendet wird und der entsprechende Interrupt eintritt. Der Treiber
+selbst kann sich beispielsweise durch die \texttt{down} Operation blockieren.
+Anschließend muss die Unterbrechungsroutine den Treiber mittels \texttt{up}
+wieder deblockieren. Dies Funktioniert am besten, wenn der Treiber als
+Kernprozess mit eigenem Zustand, Stack und Befehlszähler implementiert ist.
+
+\subsection{Gerätetreiber}
+
+Der Code von Gerätetreibern ist Geräteabhängig. Dieser wird vom Hersteller des
+Gerätes für die entsprechenden Betriebssysteme erstellt. Jeder Treiber
+verwaltet einen Gerätetyp oder eine Klasse von eng verwandten Geräten. Der
+Gerätetreiber schickt Kommandos an die Hardware und überprüft auf korrekte
+Ausführung. Der Treiber ist der einzige Teil der Betriebssystem Software der
+weiß, wie viele Register mit welcher Funktion ein Gerät besitzt.
+
+\subsection{Geräteunabhängige \texttt{I/O}-Software}
+
+Die Grenze zwischen Treiber und der Geräteunabhängigen Software ist
+Betirebssystem abhängig. Es kann eine einheitliche Schnittstelle bereitgestellt
+werden, die alle \texttt{I/O}-Funktionen durchführen kann, bei der die Geräte
+gleich sind.
+
+\subsection{\texttt{I/O}-Software im Benutzeradressraum}
+
+Ein Kleiner teil der \texttt{I/O}-Software bedindet sich in Bibliotheken für
+Benutzeraufrufe. Hierbei wird zwischen \textbf{Low-Leve-Routinen} und
+\textbf{High-Level-Routinen} unterschieden. Die LL-Routinen bereiten nur
+Parameter für Systemaufrufe auf (z.B. \texttt{write()}). HL-Routinen nehmen
+verarbeitung von Daten vor und benutzen LL-Routinen (z.B. \texttt{printf}).
+Spooling-Systeme zählen auch zu der \texttt{I/O}-Software.
+
+\section{Plattenspeicher}
+
+\subsection{Strategien zur Steuerung eines Plattenarms}
+
+\subsubsection{First Come First Served (FCFS)}
+
+Falls der Plattentreiber nur eine Anfrage zu einer Zeit bearbeiten kann, werden
+diese in Reihenfolge des Eintreffens bearbeitet. Keine Optimierung der
+Suchzeit.
+
+\subsubsection{Shortest Seek First (SSF)}
+
+Treiber organisiert Anfragen so, dass der Arm die kürzeste Distanz zurücklegen
+muss. Der Kopf wird sich hier in der Regel in der Plattenmitte aufhalten.
+Anfragen an die äußeren Zylinder werden benachteiligt.
+
+\subsubsection{Afuzugsalgorithmus (elevator algorithm)}
+
+Der Plattenkopf bewegt sich immer in eine Richtung (hoch oder runter). Die
+Richtung wird gewechselt, wenn keine Anfragen in dieser Richtung mehr bestehen.
+
+\section{Uhren}
+
+Uhren haben die Aufgabe, die Aktuelle Urzeit zu speichern, zu verhindern, dass
+ein Prozess die CPU nicht freigibt und Alarme zu senden. Heute werden Uhren
+durch Quarz Synchronisiert. Früher wurden sie durch Netzfrequenz
+Synchronisiert.
+
+\subsection{Funktion der Quarz-Uhr}
+
+Ein Zähler wird mit dem Quarzschwingungen dekrementiert. Ist der Zähler = 0,
+erzeugt die Uhr eine Unterbrechung und der Zähler wird aus dem Halte-Register
+neu geladen. Halte-Register liefer eine Wählbare Unterbrechungssequenz, welche
+auf die Uhrzeit umgerechnet wird.
+
+\subsection{Software Uhren}
+
+Hardware Uhren lösen nach einem bestimmten Zeitintervall einen Interruptaus.
+Der rest wird vom Uhrentreiber erledigt. Dieser Verwaltet die Uhrzeit,
+Verhindert, dass Prozesse zu lange laufen, Führt Buch über die
+Prozessornutzung, behandelt den \texttt{alarm}-Systemaufruf, Stellt Uhren zur
+Überwachung von Betriebssystemaktivitäten bereit und monitort und Protilet
+Statistiken.

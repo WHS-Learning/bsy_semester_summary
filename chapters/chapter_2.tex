@@ -2,11 +2,21 @@
 
 \section{Prozesse}
 
-Prozesse bilden Grundkonzept in allen Betriebssystemen. Zu jedem Zeitpunkt kann immer nur ein einziger Prozess gleichzeitig laufen, aufgrunddessen wechseln sich Prozesse regelmäßig ab. Dies führt zur Illusion von Parallelität. Beim Prozesswechsel tauscht selbstverständlich auch der Befehlszähler.
+Prozesse bilden Grundkonzept in allen Betriebssystemen. Zu jedem Zeitpunkt kann
+immer nur ein einziger Prozess gleichzeitig laufen, aufgrunddessen wechseln
+sich Prozesse regelmäßig ab. Dies führt zur Illusion von Parallelität. Beim
+Prozesswechsel tauscht selbstverständlich auch der Befehlszähler.
 
 \subsection{Prozessmodell}
 
-Ausführbare Programme eines Computers sind eine Anzahl seqzentieller Prozesse. Ein Prozess ist eine Instanz eines Programms in ausführung. Jeder Prozess besitzt seinen eigenen virtuellen Prozessor. In realität wechseln sich die Prozesse ab und teilen sich einen Prozessor. Ein Prozess besitzt \textit{Programm}, \textit{Ein- und Ausgabe} und \textit{einen Zustand}. Scheduling Algorithmen bestimmen den Zeitpunkt des wechselns von Prozessen. Der Scheduler unterbricht andere Prozesse und kommt nach jeden Prozess an die Reihe.
+Ausführbare Programme eines Computers sind eine Anzahl seqzentieller Prozesse.
+Ein Prozess ist eine Instanz eines Programms in ausführung. Jeder Prozess
+besitzt seinen eigenen virtuellen Prozessor. In realität wechseln sich die
+Prozesse ab und teilen sich einen Prozessor. Ein Prozess besitzt
+\textit{Programm}, \textit{Ein- und Ausgabe} und \textit{einen Zustand}.
+Scheduling Algorithmen bestimmen den Zeitpunkt des wechselns von Prozessen. Der
+Scheduler unterbricht andere Prozesse und kommt nach jeden Prozess an die
+Reihe.
 
 \subsection{Prozesserzeugung}
 
@@ -19,7 +29,10 @@ Prozesse können über einen von vier Ereignissen erzeugt werden:
     \item Initialisierung einer Stapelverarbeitung
 \end{itemize}
 
-Technischgesehen wird ein Prozess immer durch ein Systemaufruf von einem anderen Prozess erzeugt. Kindprozesse und Elternprozesse haben nach erzeugung getrennte Adressräume. In Unix ist der initiale Adressraum eine Kopie des Addressraumes des Elternprozesses. 
+Technischgesehen wird ein Prozess immer durch ein Systemaufruf von einem
+anderen Prozess erzeugt. Kindprozesse und Elternprozesse haben nach erzeugung
+getrennte Adressräume. In UNIX ist der initiale Adressraum eine Kopie des
+Addressraumes des Elternprozesses.
 
 \subsection{Prozessbeendigung}
 
@@ -27,34 +40,48 @@ Für die Terminierung von Prozessen gibt es vier grundlegende gründe:
 
 \begin{itemize}
     \item Normales Beenden (freiwillig)
-    \item Aufgrund von Fehler (freiwillig) \newline z.B. Eingabevalidierung fehl\-ge\-schlagen
-    \item Aufgrund von Schwerwiegenden Fehler (unfreiwillig) \newline z.B. Di\-vi\-sion durch null
+    \item Aufgrund von Fehler (freiwillig) \newline z.B. Eingabevalidierung
+          fehl\-ge\-schlagen
+    \item Aufgrund von Schwerwiegenden Fehler (unfreiwillig) \newline z.B. Di\-vi\-sion
+          durch null
     \item Durch anderen Prozess (unfreiwillig)
 \end{itemize}
 
 \subsection{Prozesshierarchie}
 
-Wenn ein Prozess ein Kindprozess erzeugt und dieser weitere Kindprozesse, so bilden diese eine Prozesshierarchie. In Unix bildet ein Prozess mit all seinen Nachkommen eine Prozessfamilie. In Windows gibt es keine Prozesshierarchie. Elternrprozesse bekommen unter Windows bei Erzeugung eines Kindprozesses einen Token. Mit diesen kann der Kindprozess gesteuert werden.
+Wenn ein Prozess ein Kindprozess erzeugt und dieser weitere Kindprozesse, so
+bilden diese eine Prozesshierarchie. In UNIX bildet ein Prozess mit all seinen
+Nachkommen eine Prozessfamilie. In Windows gibt es keine Prozesshierarchie.
+Elternrprozesse bekommen unter Windows bei Erzeugung eines Kindprozesses einen
+Token. Mit diesen kann der Kindprozess gesteuert werden.
 
 \subsection{Prozesszustände (sehr Prüfungsrelevant)}
 
 Prozesse können in einen von drei Zuständen sein:
 
 \begin{itemize}
-    \item Rechnend (running) Befehle werde auf der CPU Ausgeführt. Der Pro\-zess kann die CPU zeit nutzen.
-    \item Blockiert (blocked) Prozess ist nicht lauffähig bis ein Externes Ereignis eintritt (z.B. wartet er auf \texttt{I/O}).
-    \item Rechenbereit (ready) Prozess "steht an" und wartet, bis Scheduler ihn CPU zeit zuweist.
+    \item Rechnend (running) Befehle werde auf der CPU Ausgeführt. Der Pro\-zess kann die
+          CPU zeit nutzen.
+    \item Blockiert (blocked) Prozess ist nicht lauffähig bis ein Externes Ereignis
+          eintritt (z.B. wartet er auf \texttt{I/O}).
+    \item Rechenbereit (ready) Prozess "steht an" und wartet, bis Scheduler ihn CPU zeit
+          zuweist.
 \end{itemize}
 
 \subsubsection{Übergänge zwischen den Zuständen}
 
 \subsubsection*{Rechnend $\Rightarrow$ Blockiert}
 
-Betriebssystem entdeckt, dass ein Prozess nicht fortfahren kann. Der Prozess muss in manchen Systemen den Systemaufruf \texttt{pause} ausführen, um blockiert zu werden. In Unix werden Prozesse blockiert, wenn sie beispielsweise von einer Pipe oder Terminal lesen und dort noch keine Daten anliegen.
+Betriebssystem entdeckt, dass ein Prozess nicht fortfahren kann. Der Prozess
+muss in manchen Systemen den Systemaufruf \texttt{pause} ausführen, um
+blockiert zu werden. In UNIX werden Prozesse blockiert, wenn sie beispielsweise
+von einer Pipe oder Terminal lesen und dort noch keine Daten anliegen.
 
 \subsubsection*{Rechnend $\Rightarrow$ Rechenbereit}
 
-Dm Prozess wird vom Scheduler die CPU Zeit entzogen, ohne dass der Prozess dies bemerkt. Der Scheduler entscheidet, dass der Prozess lange genug gelaufen ist. Ein anderer Prozess erhält nach wechsel die Rechenleistung.
+Dm Prozess wird vom Scheduler die CPU Zeit entzogen, ohne dass der Prozess dies
+bemerkt. Der Scheduler entscheidet, dass der Prozess lange genug gelaufen ist.
+Ein anderer Prozess erhält nach wechsel die Rechenleistung.
 
 \subsubsection*{Rechenbereit $\Rightarrow$ Rechnend}
 
@@ -62,39 +89,48 @@ Der Prozess bekommt vom Scheduler Rechenzeit zugeteilt.
 
 \subsubsection*{Blockiert $\Rightarrow$ Rechenbereit}
 
-Externes Ereignis, auf das gewartet wurde, tritt ein. Prozess wartet, bis dieser vom Scheduler CPU-Zeit zugewiesen bekommt.
+Externes Ereignis, auf das gewartet wurde, tritt ein. Prozess wartet, bis
+dieser vom Scheduler CPU-Zeit zugewiesen bekommt.
 
 \subsection{Implementierung von Prozesstabellen}
 
-Das Betriebssystem pflegt eine Prozesstabelle. Jeder Prozess hat hier einen Eintrag (\textit{Prozesskontrollblock}). Die Prozesstabelle enthält wichtige Informationen über die Prozesse.
+Das Betriebssystem pflegt eine Prozesstabelle. Jeder Prozess hat hier einen
+Eintrag (\textit{Prozesskontrollblock}). Die Prozesstabelle enthält wichtige
+Informationen über die Prozesse.
 
 \begin{tabular}{ | c | c | c | }
     \hline
-    Prozessverwaltung & Speicherverwaltung & Dateiverwaltung \\\hline 
-    Register & Zeiger auf Textsegment & Wurzelverzeichnis \\
-    Befehlszähler & Zeiger auf Datensegment & Arbeitsverzeichnis \\
-    Programmstatuswort & Zeiger auf Stacksegment & Dateideskriptor \\
-    Kellerregister & & Benutzer-ID \\
-    Prozesszustand & & Gruppen-ID \\
-    Priorität & &\\
-    Scheduling-Parameter & &\\
-    Prozess-ID & &\\
-    Elternprozesse & &\\
-    Prozessgruppe & &\\
-    Signale & &\\
-    Startzeit des Prozesses & &\\
-    Benutzte CPU-Zeit & &\\
-    CPU-Zeit der Kindprozesse & &\\
-    Zeitpunkt des nächsten Alarms & & \\ \hline
+    Prozessverwaltung             & Speicherverwaltung      & Dateiverwaltung    \\\hline
+    Register                      & Zeiger auf Textsegment  & Wurzelverzeichnis  \\
+    Befehlszähler                 & Zeiger auf Datensegment & Arbeitsverzeichnis \\
+    Programmstatuswort            & Zeiger auf Stacksegment & Dateideskriptor    \\
+    Kellerregister                &                         & Benutzer-ID        \\
+    Prozesszustand                &                         & Gruppen-ID         \\
+    Priorität                     &                         &                    \\
+    Scheduling-Parameter          &                         &                    \\
+    Prozess-ID                    &                         &                    \\
+    Elternprozesse                &                         &                    \\
+    Prozessgruppe                 &                         &                    \\
+    Signale                       &                         &                    \\
+    Startzeit des Prozesses       &                         &                    \\
+    Benutzte CPU-Zeit             &                         &                    \\
+    CPU-Zeit der Kindprozesse     &                         &                    \\
+    Zeitpunkt des nächsten Alarms &                         &                    \\ \hline
 \end{tabular}
 
 \subsection{Ablauf der interruptverarbeitung}
 
-Wenn die Hardware eine Unterbrechung (Interrupt) auslöst, so wird Programmzähler, Programmstatus und Register auf den Stack abgelegt. Die CPU setzt die bearbeitung an den durch Interruptvektor vorgegebenen Adresse fort. Der Reset wird durch die Software in einer Unterbrechungsroutine erledigt. 
+Wenn die Hardware eine Unterbrechung (Interrupt) auslöst, so wird
+Programmzähler, Programmstatus und Register auf den Stack abgelegt. Die CPU
+setzt die bearbeitung an den durch Interruptvektor vorgegebenen Adresse fort.
+Der Reset wird durch die Software in einer Unterbrechungsroutine erledigt.
 
 \section{Threads}
 
-Traditionell hat jeder Prozess einen Thread. In einigen Anwendungen sind mehrere Aktivitäten auf einmal zu erledigen. Ein Thread ist ein leichtgewichtiger Prozess. Diese können 10-100 mal schneller erzeugt bzw zerstörtz werden, wie normale Prozesse. Ein Thread besitzt:
+Traditionell hat jeder Prozess einen Thread. In einigen Anwendungen sind
+mehrere Aktivitäten auf einmal zu erledigen. Ein Thread ist ein
+leichtgewichtiger Prozess. Diese können 10-100 mal schneller erzeugt bzw
+zerstörtz werden, wie normale Prozesse. Ein Thread besitzt:
 
 \begin{itemize}
     \item Befehlszähler
@@ -102,44 +138,74 @@ Traditionell hat jeder Prozess einen Thread. In einigen Anwendungen sind mehrere
     \item Stack
 \end{itemize}
 
-Ein Thread läuft in einem Prozess und wird auf der CPU ausgeführt. Ein Prozess kann beliebig viele Threads haben. Threads teilen sich einen Adressraum und andere Ressourcen. Mehrere Threads nennt man \textit{Multithreadding}.
+Ein Thread läuft in einem Prozess und wird auf der CPU ausgeführt. Ein Prozess
+kann beliebig viele Threads haben. Threads teilen sich einen Adressraum und
+andere Ressourcen. Mehrere Threads nennt man \textit{Multithreadding}.
 
-Threads können sich gegenseitig den Stack verändern. Zwischen ihnen ist kein Schutz notwendig, da jeder Thread für einen Prozess arbeitet. Threads können wie Prozesse \textit{Rechenbereit}, \textit{Rechnend} oder \textit{Blockiert} sein. Threads werden in der Regel nicht gezwungen, sich abzuwechseln, sondern sie müssen über \texttt{thread\_yield} die CPU an andere Threads abgeben.
+Threads können sich gegenseitig den Stack verändern. Zwischen ihnen ist kein
+Schutz notwendig, da jeder Thread für einen Prozess arbeitet. Threads können
+wie Prozesse \textit{Rechenbereit}, \textit{Rechnend} oder \textit{Blockiert}
+sein. Threads werden in der Regel nicht gezwungen, sich abzuwechseln, sondern
+sie müssen über \texttt{thread\_yield} die CPU an andere Threads abgeben.
 
 \section{Interprozesskommunikation}
 
 \subsection{Race Conditions}
 \label{race_conditions}
 
-Eine Race Condition  tritt auf, wenn mehrere Prozesse auf gemeinsame Daten zugreifen und das Endergebnis von der unvorhersebaren, zeitlichen Reihenfolge ihrer Aktionen abhängt. Dies kann zu schwer auffindbaren Fehlern wie Datenverlust führen. Die lösung besteht darin, diese Kritische Region durch wechselseitigen Ausschluss zu schützen, sodass immer nur ein Prozess gleichzeitig auf die Daten zugreifen kann.
+Eine Race Condition tritt auf, wenn mehrere Prozesse auf gemeinsame Daten
+zugreifen und das Endergebnis von der unvorhersebaren, zeitlichen Reihenfolge
+ihrer Aktionen abhängt. Dies kann zu schwer auffindbaren Fehlern wie
+Datenverlust führen. Die lösung besteht darin, diese Kritische Region durch
+wechselseitigen Ausschluss zu schützen, sodass immer nur ein Prozess
+gleichzeitig auf die Daten zugreifen kann.
 
 \subsection{Kritische Region}
 
-Die kritische Region ist ein teil des Programms, in dem auf die gemeinsammen Daten zugegriffen wird. Sie ist \textit{nicht} der Datenbereich selbst. Diese müssen geschützt werden, um Race Conditions zu vermeiden. Hierfür dürfen die Prozesse nicht einfach so getaktet sein, dass keine Probleme auftreten sollten. Um Race Conditions zu vermeiden, müssen die folgenden vier Bedingungen eingehalten werden:
+Die kritische Region ist ein teil des Programms, in dem auf die gemeinsammen
+Daten zugegriffen wird. Sie ist \textit{nicht} der Datenbereich selbst. Diese
+müssen geschützt werden, um Race Conditions zu vermeiden. Hierfür dürfen die
+Prozesse nicht einfach so getaktet sein, dass keine Probleme auftreten sollten.
+Um Race Conditions zu vermeiden, müssen die folgenden vier Bedingungen
+eingehalten werden:
 
 \begin{enumerate}
-    \item Es darf immer nur ein prozess  gleichzeitig in einer kritischen Region sein
-    \item Es dürfen keine Annahmen über die Geschwindigkeit und Anzahl der CPUs gemacht werden
-    \item Kein Prozess der außerhalb des Kritischen bereichs läuft, darf andere Prozesse blockieren
-    \item Jeder Prozess muss nach endlicher Zeit seine Kritische Zone verlassen, sodass kein Prozess ewig warten muss, dass dieser die Kritische Zone betreten darf.
+    \item Es darf immer nur ein prozess gleichzeitig in einer kritischen Region sein
+    \item Es dürfen keine Annahmen über die Geschwindigkeit und Anzahl der CPUs gemacht
+          werden
+    \item Kein Prozess der außerhalb des Kritischen bereichs läuft, darf andere Prozesse
+          blockieren
+    \item Jeder Prozess muss nach endlicher Zeit seine Kritische Zone verlassen, sodass
+          kein Prozess ewig warten muss, dass dieser die Kritische Zone betreten darf.
 \end{enumerate}
 
 \subsection{Aktives warten}
 \label{aktives_warten}
 
-Aktives warten funktioniert über \textit{polling}. Der Prozess überprüft aktiv, ob die Kritische Zone genutzt wird. Wenn diese benutzt wird, überprüft der Prozess unmittelbar danach noch einmal, ob sie immer noch benutzt wird.
+Aktives warten funktioniert über \textit{polling}. Der Prozess überprüft aktiv,
+ob die Kritische Zone genutzt wird. Wenn diese benutzt wird, überprüft der
+Prozess unmittelbar danach noch einmal, ob sie immer noch benutzt wird.
 
-Der Prozess versucht bildlich gesprochen eine Tür zu öffnen, welche verschlossen ist. Dann versucht er dies nocheinmal, und dann noch einmal und so weiter, bis die Tür geöffnet wird.
+Der Prozess versucht bildlich gesprochen eine Tür zu öffnen, welche
+verschlossen ist. Dann versucht er dies nocheinmal, und dann noch einmal und so
+weiter, bis die Tür geöffnet wird.
 
 Dies ist absolute Ressourcenverschwendugn und sollte immer vermieden werden.
 
 \subsubsection{Andere Prozesse sperren}
 
-Ein Prozess könnte, um \nameref{aktives_warten} zu vermeiten, alle anderen Prozesse sperren, sodass keiner mehr läuft, bis die Kritische Zone verlassen wird. Dies ist jedoch selbstverständlich sehr gefährrlich und kann das Betriebssystem zu absturz bringen.
+Ein Prozess könnte, um \nameref{aktives_warten} zu vermeiten, alle anderen
+Prozesse sperren, sodass keiner mehr läuft, bis die Kritische Zone verlassen
+wird. Dies ist jedoch selbstverständlich sehr gefährrlich und kann das
+Betriebssystem zu absturz bringen.
 
 \subsubsection{Sperrvariablen}
 
-um \nameref{race_conditions} zu vermeiden, können gemeinsam benutzte Variablen, welche mit 0 initialisiert sind, genutzt werden. Wenn ein Prozess den Kritischen bereich betritt, wird diese auf 1 gesetzt. Wenn die Kritische Zone verlassen wird, wird diese wieder auf 0 gesetzt. Hierdurch wird jedoch eine neue Kritische Zone erschaffen, wordurch dies keine lösung ist.
+um \nameref{race_conditions} zu vermeiden, können gemeinsam benutzte Variablen,
+welche mit 0 initialisiert sind, genutzt werden. Wenn ein Prozess den
+Kritischen bereich betritt, wird diese auf 1 gesetzt. Wenn die Kritische Zone
+verlassen wird, wird diese wieder auf 0 gesetzt. Hierdurch wird jedoch eine
+neue Kritische Zone erschaffen, wordurch dies keine lösung ist.
 
 \subsubsection{Striktes Alternieren}
 
@@ -165,7 +231,9 @@ while (TRUE) {
 } 
 \end{lstlisting}
 
-Dieser Ansatz funktioniert zwar, jedoch gibt es einige Probleme. Langsame Prozesse blockieren hier chnelle Prozesse. Außerdem blockieren Prozesse andere außerhalb der Kritischen Zone, wodurch geben Bedingung 3 verstoßen wird.
+Dieser Ansatz funktioniert zwar, jedoch gibt es einige Probleme. Langsame
+Prozesse blockieren hier chnelle Prozesse. Außerdem blockieren Prozesse andere
+außerhalb der Kritischen Zone, wodurch geben Bedingung 3 verstoßen wird.
 
 \subsubsection{Peterson Algorithmus (sehr Prüfungsrelevant)}
 
@@ -190,13 +258,16 @@ void leave_region(int process) {
 } 
 \end{lstlisting}
 
-Der Peterson algorithmus funktioniert \textbf{nur für 2 Prozesse} und \textbf{\textit{nicht}} für n Prozesse. 
+Der Peterson algorithmus funktioniert \textbf{nur für 2 Prozesse} und
+\textbf{\textit{nicht}} für n Prozesse.
 
 \subsubsection{TSL Befehl (sehr Prüfungsrelevant)}
 
 \lstinline{TSL Rx, LOCK}
 
-Der TSL (Test and set lock) Befehl \textit{benötigt Hardwareunterstützung}. Der Inahlt der Speichervariable \texttt{LOCK} wird in das Register \texttt{Rx} gelesen. In \texttt{LOCK} wird ein Wert ungleich 0 geschrieben.
+Der TSL (Test and set lock) Befehl \textit{benötigt Hardwareunterstützung}. Der
+Inahlt der Speichervariable \texttt{LOCK} wird in das Register \texttt{Rx}
+gelesen. In \texttt{LOCK} wird ein Wert ungleich 0 geschrieben.
 
 \begin{lstlisting}[language={[x86masm]Assembler}]
 enter_region:
@@ -210,7 +281,8 @@ leave_region:
     RET 
 \end{lstlisting}
 
-Gibt es den TSL Befehl nicht (wie auf Intel x86 CPUs), so muss der Code wiefolgt angepasst werden: (mögliche Prüfungsfrage)
+Gibt es den TSL Befehl nicht (wie auf Intel x86 CPUs), so muss der Code
+wiefolgt angepasst werden: (mögliche Prüfungsfrage)
 
 \begin{lstlisting}[language={[x86masm]Assembler}]
 enter_region:
@@ -227,18 +299,24 @@ leave_region:
 
 \subsection{Passives warten}
 
-Ein Prozess, der in den Kritischen Bereich geht, legt alle anderen Prozesse die in den Kritischen bereich gehen wollen schlafen.
+Ein Prozess, der in den Kritischen Bereich geht, legt alle anderen Prozesse die
+in den Kritischen bereich gehen wollen schlafen.
 
 \subsubsection{Semaphoren (sehr Prüfungsrelevant)}
 
-Semaphoren benötigen \textbf{keine} Hardwareunterstützung. Sie haben zwei Operationen:
+Semaphoren benötigen \textbf{keine} Hardwareunterstützung. Sie haben zwei
+Operationen:
 
 \begin{itemize}
     \item \texttt{Down} \newline Überprüft, ob Wert > 0 ist. Wenn ja, wert = wert - 1. Wenn nein, Prozess schlafen legen.
     \item \texttt{up} \newline wert = wert + 1 und schlafende Prozesse wecken.
 \end{itemize}
 
-Diese Operationen sind durch Systemaufrufe realisiert. Der Wert kann \textbf{nicht} direkt von Semaphoren gelesen/geschrieben werden. Aufgrunddessen können sie nicht unterbrochen werden. Sie sind also Atomar. In Systemen mit mehreren CPUs wird jeder Semaphor durch Sperrvariablen unter verwendung von \texttt{tsl} oder \texttt{XCHG} geschützt.
+Diese Operationen sind durch Systemaufrufe realisiert. Der Wert kann
+\textbf{nicht} direkt von Semaphoren gelesen/geschrieben werden. Aufgrunddessen
+können sie nicht unterbrochen werden. Sie sind also Atomar. In Systemen mit
+mehreren CPUs wird jeder Semaphor durch Sperrvariablen unter verwendung von
+\texttt{tsl} oder \texttt{XCHG} geschützt.
 
 \subsubsection*{Lösung des Erzeuger Verbracuher Problems mit Semaphoren}
 
@@ -278,7 +356,8 @@ void consumer(void) {
 
 \subsubsection{Ereigniszähler}
 
-Ein Ereigniszähler ist eine Spezielle Variablenart, auf denen drei Operationen angewandt werden können:
+Ein Ereigniszähler ist eine Spezielle Variablenart, auf denen drei Operationen
+angewandt werden können:
 
 \begin{itemize}
     \item \texttt{read(E)}: Liefert den aktuellen Wert von E
@@ -288,7 +367,9 @@ Ein Ereigniszähler ist eine Spezielle Variablenart, auf denen drei Operationen 
 
 \subsubsection{Mutex}
 
-Ein Mutex ist eine vereinfachte Form des Semaphors. Er ist eine gemeinsamme Variable, die gesperrt oder nicht gesperrt sein kann. Ein Mutex besitzt zwei Prozeduren:
+Ein Mutex ist eine vereinfachte Form des Semaphors. Er ist eine gemeinsamme
+Variable, die gesperrt oder nicht gesperrt sein kann. Ein Mutex besitzt zwei
+Prozeduren:
 
 \begin{itemize}
     \item \texttt{mutex\_lock}: Wird aufgerufen, wenn Zugang zum Kritischen Bereich gebraucht wird. $\Rightarrow{}$ Warten wenn gesperrt, sonst Eintritt.
@@ -315,13 +396,19 @@ Kein Aktives warten, da Thread die CPU an anderen Thread abgibt.
 
 \subsection{Monitor}
 
-Vertausch von \texttt{down(mutex)} und \texttt{up(mutex)} können bei der Lösung des Erzeuger Verbraucher Problems zu einem Deadlock führen. Um dies zu verhindern, gibt es den Monitor. Der Monitor ist eine Sammlung von Prozeduren, Variablen und Datenstrukturen, die als Modul zusammengefasst werden. Es kann zu einem Zeitpunkt immer nur ein Prozess im Monitor aktiv sein.
+Vertausch von \texttt{down(mutex)} und \texttt{up(mutex)} können bei der Lösung
+des Erzeuger Verbraucher Problems zu einem Deadlock führen. Um dies zu
+verhindern, gibt es den Monitor. Der Monitor ist eine Sammlung von Prozeduren,
+Variablen und Datenstrukturen, die als Modul zusammengefasst werden. Es kann zu
+einem Zeitpunkt immer nur ein Prozess im Monitor aktiv sein.
 
-Monitore sind Spezielle Programmkonstrukte. Es ist die Aufgabe des Compilers, wechselnden Ausschluss von Monitoren zu realisieren.
+Monitore sind Spezielle Programmkonstrukte. Es ist die Aufgabe des Compilers,
+wechselnden Ausschluss von Monitoren zu realisieren.
 
 \subsection{Nachrichtenaustausch}
 
-In verteilten Systemen können Semaphoren und Ereigniszähler nicht benutzt werden. Der Nachrichtenaustausch hat zwei Operationen:
+In verteilten Systemen können Semaphoren und Ereigniszähler nicht benutzt
+werden. Der Nachrichtenaustausch hat zwei Operationen:
 
 \begin{itemize}
     \item \texttt{send(destination, \&message);}
@@ -331,40 +418,60 @@ In verteilten Systemen können Semaphoren und Ereigniszähler nicht benutzt werd
 Hierbei gibt es einige Probleme in Netzen:
 
 \begin{itemize}
-    \item Nachrichten können verloren gehen, indem z.B. mehrfach an dieselbe Destination gesendet wird
+    \item Nachrichten können verloren gehen, indem z.B. mehrfach an dieselbe Destination
+          gesendet wird
     \item Benennung von Sender und Empfänger ist z.B. \texttt{prozess@maschine}
 \end{itemize}
 
-Die lösung des Erzeuger Verbraucher Problems über den Nachrichtenaustausch setzt voraus, dass alle Nachrichten dieselbe Länge haben und das Betriebssystem die Nachrichten puffert.
+Die lösung des Erzeuger Verbraucher Problems über den Nachrichtenaustausch
+setzt voraus, dass alle Nachrichten dieselbe Länge haben und das Betriebssystem
+die Nachrichten puffert.
 
 Ablauf:
 
 \begin{itemize}
     \item Verbraucher sendet $n$ leere Nachrichten an Erzeuger
-    \item Wenn Erzeuger ein Datum an Verbraucher übergeben will, entnimmt er eine leere Nachricht und schickt sie gefüllt zurück
+    \item Wenn Erzeuger ein Datum an Verbraucher übergeben will, entnimmt er eine leere
+          Nachricht und schickt sie gefüllt zurück
 \end{itemize}
 
-Wenn der Erzeuger schneller als der Verbraucher ist, sind keine leeren Nach\-rich\-ten vorhanden, welche beschrieben werden können. Der Erzeuger muss also warten.
+Wenn der Erzeuger schneller als der Verbraucher ist, sind keine leeren
+Nach\-rich\-ten vorhanden, welche beschrieben werden können. Der Erzeuger muss
+also warten.
 
-Wenn der Verbraucher schneller als der Erzeuger ist, blockiert der Verbraucher einfach.
+Wenn der Verbraucher schneller als der Erzeuger ist, blockiert der Verbraucher
+einfach.
 
 \subsubsection{Lösung des Erzeuger Verbraucher Problems mittels Mailboxen}
 
-Erzeuger und Verbraucher besitzen Mailboxen. Puffer sind endlich und können $n$ Nachrichten aufnehmen. Senden an die Verbraucher Mailbox blockiert den Erzeugerprozess. Senden an die volle Erzeuger-Mailbox blockiert den Verbruacherprozess.
+Erzeuger und Verbraucher besitzen Mailboxen. Puffer sind endlich und können $n$
+Nachrichten aufnehmen. Senden an die Verbraucher Mailbox blockiert den
+Erzeugerprozess. Senden an die volle Erzeuger-Mailbox blockiert den
+Verbruacherprozess.
 
 \subsubsection{Lösung des Erzeuger Verbraucher Problems ohne Pufferspeicher}
 
-Wird zuerst \texttt{send} und danach \texttt{recieve} gesendet, so wird der Erzeugerprozess blockiert, bis \texttt{recieve} ausgeführt wird. Wird zuerst \texttt{recieve} und danach \texttt{send} ausgeführt, so wird der Verbruacherprozess blockiert, bis \texttt{send} ausgeführt wird.
+Wird zuerst \texttt{send} und danach \texttt{recieve} gesendet, so wird der
+Erzeugerprozess blockiert, bis \texttt{recieve} ausgeführt wird. Wird zuerst
+\texttt{recieve} und danach \texttt{send} ausgeführt, so wird der
+Verbruacherprozess blockiert, bis \texttt{send} ausgeführt wird.
 
 \subsection{Barrieren}
 
-Barrieren sorgen dafür, dass Prozesse auf andere Warten. Alle Prozesse müssen eine Phase abgeschlossen haben, um weiter zu kommen. Erst wenn jeder Prozess die Phase abgeschlossen hat und die Barierre erreicht hat, dürfen Prozesse weiter arbeiten. Der schnellste Prozess wartet auf den langsamsten.
+Barrieren sorgen dafür, dass Prozesse auf andere Warten. Alle Prozesse müssen
+eine Phase abgeschlossen haben, um weiter zu kommen. Erst wenn jeder Prozess
+die Phase abgeschlossen hat und die Barierre erreicht hat, dürfen Prozesse
+weiter arbeiten. Der schnellste Prozess wartet auf den langsamsten.
 
 \section{Scheduling}
 
-Prozesse konkurrieren um die CPU Zeit. Der Scheduling Algorithmus entscheidet, welcher Prozess die CPU nutzen darf. Ein Prozesswechsel ist sehr aufwendig und braucht viel CPU Zeit. Deshalb sollten diese so selten wie möglich stattfinden.
+Prozesse konkurrieren um die CPU Zeit. Der Scheduling Algorithmus entscheidet,
+welcher Prozess die CPU nutzen darf. Ein Prozesswechsel ist sehr aufwendig und
+braucht viel CPU Zeit. Deshalb sollten diese so selten wie möglich stattfinden.
 
-Prozesse können CPU intensiv oder \texttt{I/O} Intensiv sein.\texttt{I/O} Intensive Prozesse sollten bevorzugt werden, damit die \texttt{I/O} Parallel zu anderen Berechnungen passiert.
+Prozesse können CPU intensiv oder \texttt{I/O} Intensiv sein.\texttt{I/O}
+Intensive Prozesse sollten bevorzugt werden, damit die \texttt{I/O} Parallel zu
+anderen Berechnungen passiert.
 
 Der Scheduler arbeitet in folgenden Situationen:
 
@@ -375,7 +482,11 @@ Der Scheduler arbeitet in folgenden Situationen:
     \item Eintreten eines \texttt{I/O} Interrupts
 \end{itemize}
 
-Falls Hardware Timer zyklisch Interrupts sendet, so kann der Scheduler abhängig vom Timer entscheiden zwischen nicht unterbrechenden Scheduling Strategien (\textit{nonpreemptive}) und unterbrechenden Schedulingstrategien (\textit{preemtive}) entscheiden. Schedulingstrategien werden in drei Kategorien unterteilt:
+Falls Hardware Timer zyklisch Interrupts sendet, so kann der Scheduler abhängig
+vom Timer entscheiden zwischen nicht unterbrechenden Scheduling Strategien
+(\textit{nonpreemptive}) und unterbrechenden Schedulingstrategien
+(\textit{preemtive}) entscheiden. Schedulingstrategien werden in drei
+Kategorien unterteilt:
 
 \begin{itemize}
     \item Stapelverarbeitung
@@ -383,92 +494,153 @@ Falls Hardware Timer zyklisch Interrupts sendet, so kann der Scheduler abhängig
     \item Echtzeit
 \end{itemize}
 
-Die Ziele jedes Scheduling Algorithmussses können sich leicht unterscheiden. Jede Strategie will fair sein, die Strategie durchsetzen und alle Teile des Systems auslasten.
+Die Ziele jedes Scheduling Algorithmussses können sich leicht unterscheiden.
+Jede Strategie will fair sein, die Strategie durchsetzen und alle Teile des
+Systems auslasten.
 
-Stapelverarbeitungssysteme wollen die Jobs pro Stunde maximieren, die Zeit von Start bis zu Beendigung minimieren und die CPU möglichst hoch auslasten.
+Stapelverarbeitungssysteme wollen die Jobs pro Stunde maximieren, die Zeit von
+Start bis zu Beendigung minimieren und die CPU möglichst hoch auslasten.
 
-Interaktive Systeme hingegen wollen eine schnelle Antwortzeit liefern und die Anforderungen des Benutzers erfüllen.
+Interaktive Systeme hingegen wollen eine schnelle Antwortzeit liefern und die
+Anforderungen des Benutzers erfüllen.
 
-Echtzeitbetriebssysteme wollen Deadlines einhalten und Qualitätseinbußen vermeiden.
+Echtzeitbetriebssysteme wollen Deadlines einhalten und Qualitätseinbußen
+vermeiden.
 
 \subsection{Scheduling in Interaktiven Systemen}
 \subsubsection{First come first serve}
 
-Prozesse konnen der Reihe wie sie erstellt werden ran. Jeder Prozess darf so lange rechnen, wie er will. Bei blockierung kommt der nächste Prozess an die reihe. Wird ein blockierter Prozess wieder rechenbereit, so stellt er sich wie ein neuer Prozess hinten an.
+Prozesse konnen der Reihe wie sie erstellt werden ran. Jeder Prozess darf so
+lange rechnen, wie er will. Bei blockierung kommt der nächste Prozess an die
+reihe. Wird ein blockierter Prozess wieder rechenbereit, so stellt er sich wie
+ein neuer Prozess hinten an.
 
-Dieser Algorithmus ist zwar einfach zu implementieren und fair, jedoch werden \texttt{I/O} intensive Programme stark ausgebremst.
+Dieser Algorithmus ist zwar einfach zu implementieren und fair, jedoch werden
+\texttt{I/O} intensive Programme stark ausgebremst.
 
 \subsubsection{Shortest job first}
 
-Der Kürzeste Job wird als erstes durchgeführt. Jobs die lange dauern, werden erst ganz am Ende aufgerufen. Optimal einsetzbar, wenn alle Jobs von anfang an vorliegen.
+Der Kürzeste Job wird als erstes durchgeführt. Jobs die lange dauern, werden
+erst ganz am Ende aufgerufen. Optimal einsetzbar, wenn alle Jobs von anfang an
+vorliegen.
 
 \subsubsection{Shortest Remaining Time next Scheduling}
 
-Unterbrechende Version von Shortest Job First. Scheduler wählt immer den Prozess aus, dessen verbleibende Zeit am kürzesten ist. Wenn ein neuer Job ankomt, wird dessen Gesamtlaufzeit mit der verbleibenden des Aktuellen verglichen. Wenn neuer job kürzer ist, wird aktueller unterbrochen.
+Unterbrechende Version von Shortest Job First. Scheduler wählt immer den
+Prozess aus, dessen verbleibende Zeit am kürzesten ist. Wenn ein neuer Job
+ankomt, wird dessen Gesamtlaufzeit mit der verbleibenden des Aktuellen
+verglichen. Wenn neuer job kürzer ist, wird aktueller unterbrochen.
 
 \subsection{Scheduling in interaktiven Systemen}
 
 \subsubsection{Round Robin Scheudling}
 
-Jeder Prozess bekommt ein gewisses Quantum an Rechenzeit. Nach ablauf dieses Quantums wird der Prozss entsorgt. Wenn ein Prozess blockiert oder beendet, so erfolgt ein Prozesswechsel. Nach ablauf des Quantums wird der Prozss ans ende der Prozessliste gesetzt.
+Jeder Prozess bekommt ein gewisses Quantum an Rechenzeit. Nach ablauf dieses
+Quantums wird der Prozss entsorgt. Wenn ein Prozess blockiert oder beendet, so
+erfolgt ein Prozesswechsel. Nach ablauf des Quantums wird der Prozss ans ende
+der Prozessliste gesetzt.
 
-Die länge des Quantums sollte passend gewählt werden. Bei einem zu niedrigen Quantum ist der overhead sehr groß, da der Prozesswechsel sehr viel Zeit beansprucht. Bei einem zu hohen Quantum sind die Antwortzeiten sehr schlecht. Ein Quantum von $20ms$ bis $50ms$ ist ein guter Kompromiss.
+Die länge des Quantums sollte passend gewählt werden. Bei einem zu niedrigen
+Quantum ist der overhead sehr groß, da der Prozesswechsel sehr viel Zeit
+beansprucht. Bei einem zu hohen Quantum sind die Antwortzeiten sehr schlecht.
+Ein Quantum von $20ms$ bis $50ms$ ist ein guter Kompromiss.
 
 \subsubsection{Prioritätsscheduling}
 
-Jeder Prozess bekommt eine Priorität. Prozess, der Ausführbereit ist und die höchste Priorität hat, wird ausgeführt. Priorität wird bei ausführung mit jedem Uhrtick erniedrigt, sonst würde im zweifel immer der gleiche Prozess laufen. Prozesswechsel erfolgt, wenn Priorität unter der eines anderen liegt.
+Jeder Prozess bekommt eine Priorität. Prozess, der Ausführbereit ist und die
+höchste Priorität hat, wird ausgeführt. Priorität wird bei ausführung mit jedem
+Uhrtick erniedrigt, sonst würde im zweifel immer der gleiche Prozess laufen.
+Prozesswechsel erfolgt, wenn Priorität unter der eines anderen liegt.
 
 Für die Prioritätsvergabe gibt es folgende Strategien:
 
 \subsubsection*{Statische Prioritätsvergabe}
 
-Prioritäten werden bei Programmstart vergeben. Beispielsweise kostet Prozess A $160$€ pro Stunde, und Prozess B nur $80$€. Prozess A bekommt also eine deutlich höhere Priorität. Hier kann das \nameref{prioritaetsinversenproblem} auftreten.
+Prioritäten werden bei Programmstart vergeben. Beispielsweise kostet Prozess A
+$160$€ pro Stunde, und Prozess B nur $80$€. Prozess A bekommt also eine
+deutlich höhere Priorität. Hier kann das \nameref{prioritaetsinversenproblem}
+auftreten.
 
 \subsubsection*{Dynamische Prioritätsvergabe}
 
-Prozess mit viel \texttt{I/O} wartet die meiste Zeit auf diese. Sobald ein Prozess rechenbereit ist, soll er CPU zeit bekommen, dass er wieder auf \texttt{I/O} warten kann. Priorität des Prozesses wird auf $1 / f$ gesetzt, wobei f der Anteil ist, den der Prozess von seinem Quantum verbraucht hat.
+Prozess mit viel \texttt{I/O} wartet die meiste Zeit auf diese. Sobald ein
+Prozess rechenbereit ist, soll er CPU zeit bekommen, dass er wieder auf
+\texttt{I/O} warten kann. Priorität des Prozesses wird auf $1 / f$ gesetzt,
+wobei f der Anteil ist, den der Prozess von seinem Quantum verbraucht hat.
 
 \subsubsection*{Prioritätsklassen}
 
-Es gibt mehrere Prioritätsklassen, in denen z.B. Round Robin durchgeführt wird. Solange es Prozesse in der höchsten Prioritätsklasse gibt, werden nur diese ausgeführt. Danach wird mit der nächst unteren Klasse gearbeitet. Prozesse in sehr niedrigen Klassen gelangen hier unter Umständen nie zur Ausführung.
+Es gibt mehrere Prioritätsklassen, in denen z.B. Round Robin durchgeführt wird.
+Solange es Prozesse in der höchsten Prioritätsklasse gibt, werden nur diese
+ausgeführt. Danach wird mit der nächst unteren Klasse gearbeitet. Prozesse in
+sehr niedrigen Klassen gelangen hier unter Umständen nie zur Ausführung.
 
 \subsubsection{Schortest Process Next Scheduling}
 
-Bearbeitungszeit eines Prozesses wird in viele kleine Bearbeitungszeiten zerteilt, bis ein Interrupt auftritt. Ein ganzer Prozess wird also in viele kleine Prozesse aufgeteilt. Prozess, dessen vermutlich nächste Rechenzeit am niedrigsten ist (basierend auf Vergangenheit) kommt als nächstes an die Reihe.
+Bearbeitungszeit eines Prozesses wird in viele kleine Bearbeitungszeiten
+zerteilt, bis ein Interrupt auftritt. Ein ganzer Prozess wird also in viele
+kleine Prozesse aufgeteilt. Prozess, dessen vermutlich nächste Rechenzeit am
+niedrigsten ist (basierend auf Vergangenheit) kommt als nächstes an die Reihe.
 
 \subsubsection{Garantiertes Scheduling}
 
-Dem Benutzer soll eine Aussage über zu erwartende Performacne gemacht werden. Das Betriebssystem überwacht, wie viel prozessorzeit jeder Benutzer bisher verbraucht hat. Aus dem Verhältnis zwischen verbrauchter und zustehender Prozessorzeit wird die Priorität bestimmt. Prozess mit dem kleinsten Verhältnis wird so lange ausgeführt, bis sein Verhältnis größer ist als das eines anderen prozesses.
+Dem Benutzer soll eine Aussage über zu erwartende Performacne gemacht werden.
+Das Betriebssystem überwacht, wie viel prozessorzeit jeder Benutzer bisher
+verbraucht hat. Aus dem Verhältnis zwischen verbrauchter und zustehender
+Prozessorzeit wird die Priorität bestimmt. Prozess mit dem kleinsten Verhältnis
+wird so lange ausgeführt, bis sein Verhältnis größer ist als das eines anderen
+prozesses.
 
 \subsubsection{Lotteriescheduling}
 
-Jedem Prozess werden Lotterielose für Systemzeit gegeben. Lose werden gezogen und Prozess mit Korekten Los bekommt CPU Zeit. Wichtigen Prozessen können mehrere Lose gegeben werden.
+Jedem Prozess werden Lotterielose für Systemzeit gegeben. Lose werden gezogen
+und Prozess mit Korekten Los bekommt CPU Zeit. Wichtigen Prozessen können
+mehrere Lose gegeben werden.
 
-Die Prozesse können untereinander Lose austauschen, so kann wenn ein Client auf den Server warten muss, dieser all seine Lose an den Server geben. Der Server gibt die Lose zurück, wenn er fertig ist.
+Die Prozesse können untereinander Lose austauschen, so kann wenn ein Client auf
+den Server warten muss, dieser all seine Lose an den Server geben. Der Server
+gibt die Lose zurück, wenn er fertig ist.
 
 \subsubsection{Fair Share Scheduling}
 
-Jeder Benutzer bekommt einen Fiaren Anteil an Rechenzeit. Wenn Benutzer A 9 Prozesse hat, und Benutzer B nur einen, bekommen beide trotzdem je 50\% der Rechenzeit.
-
+Jeder Benutzer bekommt einen Fiaren Anteil an Rechenzeit. Wenn Benutzer A 9
+Prozesse hat, und Benutzer B nur einen, bekommen beide trotzdem je 50\% der
+Rechenzeit.
 
 \subsection{Prioritätsinversenprblem (Prüfungsgarantie)}
 \label{prioritaetsinversenproblem}
 
-Ein Prozess mit hoher Priorität über Polling den Kritischen Bereich betreten möchte, ein Prozess mit niedriger Priorität jedoch schon im Kritischen Bereich ist, so muss der Prozess mit hoher Priorität warten. Da der Prozess mit hoher Priorität jedoch aufgrund des Aktiven Wartens seine CPU zeit nicht abgibt, versucht er immer wieder in den Kritischen Bereich zu treten, wodurch er dem Prozess im Kritischen Bereich die CPU Zeit wegnimmt und sich selbst ausschließt.
+Ein Prozess mit hoher Priorität über Polling den Kritischen Bereich betreten
+möchte, ein Prozess mit niedriger Priorität jedoch schon im Kritischen Bereich
+ist, so muss der Prozess mit hoher Priorität warten. Da der Prozess mit hoher
+Priorität jedoch aufgrund des Aktiven Wartens seine CPU zeit nicht abgibt,
+versucht er immer wieder in den Kritischen Bereich zu treten, wodurch er dem
+Prozess im Kritischen Bereich die CPU Zeit wegnimmt und sich selbst
+ausschließt.
 
 \subsection{Scheduling in Echtzeitsystemen}
 
-Es existieren Zeitschranken für Ausführung von Prozessen. Eine Verspätete Antwort ist oft genauso schlimm wie gar keine Antwort. Aufgrunddessen müssen Prozesse Zeitlich so eingeteilt werden, dass alle Deadlines eingehalten werden.
+Es existieren Zeitschranken für Ausführung von Prozessen. Eine Verspätete
+Antwort ist oft genauso schlimm wie gar keine Antwort. Aufgrunddessen müssen
+Prozesse Zeitlich so eingeteilt werden, dass alle Deadlines eingehalten werden.
 
 \subsection{Thread Scheduling}
 
-Wenn Prozesse Threads besitzen, liegen zwei Ebenen von Parallelität vor: Prozessparrallelität und Threadparrallelität. Das Scheduling hängt stark davon ab, ob Threads auf Anwendungs- oder Kernebene unterstützt werden. Auf benutzerebene können Threads nur innerhalb des Prozesses scheduled werden. Auf Kernebene können Threads aus verschiedenen Prozessen vermischt scheduled werden.
+Wenn Prozesse Threads besitzen, liegen zwei Ebenen von Parallelität vor:
+Prozessparrallelität und Threadparrallelität. Das Scheduling hängt stark davon
+ab, ob Threads auf Anwendungs- oder Kernebene unterstützt werden. Auf
+benutzerebene können Threads nur innerhalb des Prozesses scheduled werden. Auf
+Kernebene können Threads aus verschiedenen Prozessen vermischt scheduled
+werden.
 
 \section{Klassische Probleme der IPC}
 
 \subsection{Das Philosophenproblem}
 
-fünf Philosophen sitzen an einen Tisch. Jeder hat einen Teller und zwischen den Tellern liegt jeweilts eine Gabel. Ein Philosoph denkt oder versucht zu essen, wenn er hungrig ist. Zum Essen benötigt er zwei Gabeln. Jeder der Philosophen kann zu jeder beliebigen Zeit hungrig werden.
+fünf Philosophen sitzen an einen Tisch. Jeder hat einen Teller und zwischen den
+Tellern liegt jeweilts eine Gabel. Ein Philosoph denkt oder versucht zu essen,
+wenn er hungrig ist. Zum Essen benötigt er zwei Gabeln. Jeder der Philosophen
+kann zu jeder beliebigen Zeit hungrig werden.
 
 \subsubsection{Naive Lösung}
 
@@ -487,7 +659,8 @@ void philosopher (int i) {
 } 
 \end{lstlisting}
 
-Wenn alle Philosphoen gleichzeitig versuchen zu essen, kommt es zu einen Deadlock.
+Wenn alle Philosphoen gleichzeitig versuchen zu essen, kommt es zu einen
+Deadlock.
 
 \subsubsection{Semaphoren}
 
@@ -539,7 +712,9 @@ void test (int i) {
 
 \subsection{Das Leser-Schreiber Problem}
 
-Es wollen mehrere Prozesse gleichzeitig auf eine Datenbank zugreifen. Wenn bestimmte Prozesse Datensätze verändern wollen, darf kein weiterer Prozess auf die Datenbank zugreifen, egal ob lesend oder schreibend.
+Es wollen mehrere Prozesse gleichzeitig auf eine Datenbank zugreifen. Wenn
+bestimmte Prozesse Datensätze verändern wollen, darf kein weiterer Prozess auf
+die Datenbank zugreifen, egal ob lesend oder schreibend.
 
 \subsubsection{Eine Lösung des Leser-Schreiber Problems}
 

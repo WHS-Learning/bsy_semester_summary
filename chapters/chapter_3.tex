@@ -1,51 +1,87 @@
 \chapter{Kapitel 3}
 
-Der Speicher ist, neben der CPU, eines der wichtigsten Betriebsmittel in einem Rechnersystem. Eine Kernaussage, bekannt als Parkinsons Gesetz angewandt auf Speicher, lautet: „Die Programme expandieren, um den zugänglichen Speicher, der sie enthält, auszufüllen.". Der Teil des Betriebssystems, der die Speicherhierarchie verwaltet, wird als \textbf{Speicherverwaltung} (Memory Manager) bezeichnet.
+Der Speicher ist, neben der CPU, eines der wichtigsten Betriebsmittel in einem
+Rechnersystem. Eine Kernaussage, bekannt als Parkinsons Gesetz angewandt auf
+Speicher, lautet: „Die Programme expandieren, um den zugänglichen Speicher, der
+sie enthält, auszufüllen.". Der Teil des Betriebssystems, der die
+Speicherhierarchie verwaltet, wird als \textbf{Speicherverwaltung} (Memory
+Manager) bezeichnet.
 
 \section{Systeme ohne Speicherverwaltung}
 
-Frühe Computersysteme, wie Großrechner vor 1960 und PCs vor 1980, kamen ohne Speicherabstraktion aus. Das bedeutet, dass Programme direkt auf den physikalischen Speicher zugegriffen haben. Ein Mehrprogrammbetrieb war unter diesen Umständen nicht möglich.
+Frühe Computersysteme, wie Großrechner vor 1960 und PCs vor 1980, kamen ohne
+Speicherabstraktion aus. Das bedeutet, dass Programme direkt auf den
+physikalischen Speicher zugegriffen haben. Ein Mehrprogrammbetrieb war unter
+diesen Umständen nicht möglich.
 
-Um dennoch mehrere Programme ausführen zu können, wurden zwei grundlegende Techniken entwickelt:
+Um dennoch mehrere Programme ausführen zu können, wurden zwei grundlegende
+Techniken entwickelt:
 
 \subsection{Swapping}
-Beim Swapping wird der gesamte Speicherinhalt auf eine Platte ausgelagert (geswappt), um Platz für ein neues Programm zu schaffen. Nachdem das neue Programm abgearbeitet wurde, kann das nächste geladen werden.
+Beim Swapping wird der gesamte Speicherinhalt auf eine Platte ausgelagert
+(geswappt), um Platz für ein neues Programm zu schaffen. Nachdem das neue
+Programm abgearbeitet wurde, kann das nächste geladen werden.
 
 \subsection{Statische Relokation}
-Hierbei werden die Adressen eines Programms beim Laden in den Speicher angepasst. Das Betriebssystem addiert eine Startadresse auf alle Speicheradressen des Programms. Eine Herausforderung dabei ist die Unterscheidung zwischen Adressen und Konstanten, was den Ladevorgang verlangsamt.
+Hierbei werden die Adressen eines Programms beim Laden in den Speicher
+angepasst. Das Betriebssystem addiert eine Startadresse auf alle
+Speicheradressen des Programms. Eine Herausforderung dabei ist die
+Unterscheidung zwischen Adressen und Konstanten, was den Ladevorgang
+verlangsamt.
 
 \section{Speicherabstraktion: Der Adressraum}
 
-Die Speicherabstraktion löst die Probleme der direkten Adressierung durch die Einführung von Adressräumen. Der \textbf{Adressraum} ist die Menge aller Adressen, die ein Prozess zur Adressierung des Speichers nutzen kann. Jeder Prozess erhält seinen eigenen, von anderen Prozessen getrennten (disjunkten) Adressraum.
+Die Speicherabstraktion löst die Probleme der direkten Adressierung durch die
+Einführung von Adressräumen. Der \textbf{Adressraum} ist die Menge aller
+Adressen, die ein Prozess zur Adressierung des Speichers nutzen kann. Jeder
+Prozess erhält seinen eigenen, von anderen Prozessen getrennten (disjunkten)
+Adressraum.
 
 \subsection{Relokation und Schutz}
-Die Speicherabstraktion ermöglicht es, verschiedene Prozesse an unterschiedliche Stellen im physikalischen Speicher zu laden (Relokation) und sie voreinander zu schützen. Eine Hardware-Lösung hierfür verwendet ein \textbf{Basisregister} und ein \textbf{Limitregister}.
+Die Speicherabstraktion ermöglicht es, verschiedene Prozesse an
+unterschiedliche Stellen im physikalischen Speicher zu laden (Relokation) und
+sie voreinander zu schützen. Eine Hardware-Lösung hierfür verwendet ein
+\textbf{Basisregister} und ein \textbf{Limitregister}.
 \begin{itemize}
-    \item Das \textbf{Basisregister} wird bei einem Prozesswechsel mit der Startadresse des Prozesses im physikalischen Speicher geladen.
-    \item Das \textbf{Limitregister} enthält die Länge des für den Prozess reservierten Speicherbereichs (Partition).
+    \item Das \textbf{Basisregister} wird bei einem Prozesswechsel mit der Startadresse
+          des Prozesses im physikalischen Speicher geladen.
+    \item Das \textbf{Limitregister} enthält die Länge des für den Prozess reservierten
+          Speicherbereichs (Partition).
 \end{itemize}
 Bei jedem Speicherzugriff wird die vom Prozess generierte Adresse zunächst mit dem Limitregister verglichen. Ist die Adresse größer oder gleich dem Limit, wird ein Fehler ausgelöst (Schutzverletzung). Andernfalls wird die Adresse zum Inhalt des Basisregisters addiert, um die physikalische Adresse zu erhalten. Der Nachteil ist, dass bei jedem Speicherzugriff eine Addition und ein Vergleich notwendig sind, wobei die Addition als teuer (zeitaufwendig) gilt.
 
 \subsection{Swapping mit Speicherabstraktion}
-In modernen Mehrbenutzersystemen ist die Anzahl der Prozesse oft größer als der verfügbare physikalische Speicher. Swapping ist hier eine gängige Strategie:
+In modernen Mehrbenutzersystemen ist die Anzahl der Prozesse oft größer als der
+verfügbare physikalische Speicher. Swapping ist hier eine gängige Strategie:
 \begin{itemize}
-    \item Prozesse werden vollständig in den Speicher geladen, laufen für eine bestimmte Zeit und werden dann wieder in den Hintergrundspeicher ausgelagert.
-    \item Dies führt zur \textbf{Fragmentierung} des Speichers, es entstehen Lücken. Diese Lücken zu schließen (Speicherverdichtung) ist sehr zeitaufwendig. Eine 16-GB-Maschine, die 8 Bytes in 8 ns kopiert, benötigt für die Verdichtung ca. 16 Sekunden.
-    \item Da Prozesse oft wachsen, ist es sinnvoll, bei der Einlagerung etwas mehr Speicher zu reservieren. Beim Auslagern wird nur der tatsächlich belegte Speicher auf die Platte geschrieben.
+    \item Prozesse werden vollständig in den Speicher geladen, laufen für eine bestimmte
+          Zeit und werden dann wieder in den Hintergrundspeicher ausgelagert.
+    \item Dies führt zur \textbf{Fragmentierung} des Speichers, es entstehen Lücken.
+          Diese Lücken zu schließen (Speicherverdichtung) ist sehr zeitaufwendig. Eine
+          16-GB-Maschine, die 8 Bytes in 8 ns kopiert, benötigt für die Verdichtung ca.
+          16 Sekunden.
+    \item Da Prozesse oft wachsen, ist es sinnvoll, bei der Einlagerung etwas mehr
+          Speicher zu reservieren. Beim Auslagern wird nur der tatsächlich belegte
+          Speicher auf die Platte geschrieben.
 \end{itemize}
 
 \subsection{Verwaltung von freiem Speicher}
 Zur Verwaltung von freiem Speicher gibt es hauptsächlich zwei Methoden:
 
 \subsubsection{Speicherverwaltung mit Bitmaps}
-Der Speicher wird in \textbf{Allokationseinheiten (AE)} unterteilt. Für jede AE gibt es ein Bit in einer Bitmap (0 = frei, 1 = belegt).
+Der Speicher wird in \textbf{Allokationseinheiten (AE)} unterteilt. Für jede AE
+gibt es ein Bit in einer Bitmap (0 = frei, 1 = belegt).
 \begin{itemize}
     \item \textbf{Vorteil:} Einfachheit.
     \item \textbf{Nachteil:} Die Größe der Bitmap hängt von der Größe der AE ab. Kleine AEs führen zu großen Bitmaps, während große AEs zu interner Fragmentierung führen (eine AE ist im Mittel nur zur Hälfte belegt).
 \end{itemize}
 
 \subsubsection{Speicherverwaltung mit verketteter Liste}
-Freier und belegter Speicher wird in einer nach Adressen sortierten, verketteten Liste verwaltet. Jeder Eintrag in der Liste repräsentiert entweder einen Prozess (P) oder ein Loch (L) und enthält die Startadresse, die Länge und einen Zeiger auf den nächsten Eintrag. Wenn ein Prozess terminiert, werden angrenzende Löcher verschmolzen.
+Freier und belegter Speicher wird in einer nach Adressen sortierten,
+verketteten Liste verwaltet. Jeder Eintrag in der Liste repräsentiert entweder
+einen Prozess (P) oder ein Loch (L) und enthält die Startadresse, die Länge und
+einen Zeiger auf den nächsten Eintrag. Wenn ein Prozess terminiert, werden
+angrenzende Löcher verschmolzen.
 
 \paragraph{Algorithmen zur Speicherallozierung:}
 \begin{itemize}
@@ -59,84 +95,163 @@ Freier und belegter Speicher wird in einer nach Adressen sortierten, verketteten
 \subsection{Speicherverwaltung mit dem Buddy-System}
 Dieses System nutzt die binäre Adressierung von Rechnern.
 \begin{itemize}
-    \item Es werden Listen von freien Blöcken in Zweierpotenzgrößen (1, 2, 4, 8, ... KB) verwaltet.
-    \item Bei einer Anforderung für einen Block der Größe $k$ wird eine Liste mit Blöcken der Größe $2^m$ gesucht, wobei $2^{m-1} < k \le 2^m$.
-    \item Ist kein Block der passenden Größe frei, wird ein größerer Block rekursiv halbiert ("Buddies"), bis ein passender Block entsteht.
+    \item Es werden Listen von freien Blöcken in Zweierpotenzgrößen (1, 2, 4, 8, ... KB)
+          verwaltet.
+    \item Bei einer Anforderung für einen Block der Größe $k$ wird eine Liste mit Blöcken
+          der Größe $2^m$ gesucht, wobei $2^{m-1} < k \le 2^m$.
+    \item Ist kein Block der passenden Größe frei, wird ein größerer Block rekursiv
+          halbiert ("Buddies"), bis ein passender Block entsteht.
     \item \textbf{Nachteil:} Hohe interne Fragmentierung, da immer auf die nächste Zweierpotenz aufgerundet wird.
 \end{itemize}
 
 \section{Virtueller Speicher (Extrem prüfungsrelevant)}
 
-Beispielsweise Filme sind zu groß, um in die meisten Haupspeicher geladen zu werden. Dennoch ist es möglich, Filme auf Computern zu gucken. Programme im allgemeinen sind zu groß für den Speicher. Aufgrunddessen müssen zur Laufzeit Programme (zumindest Teilweise) ein- und Ausgelagert werden. Zur Laufzeit wird dann entschieden, welches Programm und welche Teile des Programms in den Hauptspeicher geladen werden soll. 
+Beispielsweise Filme sind zu groß, um in die meisten Haupspeicher geladen zu
+werden. Dennoch ist es möglich, Filme auf Computern zu gucken. Programme im
+allgemeinen sind zu groß für den Speicher. Aufgrunddessen müssen zur Laufzeit
+Programme (zumindest Teilweise) ein- und Ausgelagert werden. Zur Laufzeit wird
+dann entschieden, welches Programm und welche Teile des Programms in den
+Hauptspeicher geladen werden soll.
 
-Swapping ist hier eine mögliche lösung, jedoch keine gute, da es sehr lange dauert, gesammte Prozesse samt ihres Contextes in den Hauptspeicher zu swappen.
+Swapping ist hier eine mögliche lösung, jedoch keine gute, da es sehr lange
+dauert, gesammte Prozesse samt ihres Contextes in den Hauptspeicher zu swappen.
 
 \subsection{Grundidee}
 
-Der Haupspeicher wird in einzelne Teile aufgeteilt (sog. Seiten). Jede Seite ist ein aneinander angrenzender Bereich von Adressen. Das Betriebssystem hält nur die aktuell relevanten Seiten im Hauptspeicher, alle anderen Seiten sind im Massenspeicher gespeichert. Bei Filmen werden also beispielsweise nur die nächsten 10 Frames im Hauptspeicher geladen. Damit muss nur eine halbe Sekunde des Films anstelle von mehreren Stunden langen Film im Hauptspeicher gespeichert sein.
+Der Haupspeicher wird in einzelne Teile aufgeteilt (sog. Seiten). Jede Seite
+ist ein aneinander angrenzender Bereich von Adressen. Das Betriebssystem hält
+nur die aktuell relevanten Seiten im Hauptspeicher, alle anderen Seiten sind im
+Massenspeicher gespeichert. Bei Filmen werden also beispielsweise nur die
+nächsten 10 Frames im Hauptspeicher geladen. Damit muss nur eine halbe Sekunde
+des Films anstelle von mehreren Stunden langen Film im Hauptspeicher
+gespeichert sein.
 
-Seiten, welche im Hauptspeicher sind, nennt man PageFrames. Andere Seiten werden Virtuelle Seiten genannt. Wird auf eine Virtuelle Seite zugegriffen, erfolgt ein Seitenfehler. Das Betriebssystem muss nun dafür sorgen, dass die angeforderte Seite in den Hauptspeicher gelangt. Hierbei kann es passieren, dass der Hauptspeicher nicht genug Platz für die neue Seite hat. Deshalb muss mittels eines Seitenersetzungsalgorithmuses eine alte Seite aus den Hauptspeicher gelöscht werden.
+Seiten, welche im Hauptspeicher sind, nennt man PageFrames. Andere Seiten
+werden Virtuelle Seiten genannt. Wird auf eine Virtuelle Seite zugegriffen,
+erfolgt ein Seitenfehler. Das Betriebssystem muss nun dafür sorgen, dass die
+angeforderte Seite in den Hauptspeicher gelangt. Hierbei kann es passieren,
+dass der Hauptspeicher nicht genug Platz für die neue Seite hat. Deshalb muss
+mittels eines Seitenersetzungsalgorithmuses eine alte Seite aus den
+Hauptspeicher gelöscht werden.
 
-Sobald Virtuelle Seite in Hauptspeicher geladen ist, muss der ausgeführte Befehl restauriert werden, sodass der Befehl noch einmal ausgeführt werden kann.
+Sobald Virtuelle Seite in Hauptspeicher geladen ist, muss der ausgeführte
+Befehl restauriert werden, sodass der Befehl noch einmal ausgeführt werden
+kann.
 
 \subsection{Paging}
 
-Jeder Rechner hat eine Menge von virtuellen Speicheradressen. 
+Jeder Rechner hat eine Menge von virtuellen Speicheradressen.
 
 MOVE REG, 1000
 
 kopiert die Speicherstelle 1000 in das Register oder umgekehrt.
 
-die von Programmen generierten Adressen werden \textit{virtuelle Adressen} genannt. Alle Programme bilden den virtuellen Adressraum. Der Virtuelle Speicher ist meist um einen faktor 1000000 größer als der tatsächliche Hauptspeicher. Um sicherzustellen, wo die Virtuellen Adressen im Hauptspeicher abgelegt sind, wird die gls{MMU} benötigt.
+die von Programmen generierten Adressen werden \textit{virtuelle Adressen}
+genannt. Alle Programme bilden den virtuellen Adressraum. Der Virtuelle
+Speicher ist meist um einen faktor 1000000 größer als der tatsächliche
+Hauptspeicher. Um sicherzustellen, wo die Virtuellen Adressen im Hauptspeicher
+abgelegt sind, wird die gls{MMU} benötigt.
 
 \subsection{Seitentabellen}
 
 \includegraphics[width=\textwidth]{virtuelle_adressen.png}
 
-Die Virtuellen Adressen 0KB-4KB ist im Seitenrahmen 2, die Virtuellen Adressen 4KB - 8KB ist im Seitenrahmen 1 usw. Virtuelle Adressen wie beispielsweise 24KB - 28KB sind gar nicht im Hauptspeicher. Wenn auf diese zugegriffen werden soll, müssen diese in den Hauptspeicher geladen werden.
+Die Virtuellen Adressen 0KB-4KB ist im Seitenrahmen 2, die Virtuellen Adressen
+4KB - 8KB ist im Seitenrahmen 1 usw. Virtuelle Adressen wie beispielsweise 24KB
+- 28KB sind gar nicht im Hauptspeicher. Wenn auf diese zugegriffen werden soll,
+müssen diese in den Hauptspeicher geladen werden.
 
-Der Virtuelle Adressraum wird in Seiten gleicher Größe eingeteilt (512 Byte - 1GB üblich). Seiten und Seitenrahmens ind idr. gleich groß. Zwischen RAM und Festplatte werden immer nur komplette Seiten übertragen. Um zu prüfen, ob eine Virtuelle Seite im Speicher ist, wird das Present/absent- Bit überprüft.
+Der Virtuelle Adressraum wird in Seiten gleicher Größe eingeteilt (512 Byte -
+1GB üblich). Seiten und Seitenrahmens ind idr. gleich groß. Zwischen RAM und
+Festplatte werden immer nur komplette Seiten übertragen. Um zu prüfen, ob eine
+Virtuelle Seite im Speicher ist, wird das Present/absent- Bit überprüft.
 
 \subsection{Pagefault (Seitenfehler)}
 
-Wenn auf eine nicht vorhandene Seite zugegriffen wird, ist das Present-Bit = 0. Die MMU muss nun per Interrupt sicherstellen, dass die benötigte Seite in den Hauptspeicher geladen wird. Hierfür überprüft die MMU zunächst, ob noch freier Platz zur verfügung steht. Wenn nicht wird ein Seitenersetz\-ungsalgorithmus aufgerufen, um eine Seite zu ersetzen. Hierbei ist es möglich, dass diese Seite bearbeitet wurde. Wenn eine Seite im Hauptspeicher bearbeitet wurde, muss sie zunächst zurück in den Massenspeicher geschrieben werden, um Datenverlust zu verhindern. Auch das Present- und Absent bit muss von der MMU gesetzt werden. Der BEfehl, der den Pagefault ausgelöst hat, wird wiederholt.
+Wenn auf eine nicht vorhandene Seite zugegriffen wird, ist das Present-Bit = 0.
+Die MMU muss nun per Interrupt sicherstellen, dass die benötigte Seite in den
+Hauptspeicher geladen wird. Hierfür überprüft die MMU zunächst, ob noch freier
+Platz zur verfügung steht. Wenn nicht wird ein Seitenersetz\-ungsalgorithmus
+aufgerufen, um eine Seite zu ersetzen. Hierbei ist es möglich, dass diese Seite
+bearbeitet wurde. Wenn eine Seite im Hauptspeicher bearbeitet wurde, muss sie
+zunächst zurück in den Massenspeicher geschrieben werden, um Datenverlust zu
+verhindern. Auch das Present- und Absent bit muss von der MMU gesetzt werden.
+Der BEfehl, der den Pagefault ausgelöst hat, wird wiederholt.
 
 \subsubsection{Interne Operationen der MMU}
 
 \includegraphics[width=\textwidth]{interne_operationen_der_mmu.png}
 
-Unten steht Virtuelle Seitennummer. Die vorderen vier Bit werden als Index für Seitentabelle verwendet. hier 0010 steht für Eintrag 2 an Seitentabelle. Present/Absent bit ist hier gesetzt, sprich die Seite ist im Hauptspeicher vorhanden. Die tatsächliche Adresse wird dann als Prefix an die Tatsächliche Phsysikalische Adresse gesetzt. Dies funktioniert, da mit zweierpotenzen gerechnet werden. Die Seitennummer kann einfach mit der Adresse innerhalb der Seite Konkartiniert werden.
+Unten steht Virtuelle Seitennummer. Die vorderen vier Bit werden als Index für
+Seitentabelle verwendet. hier 0010 steht für Eintrag 2 an Seitentabelle.
+Present/Absent bit ist hier gesetzt, sprich die Seite ist im Hauptspeicher
+vorhanden. Die tatsächliche Adresse wird dann als Prefix an die Tatsächliche
+Phsysikalische Adresse gesetzt. Dies funktioniert, da mit zweierpotenzen
+gerechnet werden. Die Seitennummer kann einfach mit der Adresse innerhalb der
+Seite Konkartiniert werden.
 
-Die Seitentabelle dient als Abbildung einer Virtuellen adresse auf Physikalischen Seitenrahmen. 
+Die Seitentabelle dient als Abbildung einer Virtuellen adresse auf
+Physikalischen Seitenrahmen.
 
 \subsection{Einträge der Seitentabelle}
 
 \includegraphics[width=\textwidth]{seitentabelleneintrag.png}
 
-In der Seitentabelle steht, ob Cashing eingeschalten oder abgeschalten ist. Wenn häufig auf eine Seite zugegriffen wird, kann sie gecashed werden. Hier kann sich der Inhalt der Seite im Massenspeicher von der im Cash unterscheiden. Das \textit{R-Bit} (Reference Bit) sagt aus, ob in letzter Zeit auf diese Seite zugegriffen wurde. Das \textit{M-Bit} (Modify Bit oder Dirty Bit) sagt aus, ob die Seite modifiziert wurde. Wenn die Seite nicht modifiziert wurde, muss sie nicht zurück in den Massenspeicher zurückgeschrieben werden, da die Seiten im Haupt- und Massenspeicher identisch sind. Die Protection-Bits (read, write, execute) sagen aus, ob und wer die Seite ausführen, lesen und schreiben darf.
+In der Seitentabelle steht, ob Cashing eingeschalten oder abgeschalten ist.
+Wenn häufig auf eine Seite zugegriffen wird, kann sie gecashed werden. Hier
+kann sich der Inhalt der Seite im Massenspeicher von der im Cash unterscheiden.
+Das \textit{R-Bit} (Reference Bit) sagt aus, ob in letzter Zeit auf diese Seite
+zugegriffen wurde. Das \textit{M-Bit} (Modify Bit oder Dirty Bit) sagt aus, ob
+die Seite modifiziert wurde. Wenn die Seite nicht modifiziert wurde, muss sie
+nicht zurück in den Massenspeicher zurückgeschrieben werden, da die Seiten im
+Haupt- und Massenspeicher identisch sind. Die Protection-Bits (read, write,
+execute) sagen aus, ob und wer die Seite ausführen, lesen und schreiben darf.
 
 \subsection{Beschleunigung des Paging}
 
-Die umrechnung von virtuellen zu Phsyikalischen Adressen muss sehr schnell erfolgen. Hierfür könnte mit registern gearbeitet werden, dies funktioniert in der realität allerdings nicht, da Seitentabellen sehr groß werden können (bei 64Bit rechner und 4k großen Seiten ist Tabelle $2^{54}$ Byte lang. das sind 52 Petabyte!).
+Die umrechnung von virtuellen zu Phsyikalischen Adressen muss sehr schnell
+erfolgen. Hierfür könnte mit registern gearbeitet werden, dies funktioniert in
+der realität allerdings nicht, da Seitentabellen sehr groß werden können (bei
+64Bit rechner und 4k großen Seiten ist Tabelle $2^{54}$ Byte lang. das sind 52
+Petabyte!).
 
-Eine andere lösung wäre, dass sich die Seite komplett im Arbeitsspeicher befindet. Hier könnte ein Register auf den Anfang der Seitentabelle zeigen. Dann müsste allerdings bei jeder Speicherreferenz auf diese Seitentabelle zugegriffen werden, wodurch jeder \texttt{I/O} Zugriff sehr viel langsamer wird.
+Eine andere lösung wäre, dass sich die Seite komplett im Arbeitsspeicher
+befindet. Hier könnte ein Register auf den Anfang der Seitentabelle zeigen.
+Dann müsste allerdings bei jeder Speicherreferenz auf diese Seitentabelle
+zugegriffen werden, wodurch jeder \texttt{I/O} Zugriff sehr viel langsamer
+wird.
 
 \subsection{TLB - Translation Lookaside Buffer}
 
-Bisher ist davon ausgegangen, dass Seitentabellen im Speicher sind. Dies hat jedoch die oben genannten nachteile. Man Beobachtete, dass die meisten Programme eine große Anzahl von Referenzen auf eine kleine Anzahl von Seiten beschränken. Dies bedeutet, dass eine kleine Anzahl an Seiten häufiger benötigt werden. Ein Videoplayer wird beispielsweise die meiste Zeit für das Darstellen des Videos verhältnismäßig wenige Seiten benötigen. Am Anfang wird er jedoch viele Seiten benötigen. 
+Bisher ist davon ausgegangen, dass Seitentabellen im Speicher sind. Dies hat
+jedoch die oben genannten nachteile. Man Beobachtete, dass die meisten
+Programme eine große Anzahl von Referenzen auf eine kleine Anzahl von Seiten
+beschränken. Dies bedeutet, dass eine kleine Anzahl an Seiten häufiger benötigt
+werden. Ein Videoplayer wird beispielsweise die meiste Zeit für das Darstellen
+des Videos verhältnismäßig wenige Seiten benötigen. Am Anfang wird er jedoch
+viele Seiten benötigen.
 
-Es werden innerhalb der MMU eine kleine Anzahl an Seiten zwischengespeichert. Die Zuordnung der virtuellen Seiten wird in einem sog. \texttt{Translation Lookaside Buffer} gespeichert. Dieser ist extrem schnell, aber auch extrem teuer.
+Es werden innerhalb der MMU eine kleine Anzahl an Seiten zwischengespeichert.
+Die Zuordnung der virtuellen Seiten wird in einem sog. \texttt{Translation
+    Lookaside Buffer} gespeichert. Dieser ist extrem schnell, aber auch extrem
+teuer.
 
 \subsubsection{Aufbau}
 
-Der \texttt{TLB} Befindet sich innerhalb der MMU. Er verwaltet nur eine kleine Anzahl an einträgen und kann Hardwarebasiert innerhalb eines Taktes die gesammte gespeicherte Seitentabelle durchsuchen. Wenn eine Seitentabelle nicht innerhalb des \texttt{TLB} gefunden wird, wird diese aus dem Hauptspeicher geholt und in den \texttt{TLB} eingelagert.
+Der \texttt{TLB} Befindet sich innerhalb der MMU. Er verwaltet nur eine kleine
+Anzahl an einträgen und kann Hardwarebasiert innerhalb eines Taktes die
+gesammte gespeicherte Seitentabelle durchsuchen. Wenn eine Seitentabelle nicht
+innerhalb des \texttt{TLB} gefunden wird, wird diese aus dem Hauptspeicher
+geholt und in den \texttt{TLB} eingelagert.
 
 \subsubsection{Arbeitsweise des \texttt{TLB}}
 
 \begin{itemize}
     \item Virtuelle Adresse wird an MMU gesendet
-    \item Hardware durchsucht parallel alle Einträge des \texttt{TLB} nach der Virtuellen Adresse
-    \item Bei hit und keine Schutzcodeverletzung wird Seitenrahmennummer aus \texttt{TLB} verwendet.
+    \item Hardware durchsucht parallel alle Einträge des \texttt{TLB} nach der Virtuellen
+          Adresse
+    \item Bei hit und keine Schutzcodeverletzung wird Seitenrahmennummer aus \texttt{TLB}
+          verwendet.
     \item Bei hit und Schutzcodeverletzung kommt Schutzfehler-Außnahme
     \item bei Miss durchsucht MMU die Seitentabelle.
     \item Eintrag aus dem \texttt{TLB} wird durch den gefundenen Ersetzt
@@ -144,7 +259,9 @@ Der \texttt{TLB} Befindet sich innerhalb der MMU. Er verwaltet nur eine kleine A
 
 \subsubsection{Erhöhung der hit-rate}
 
-Trefferrate ist der Bruchteil der Speicherreferenzen mithilfe des \texttt{TLB} bedinet werden kann. Jehör die Hit-rate ist, desto besser ist die Performance. Die Performance hängt von drei Faktoren ab:
+Trefferrate ist der Bruchteil der Speicherreferenzen mithilfe des \texttt{TLB}
+bedinet werden kann. Jehör die Hit-rate ist, desto besser ist die Performance.
+Die Performance hängt von drei Faktoren ab:
 
 \begin{enumerate}
     \item Zugriffszeit auf Seitentabelle
@@ -152,7 +269,9 @@ Trefferrate ist der Bruchteil der Speicherreferenzen mithilfe des \texttt{TLB} b
     \item Trefferrate
 \end{enumerate}
 
-Die Trefferrate hängt also von der mittleren Anzahl der Seiten und der größe des \texttt{TLB} ab. Die Performance kann weiterhin erhöht werden, indem der \texttt{TLB} Prefetched wird.
+Die Trefferrate hängt also von der mittleren Anzahl der Seiten und der größe
+des \texttt{TLB} ab. Die Performance kann weiterhin erhöht werden, indem der
+\texttt{TLB} Prefetched wird.
 
 \subsubsection*{Cashing von \texttt{TLB} Einträgen}
 
@@ -160,27 +279,48 @@ Der \texttt{TLB} kann auch gecahsed werden.
 
 \subsection{Seitentabellen für große Speicherbreite}
 
-Seitentabellen sind heutzutage sehr sehr groß. Die gesammte Seitentabelle kann rein physikalisch nicht gesammt im Hauptspeicher gespeichert sein. Aus diesen grund gibt es \textit{Mehrstufiges Paging}. Die Virtuelle Adresse wird in mehrere Tabellen aufgeteilt.
+Seitentabellen sind heutzutage sehr sehr groß. Die gesammte Seitentabelle kann
+rein physikalisch nicht gesammt im Hauptspeicher gespeichert sein. Aus diesen
+grund gibt es \textit{Mehrstufiges Paging}. Die Virtuelle Adresse wird in
+mehrere Tabellen aufgeteilt.
 
 \includegraphics[width=\textwidth]{zweistufige_seitentabelle.png}
 
-Anstelle nur eines Bit für die Seitentabelle teilt man die Seitentabellenadresse in mehere Bit ein. so steht ein Bit für die Seitentabelle, in welcher weitere Seitentabellen sind. Der zweite Bit steht dann für die über die Seitentabelle gefundene Seitentabelle, in welcher dann der tatsächliche Seitenrahmen steht.
+Anstelle nur eines Bit für die Seitentabelle teilt man die
+Seitentabellenadresse in mehere Bit ein. so steht ein Bit für die
+Seitentabelle, in welcher weitere Seitentabellen sind. Der zweite Bit steht
+dann für die über die Seitentabelle gefundene Seitentabelle, in welcher dann
+der tatsächliche Seitenrahmen steht.
 
-In der realität wird dies nicht nur mit zweistufigen Paging, sondern mit mehrstufigen Paging durchgeführt. Beispielsweise besitzt der \texttt{80386} 4GB adressierbaren Speicher. Hier wird zweistufiges Paging verwendet. Der Pentium Pro hingegen hatte auch 4GB Adressierbaren Speicher, jedoch hat dieser 4 Stufiges Paging. Die X86-Familie mit 64 Bit besitzt 256TB adressierbaren Speicher addressierbar und 4  Stufiges Paging.
+In der realität wird dies nicht nur mit zweistufigen Paging, sondern mit
+mehrstufigen Paging durchgeführt. Beispielsweise besitzt der \texttt{80386} 4GB
+adressierbaren Speicher. Hier wird zweistufiges Paging verwendet. Der Pentium
+Pro hingegen hatte auch 4GB Adressierbaren Speicher, jedoch hat dieser 4
+Stufiges Paging. Die X86-Familie mit 64 Bit besitzt 256TB adressierbaren
+Speicher addressierbar und 4 Stufiges Paging.
 
-Mehrstufiges Paging erhöht den Overhead des Speicherzugriffs. Beispielsweise ist 4-Stufiges Paging 5 mal langsamer als Physikalische Adressen, da auf 4 Seitentabellen und dann noch auf die Physikalische Adresse zugegriffen werden muss.
+Mehrstufiges Paging erhöht den Overhead des Speicherzugriffs. Beispielsweise
+ist 4-Stufiges Paging 5 mal langsamer als Physikalische Adressen, da auf 4
+Seitentabellen und dann noch auf die Physikalische Adresse zugegriffen werden
+muss.
 
 \subsubsection{Invertierte Seitentabellen}
 
-Alternativ zu den ständig zunehmenden Stufen der Paging-Hierarchie wird ein Eintrag pro Seitenrahmen zugewiesen. 
+Alternativ zu den ständig zunehmenden Stufen der Paging-Hierarchie wird ein
+Eintrag pro Seitenrahmen zugewiesen.
 
 \subsubsection*{Vorteil}
 
-Es wird viel Speicher gespaart, wenn Physikalischer Speicher wesentlich kleiner als Virtueller Speicher ist. -> Ist heutzugage immer der fehleranfällig
+Es wird viel Speicher gespaart, wenn Physikalischer Speicher wesentlich kleiner
+als Virtueller Speicher ist. -> Ist heutzugage immer der fehleranfällig
 
 \subsubsection*{Nachteile}
 
-Wenn Prozess n auf Seite p zugreifen will, so muss er bei \textbf{jedem} Speicherzugriff die gesamte Seitentabelle nach dem paar \textit{(n,p)} durchsuchen -> sehr sehr langsam. Der \texttt{TLB} hilft zwar, allerdings bei einem TLB Fehler erfolgt das suchen der Seitentabelle per Software. Schnellere Suche ermöglichen Hashtabellen mit den virtuellen Adressen als Hashwert. 
+Wenn Prozess n auf Seite p zugreifen will, so muss er bei \textbf{jedem}
+Speicherzugriff die gesamte Seitentabelle nach dem paar \textit{(n,p)}
+durchsuchen -> sehr sehr langsam. Der \texttt{TLB} hilft zwar, allerdings bei
+einem TLB Fehler erfolgt das suchen der Seitentabelle per Software. Schnellere
+Suche ermöglichen Hashtabellen mit den virtuellen Adressen als Hashwert.
 
 \subsubsection*{Vergleich zwischen herkömmlicher und invertierter Seitentabelle}
 
@@ -188,17 +328,27 @@ Wenn Prozess n auf Seite p zugreifen will, so muss er bei \textbf{jedem} Speiche
 
 \section{Seitenerzetzungsalgorithmen}
 
-Durch Seitenersetzungsalgorithmen sollen zu häufige Seitenfehler vermieden werden. Die Fragestellung ist, welche seite am besten aus dem Hauptspeicher geholt wird. Hier sollte am besten eine Seite ausgelagert werden, welche in der Zukunft nicht so häufig verwendet wird. 
+Durch Seitenersetzungsalgorithmen sollen zu häufige Seitenfehler vermieden
+werden. Die Fragestellung ist, welche seite am besten aus dem Hauptspeicher
+geholt wird. Hier sollte am besten eine Seite ausgelagert werden, welche in der
+Zukunft nicht so häufig verwendet wird.
 
 \subsection{Optimaler Seitenersetzungsalgorithmus}
 
-Der Optimale Seitenersetzungsalgorithmus nimmt die Seite, die erst am weitesten in der Zukunft benötigt wird, und wirft sie aus den Speicher. Dies ist selbstverständlich nicht umsetzbar, jedoch ist der Optimale Seitenersetzungsalgorithmus sehr sinnvoll für Vergleichszwecke.
+Der Optimale Seitenersetzungsalgorithmus nimmt die Seite, die erst am weitesten
+in der Zukunft benötigt wird, und wirft sie aus den Speicher. Dies ist
+selbstverständlich nicht umsetzbar, jedoch ist der Optimale
+Seitenersetzungsalgorithmus sehr sinnvoll für Vergleichszwecke.
 
 \subsection{Not-Recently-Used-Algorithmus (NRU)}
 
-Es gibt zwei Bits im Rechner, die die Nutzung von Seiten protokollieren: das R- und M-Bit. Das R-Bit wird gesetzt, wenn die Seite referenziert wurde. Das M-Bit wird gesetzt, wenn eine Seite bearbeitet wird. Beide Bits bleiben gesetzt, bis das Betriebssystem diese zurücksetzt. Die Bits werden regelmäßig zurückgesetzt.
+Es gibt zwei Bits im Rechner, die die Nutzung von Seiten protokollieren: das R-
+und M-Bit. Das R-Bit wird gesetzt, wenn die Seite referenziert wurde. Das M-Bit
+wird gesetzt, wenn eine Seite bearbeitet wird. Beide Bits bleiben gesetzt, bis
+das Betriebssystem diese zurücksetzt. Die Bits werden regelmäßig zurückgesetzt.
 
-Bei jedem Timerinterrutp wird das R-Bit zurückgesetzt. Bei Seitenfehler werden alle Seiten in vier Klassen klassiviziert
+Bei jedem Timerinterrutp wird das R-Bit zurückgesetzt. Bei Seitenfehler werden
+alle Seiten in vier Klassen klassiviziert
 
 \begin{enumerate}
     \item Klasse 0: Nicht referenziert, nicht Modifiziert (guter Kanidat zum ersetzen)
@@ -207,49 +357,88 @@ Bei jedem Timerinterrutp wird das R-Bit zurückgesetzt. Bei Seitenfehler werden 
     \item Klasse 3: referenziert, modifiziert
 \end{enumerate}
 
-NRU entfernt zufällig eine Seite aus der Kleinstnummerierten, nicht leeren Klasse. Dieser Algo ist sehr einfach implementiert. Die Leistung ist zwar nicht Optimal, aber oft ausreichend.
+NRU entfernt zufällig eine Seite aus der Kleinstnummerierten, nicht leeren
+Klasse. Dieser Algo ist sehr einfach implementiert. Die Leistung ist zwar nicht
+Optimal, aber oft ausreichend.
 
 \subsection{First-In-First-Out-Algorithmus FIFO}
 
-Die älteste Seite befindet sich am Ende der Liste. die Neuste am Anfang. Es wird immer die älteste Seite ausgeworfen.
+Die älteste Seite befindet sich am Ende der Liste. die Neuste am Anfang. Es
+wird immer die älteste Seite ausgeworfen.
 
 \subsection{Second-Chance-Algorithmus}
 
-Der Second-Chance-Algorithmus ist eine Modifikation des FIFO-Algorithmus. Wenn die älteste Seite den R-Bit = 0 ist, wird sie entfernt. Wenn das R-Bit = 1 ist, wird die Seite nach vorne gestellt. Dies geschiet so lange, bis eine Seite gefunden wurde, bei welcher das R-Bit = 0 ist. Wenn keine Seite gefunden wird, wird die Älteste Seite entfernt.
+Der Second-Chance-Algorithmus ist eine Modifikation des FIFO-Algorithmus. Wenn
+die älteste Seite den R-Bit = 0 ist, wird sie entfernt. Wenn das R-Bit = 1 ist,
+wird die Seite nach vorne gestellt. Dies geschiet so lange, bis eine Seite
+gefunden wurde, bei welcher das R-Bit = 0 ist. Wenn keine Seite gefunden wird,
+wird die Älteste Seite entfernt.
 
 \subsection{Clock-Algorithmus}
 
-Der Clock-Algorithmus ist eine Variation des Second-Chance-Algorithmus. Die Seiten sind als Kreis dagestellt. Ein Zeiger zeigt auf die Älteste Seite. Wenn ein Seitenfehler auftritt, wird die Seite, auf die der Zeiger zeigt analysiert. Wenn R-Bit = 0 ist, wird die Seite ausgelagert. Wenn das R-Bit = 1 ist, wird R-Bit auf 0 gesetzt und der Zeiger rückt weiter.
+Der Clock-Algorithmus ist eine Variation des Second-Chance-Algorithmus. Die
+Seiten sind als Kreis dagestellt. Ein Zeiger zeigt auf die Älteste Seite. Wenn
+ein Seitenfehler auftritt, wird die Seite, auf die der Zeiger zeigt analysiert.
+Wenn R-Bit = 0 ist, wird die Seite ausgelagert. Wenn das R-Bit = 1 ist, wird
+R-Bit auf 0 gesetzt und der Zeiger rückt weiter.
 
 \subsection{Least-Recently-Used-Algorithmus (LRU)}
 
-Der Least-Recently-Used-Algirhtmus bildet eine Approximation des Optimalen Algorithmuses ab. Es werden die Seiten entfernt, die am längsten unbenutzt sind. Die Listen werden nach jedem Zugriff aktualisiert. Diese Liste zu pflegen sit sehr aufwändig, weshalb es mögliche umsetzung in Hardware gibt. Es wird ein Hardware 64Bit zähler bei jedem Zugriff inkrementiert. Die Seite mit dem niedrigsten Zählerstand wird dann ausgeworfen. Wenn eine Seite in der Vergangenheit sehr häufig benutzt wurde, bleiben unter Umständen für immer im Hauptspeicher.
+Der Least-Recently-Used-Algirhtmus bildet eine Approximation des Optimalen
+Algorithmuses ab. Es werden die Seiten entfernt, die am längsten unbenutzt
+sind. Die Listen werden nach jedem Zugriff aktualisiert. Diese Liste zu pflegen
+sit sehr aufwändig, weshalb es mögliche umsetzung in Hardware gibt. Es wird ein
+Hardware 64Bit zähler bei jedem Zugriff inkrementiert. Die Seite mit dem
+niedrigsten Zählerstand wird dann ausgeworfen. Wenn eine Seite in der
+Vergangenheit sehr häufig benutzt wurde, bleiben unter Umständen für immer im
+Hauptspeicher.
 
 \subsection{Not-Frequently-Used-Algorithmus (NFU)}
 
-Software Variation des LRU. Es wird Periodisch das R-Bit auf einen Zähler addiert. Die Seite mit den kleinsten Zählerstand wird dann entfernt. Auch hier ist das Problem, dass hohe Zählerstände nicht vergessen werden.
+Software Variation des LRU. Es wird Periodisch das R-Bit auf einen Zähler
+addiert. Die Seite mit den kleinsten Zählerstand wird dann entfernt. Auch hier
+ist das Problem, dass hohe Zählerstände nicht vergessen werden.
 
 \subsection{Aging-Algorithmus}
 
-Modifikation des NFU. Die Zähler werden alle ein Bit nach rechts geschoben, bevor das R-Bit addiert wird. Das R-Bit wird auf das am weitesten Links stehende Bit addiert.
+Modifikation des NFU. Die Zähler werden alle ein Bit nach rechts geschoben,
+bevor das R-Bit addiert wird. Das R-Bit wird auf das am weitesten Links
+stehende Bit addiert.
 
 \includegraphics[width=\textwidth]{aging.png}
 
 \subsection{Working-Set-Algorithmus}
 
-Reinste form des Paging. Bei Prozessstart ist keine Seite im Speicher. Überzeit kommen mehr und mehr Seiten in den Hauptspeicher. Die Lokalitätseigenschaft besagt, dass wärend der Ausführung eines Programms nur ein Bruchteil seiner Seiten benötigt werden. Der Arbeitsbereich beschreibt die Menge der Seiten, die ein Prozess zur ausführung benötigt. Ist der gesammte Arbeitsbereich im Speicher, so entstehen keine Seitenfehler.
+Reinste form des Paging. Bei Prozessstart ist keine Seite im Speicher. Überzeit
+kommen mehr und mehr Seiten in den Hauptspeicher. Die Lokalitätseigenschaft
+besagt, dass wärend der Ausführung eines Programms nur ein Bruchteil seiner
+Seiten benötigt werden. Der Arbeitsbereich beschreibt die Menge der Seiten, die
+ein Prozess zur ausführung benötigt. Ist der gesammte Arbeitsbereich im
+Speicher, so entstehen keine Seitenfehler.
 
-Wenn Prozesse vollständig aus den Arbeitsspeicher verdrängt wurden, werden viele Seitenfehler auftauchen. Dies kann den Prozess sehr stark verlangsamen, um den Faktor 1 bis 10 Mio. Dies wird Thrashing oder Seitenflattern genannt. Das Anlaufverhalten sollte also verbessert werden.
+Wenn Prozesse vollständig aus den Arbeitsspeicher verdrängt wurden, werden
+viele Seitenfehler auftauchen. Dies kann den Prozess sehr stark verlangsamen,
+um den Faktor 1 bis 10 Mio. Dies wird Thrashing oder Seitenflattern genannt.
+Das Anlaufverhalten sollte also verbessert werden.
 
-Es wird versucht, den gesammten Arbeitsbereich eines Prozesses in den Speicher zu bekommen. 
+Es wird versucht, den gesammten Arbeitsbereich eines Prozesses in den Speicher
+zu bekommen.
 
-Idee für die Umsetzung ist also dass der Arbeitsbereich identifiziert werden muss. Dies funktionier auch mit Seitenersetzungsalgorithmen. Es werden nicht nur die letzten k-Speicherzugriffe betrachtet, sondern die Ausführungszeit des Prozesses. Es wird eine Virtuelle Zeit eingeführt, welche ein Prozess zum start initialisiert hat. Der Arbeitsbereich eines Prozesses sind die Seiten, die ein Prozess in den letzten $\tau$ Sekunden benutzr hat. Bei einem Seitenfehler werden die Seiten ausgelagert, die nicht länger zu dem Arbeitsbereich gehören und das R-Bit 0 ist. 
+Idee für die Umsetzung ist also dass der Arbeitsbereich identifiziert werden
+muss. Dies funktionier auch mit Seitenersetzungsalgorithmen. Es werden nicht
+nur die letzten k-Speicherzugriffe betrachtet, sondern die Ausführungszeit des
+Prozesses. Es wird eine Virtuelle Zeit eingeführt, welche ein Prozess zum start
+initialisiert hat. Der Arbeitsbereich eines Prozesses sind die Seiten, die ein
+Prozess in den letzten $\tau$ Sekunden benutzr hat. Bei einem Seitenfehler
+werden die Seiten ausgelagert, die nicht länger zu dem Arbeitsbereich gehören
+und das R-Bit 0 ist.
 
 \subsection{Working-Set-Clock-Algorithmus}
 
 \includegraphics[width=\textwidth]{wsclock.png}
 
-Wenn Seite gefunden wird, die außerhalb des Workingsets ist, wird so lange weitergesucht, bis Seite rausgeschrieben wird, die ersetzt werden kann.
+Wenn Seite gefunden wird, die außerhalb des Workingsets ist, wird so lange
+weitergesucht, bis Seite rausgeschrieben wird, die ersetzt werden kann.
 
 \section{Entwurfskriterien fürs Paging}
 
@@ -257,105 +446,195 @@ Beim einführen von Paging gibt es mehrere dinge die betrachtet werden müssen.
 
 \subsection{Pagefaultfrequency Algorithmus}
 
-Der Pagefaultfrequency Algorithmus (PFF-Algorithmus) versucht, die Seitenfehler pro Sekunde zwischen einem Minimum und Maximum zu behalten.  Die Seitenfehler pro Sekunde sollten nicht zu hoch sein, da sonst die Leistung leidet. Sie sollte aber auch niht zu niedrig sein, da sonst unnötig viel Speicher verschwendet wird.
+Der Pagefaultfrequency Algorithmus (PFF-Algorithmus) versucht, die Seitenfehler
+pro Sekunde zwischen einem Minimum und Maximum zu behalten. Die Seitenfehler
+pro Sekunde sollten nicht zu hoch sein, da sonst die Leistung leidet. Sie
+sollte aber auch niht zu niedrig sein, da sonst unnötig viel Speicher
+verschwendet wird.
 
 \subsection{Lastkontrolle}
 
-Trotz gutem Seitenersetzungsalgorithmus und optimaler globaler Speicherzuteilung können viele Seitenfehler auftreten. Der Arbeitsbereich aller Prozesse ist also größer als der verfügbare Arbeitsspeicher. Um dies zu verhindern, kann ein gesammter Prozess ausgelagert werden, sodass Seitenflattern verhindert wird.
+Trotz gutem Seitenersetzungsalgorithmus und optimaler globaler
+Speicherzuteilung können viele Seitenfehler auftreten. Der Arbeitsbereich aller
+Prozesse ist also größer als der verfügbare Arbeitsspeicher. Um dies zu
+verhindern, kann ein gesammter Prozess ausgelagert werden, sodass
+Seitenflattern verhindert wird.
 
 \subsection{Seitengröße}
 
-Die Seitengröße sollte nicht zufällig gewählt werden. Bei kleinen Seiten gibt es eine sehr kleine interne Fragmentierung, was zu sehr guter Auslastung des Arbeitsspeichers führt. Allerdings wird die Seitentabelle auch sehr groß sein. Bei einer sehr großen Seitengröße ist die Seitentabelle zwar sehr klein und die Seiten können sehr schnell vom Massenspeicher geholt werden, allerdings ist die interne fragmentierung sehr groß wodurch der Arbeitsspeicher nur sehr schlecht genutzt wird.
+Die Seitengröße sollte nicht zufällig gewählt werden. Bei kleinen Seiten gibt
+es eine sehr kleine interne Fragmentierung, was zu sehr guter Auslastung des
+Arbeitsspeichers führt. Allerdings wird die Seitentabelle auch sehr groß sein.
+Bei einer sehr großen Seitengröße ist die Seitentabelle zwar sehr klein und die
+Seiten können sehr schnell vom Massenspeicher geholt werden, allerdings ist die
+interne fragmentierung sehr groß wodurch der Arbeitsspeicher nur sehr schlecht
+genutzt wird.
 
 \subsubsection*{Mathematische Analyse}
 
 \begin{align*}
-    s := \text{Durchschnittliche Prozessgröße in Byte} \\
-    p := \text{Seitengröße in Byte} \\
-    e := \text{Seiteneintragsgröße in Byte} \\
-    \frac{s}{p} := \text{Anzahl der seiten pro Prozess} \\
-    \frac{s \cdot e}{p} := \text{Größe der Seitentabelle} \\
+    s := \text{Durchschnittliche Prozessgröße in Byte}                    \\
+    p := \text{Seitengröße in Byte}                                       \\
+    e := \text{Seiteneintragsgröße in Byte}                               \\
+    \frac{s}{p} := \text{Anzahl der seiten pro Prozess}                   \\
+    \frac{s \cdot e}{p} := \text{Größe der Seitentabelle}                 \\
     \frac{p}{2} := \text{Verschwendeter Raum durch interne Fragmentierun} \\
-    Overhead(p) = \frac{s \cdot e}{p} + \frac{p}{2} \\
+    Overhead(p) = \frac{s \cdot e}{p} + \frac{p}{2}                       \\
     Overhead'(p) = \frac{- s \cdot e}{p^2} + \frac{1}{2} = 0 \Rightarrow p_{opt} = \sqrt{2 \cdot s \cdot e}
 \end{align*}
 
-Für s = 1MB und e = 8 Byte ist also die Optimale Seitengröße 4KB. In heutigen Rechnern ist eine Seitengröße von 512 Byte bis 64KB typisch.
+Für s = 1MB und e = 8 Byte ist also die Optimale Seitengröße 4KB. In heutigen
+Rechnern ist eine Seitengröße von 512 Byte bis 64KB typisch.
 
 \subsection{Memory-Mapped-Dateien}
 
-Ein Prozess kann über einen Systemaufruf eine Datei in einen Teilbereich seines virtuellen Adressraums einblenden. Seiten werden also nicht zum zeitpunkt des Einblendens, sondern nach Anforderung eingelagert.  Wenn der Prozess terminiert oder explizit die Datei wieder ausblendet, werden veränderte Seiten zurück in die Datei auf der Platte geschrieben.
+Ein Prozess kann über einen Systemaufruf eine Datei in einen Teilbereich seines
+virtuellen Adressraums einblenden. Seiten werden also nicht zum zeitpunkt des
+Einblendens, sondern nach Anforderung eingelagert. Wenn der Prozess terminiert
+oder explizit die Datei wieder ausblendet, werden veränderte Seiten zurück in
+die Datei auf der Platte geschrieben.
 
 \subsection{Bereinigungsstrategien}
 
-Beim paging sollten immer einige freie Seitenrahmen vorhanden sein. Der Paging-Dämon ist ein Hintergrundprozess, welcher periodisch aktiv wird. Er Inspiziert den Zustand des Speichers. Mit hilfe eines Seitenersetzungsalgorithmus werden Seiten frei gemacht.
+Beim paging sollten immer einige freie Seitenrahmen vorhanden sein. Der
+Paging-Dämon ist ein Hintergrundprozess, welcher periodisch aktiv wird. Er
+Inspiziert den Zustand des Speichers. Mit hilfe eines
+Seitenersetzungsalgorithmus werden Seiten frei gemacht.
 
 \pagebreak
 
 \section{Implementierungsaspekte}
 
-Beim auftreten eines Seitenfehlers werden die folgenden Ereignisse aus\-ge\-führt:
+Beim auftreten eines Seitenfehlers werden die folgenden Ereignisse
+aus\-ge\-führt:
 
 \begin{enumerate}
     \item Hardware spingt in Betriebssystem Kern und sichert Befehlszähler auf den Stack
-    \item Assembler-Routine sichert Prozesskontext. Routine ruft Be\-triebs\-sys\-tem als Prozedur auf
+    \item Assembler-Routine sichert Prozesskontext. Routine ruft Be\-triebs\-sys\-tem als
+          Prozedur auf
     \item Betriebssystem entdeckt Seitenfehler und ermittelt benötigte Seite
-    \item Nachdem virtuelle Adresse bekannt ist, überprüft Betriebssystem gül\-tig\-keit der Adresse und Schutzattribute\newline Fehler: Signale senden oder Abbrechen \newline kein Fehler: Seitenrahmen aus freier liste, wenn es keine gibt wird eine über den Seitenersetzungsalgorithmus ersetzt.
-    \item Wenn ein Seitenrahmen ausgelagert werden muss und dieser modifiziert wurde, wird dieser weggeschrieben Seite zum Transfer auf die Platte einreihen. Kontextwechsel bis Transfer abgeschlossen. Seite wird als belegt makiert
-    \item Wenn der Seitenrahmen sauber ist, sucht das Betriebssystem die Platt\-en\-ad\-res\-se der Seite. Plattenoperation zum einlagern der Seite wird angestoßen. 
-    \item Plattenunterbrechung signalisiert den Eingang der Seite. Seitentabelle wird aktualisiert. Seitenrahmen wird als normal makiert
-    \item Fehlgeschlagene Instruktion (welche den Pagefault verursacht hat) wird restauriert
-    \item Fehlerhafter Pozess wird wieder zur Ausführung gewählt. Be\-triebs\-sys\-tem kehrt in Assemblerprogramm zurück, das es aufgerufen hat
-    \item Routine stellt Kontext wieder her und kehrt in Benutzerprogramm zurück. Anwendung wird fortgesetzt, als sei kein Fehler passiert
+    \item Nachdem virtuelle Adresse bekannt ist, überprüft Betriebssystem gül\-tig\-keit
+          der Adresse und Schutzattribute\newline Fehler: Signale senden oder Abbrechen
+          \newline kein Fehler: Seitenrahmen aus freier liste, wenn es keine gibt wird
+          eine über den Seitenersetzungsalgorithmus ersetzt.
+    \item Wenn ein Seitenrahmen ausgelagert werden muss und dieser modifiziert wurde,
+          wird dieser weggeschrieben Seite zum Transfer auf die Platte einreihen.
+          Kontextwechsel bis Transfer abgeschlossen. Seite wird als belegt makiert
+    \item Wenn der Seitenrahmen sauber ist, sucht das Betriebssystem die
+          Platt\-en\-ad\-res\-se der Seite. Plattenoperation zum einlagern der Seite wird
+          angestoßen.
+    \item Plattenunterbrechung signalisiert den Eingang der Seite. Seitentabelle wird
+          aktualisiert. Seitenrahmen wird als normal makiert
+    \item Fehlgeschlagene Instruktion (welche den Pagefault verursacht hat) wird
+          restauriert
+    \item Fehlerhafter Pozess wird wieder zur Ausführung gewählt. Be\-triebs\-sys\-tem
+          kehrt in Assemblerprogramm zurück, das es aufgerufen hat
+    \item Routine stellt Kontext wieder her und kehrt in Benutzerprogramm zurück.
+          Anwendung wird fortgesetzt, als sei kein Fehler passiert
 \end{enumerate}
 
 \subsection{Sicherung von unterbrochenen Befehlen (restaurieren)}
 
-Führt ein Befehl zu einen Seitenfehler, so muss dieser nachdem die Seite geholt wurde, erneut ausgeführt werden. Probleme die hier auftreten könnten werden durch die CPU oder das Betriebssystem gelöst. Ein einziger Befehl kann an mehreren Stellen einen Seitenfehler auslösen, beispielswesie kann \texttt{MOVE.L \#6, 2} an drei Stellen einen Seitenfehler verursachen. Es muss herausgefunden werden, ob der Befehl, der erste Operant oder der zweite Operant den Seitenfehler ausgelöst hat.
+Führt ein Befehl zu einen Seitenfehler, so muss dieser nachdem die Seite geholt
+wurde, erneut ausgeführt werden. Probleme die hier auftreten könnten werden
+durch die CPU oder das Betriebssystem gelöst. Ein einziger Befehl kann an
+mehreren Stellen einen Seitenfehler auslösen, beispielswesie kann
+\texttt{MOVE.L \#6, 2} an drei Stellen einen Seitenfehler verursachen. Es muss
+herausgefunden werden, ob der Befehl, der erste Operant oder der zweite Operant
+den Seitenfehler ausgelöst hat.
 
 \subsection{Sperren von Seiten im Speicher}
 
-Seiten, welche mit \texttt{I/O} verbunden sind, dürfen nicht ausgelagert werden. Gemeinsam genutzte Seiten sollten auch nicht ausgelagert werden, solange sie zu mehr als einem Prozess gehören. Seiten, welche nicht ausgelagert werden sollen, können gesperrt werden. Dies nennt man \textit{Pinning}.
+Seiten, welche mit \texttt{I/O} verbunden sind, dürfen nicht ausgelagert
+werden. Gemeinsam genutzte Seiten sollten auch nicht ausgelagert werden,
+solange sie zu mehr als einem Prozess gehören. Seiten, welche nicht ausgelagert
+werden sollen, können gesperrt werden. Dies nennt man \textit{Pinning}.
 
 \subsection{Hintergrundspeicher}
 
-seiten, welche ausgelagert werden sollen, brauchen bestimmten Platz auf der Platte. Unter Unix gibt es einen Festgelegten Swap-Bereich. Im Speicher wird für jeden Prozess die Position und Größe innerhalb des Swap-Bereichs gestgehalten. Beim Start eines Prozesses wird ein Teil des Swap Bereichs in der Größe des Prozesses reserviert. Mit jedem Prozess ist die Plattenadresse seines Swap-Bereichs verbunden. 
+seiten, welche ausgelagert werden sollen, brauchen bestimmten Platz auf der
+Platte. Unter UNIX gibt es einen Festgelegten Swap-Bereich. Im Speicher wird
+für jeden Prozess die Position und Größe innerhalb des Swap-Bereichs
+gestgehalten. Beim Start eines Prozesses wird ein Teil des Swap Bereichs in der
+Größe des Prozesses reserviert. Mit jedem Prozess ist die Plattenadresse seines
+Swap-Bereichs verbunden.
 
 \includegraphics[width=\textwidth]{hintergrundspeicher.png}
 
-Der festgelegte Swap bereich kann statisch (a) oder dynamisch (b) sein. 
+Der festgelegte Swap bereich kann statisch (a) oder dynamisch (b) sein.
 
-Die Adresse des Swap Bereichs wird errechnet über [Formel von Seite 101 einfügen]
+Die Adresse des Swap Bereichs wird errechnet über [Formel von Seite 101
+einfügen]
 
-Beim Prozessspezifischen Swap-Bereich erhält jeder Prozess seinen eigenen Swap-Bereich. Dieser wird im vorraus nicht reserviert. Für jede einzelne auszulagernde Seite wird ein Block auf der platte für den Prozess reserviert und nach Einlagerung wieder freigegeben. Es ist nicht immer möglich, Swap Partitionen fester Größe zuzuordnen. Normale Dateiein im normalen Datei\-system reservieren Plattenplatz für das Swapping. 
+Beim Prozessspezifischen Swap-Bereich erhält jeder Prozess seinen eigenen
+Swap-Bereich. Dieser wird im vorraus nicht reserviert. Für jede einzelne
+auszulagernde Seite wird ein Block auf der platte für den Prozess reserviert
+und nach Einlagerung wieder freigegeben. Es ist nicht immer möglich, Swap
+Partitionen fester Größe zuzuordnen. Normale Dateiein im normalen Datei\-system
+reservieren Plattenplatz für das Swapping.
 
 \section{Segmentierung}
 
-Bisher wurde der Virtuelle Speicher immer als eindimensionaler Raum von 0 bis max betrachtet. Dieser kann jedoch auch in voneinander unabhängige Adressräume, sogenannte \textit{Segmente} aufgeteilt werden. Die Segmente werden durch eine lineare Sequenz von Adressen adressiert. Die Länge der Segmente kann sich wärend der Ausführung ändern. 
+Bisher wurde der Virtuelle Speicher immer als eindimensionaler Raum von 0 bis
+max betrachtet. Dieser kann jedoch auch in voneinander unabhängige Adressräume,
+sogenannte \textit{Segmente} aufgeteilt werden. Die Segmente werden durch eine
+lineare Sequenz von Adressen adressiert. Die Länge der Segmente kann sich
+wärend der Ausführung ändern.
 
-Da jedes Segment einen eigenen Adressraum bildet, können sie nicht ko\-lli\-die\-ren. Aufgrunddessen können sie unabhängig voneinaner wachsen oder schrumpfen. Eine Adresse im segmentierten Speicher besteht aus zwei Teilen: einer Seg\-ment\-nummer und einer Adresse innerhalb des Segmentes.
+Da jedes Segment einen eigenen Adressraum bildet, können sie nicht
+ko\-lli\-die\-ren. Aufgrunddessen können sie unabhängig voneinaner wachsen oder
+schrumpfen. Eine Adresse im segmentierten Speicher besteht aus zwei Teilen:
+einer Seg\-ment\-nummer und einer Adresse innerhalb des Segmentes.
 
 \subsection{Vorteile von Segmentierung}
 
-Die Segmentierung vereinfacht die gemeinsame Nutzung von Programmcode oder daten durch mehrere Prozesse. Unterschiedliche Segmente eines Pro\-gramms können individuell geschützt werden. Beispielsweise kann der Pro\-gramm\-code als Read-Only deklariert werden, wärend die Daten als Read-Write deklariert wird.
+Die Segmentierung vereinfacht die gemeinsame Nutzung von Programmcode oder
+daten durch mehrere Prozesse. Unterschiedliche Segmente eines Pro\-gramms
+können individuell geschützt werden. Beispielsweise kann der Pro\-gramm\-code
+als Read-Only deklariert werden, wärend die Daten als Read-Write deklariert
+wird.
 
 \subsection{Implementierung von Segmentierung}
 
-Im vergleich zu Paging haben die Seiten bei der Segmentierung eine beliebige größe. Das Ein- und Auslagern von Segmenten führt zu Checkerboarding oder Externer Fragmentierung. Um dies zu vermeiden, muss der Speicher verdichtet werden.
+Im vergleich zu Paging haben die Seiten bei der Segmentierung eine beliebige
+größe. Das Ein- und Auslagern von Segmenten führt zu Checkerboarding oder
+Externer Fragmentierung. Um dies zu vermeiden, muss der Speicher verdichtet
+werden.
 
 \subsection{Segmentierung mit Paging (Nicht prüfungsrelevant)}
 
-Eine Kombination von Paging und Segmentierung klingt Sinnvoll, um die Vorteile beider zu nutzen. Der Intel x86-32 Hat dies unterstützt. Es wurden 16K große unabhängige Segmente mit bis zu eine Milliarde 32 Bit Worte genutzt. Der \textit{Local Descriptor Table} (LDT) beschreibt die lokalen Segmente zu jedem Programm. Der \textit{Global Descriptor Table} (GDT) beschreibt Segmente einschließlich dem Betriebssystem selbst. Jedes Programm hat sein eigenes LDT, aber es gibt nur ein GDT das gemeinsam von allen Prozessen genutzt wird.
+Eine Kombination von Paging und Segmentierung klingt Sinnvoll, um die Vorteile
+beider zu nutzen. Der Intel x86-32 Hat dies unterstützt. Es wurden 16K große
+unabhängige Segmente mit bis zu eine Milliarde 32 Bit Worte genutzt. Der
+\textit{Local Descriptor Table} (LDT) beschreibt die lokalen Segmente zu jedem
+Programm. Der \textit{Global Descriptor Table} (GDT) beschreibt Segmente
+einschließlich dem Betriebssystem selbst. Jedes Programm hat sein eigenes LDT,
+aber es gibt nur ein GDT das gemeinsam von allen Prozessen genutzt wird.
 
-Um auf Segmente zuzugreifen, lädt der x86-32 zunächst einen Sektor für das Segment in ein Segmentregister. Jeder Sektor ist eine 16-Bit Zahl. Ein Sektor Bit bestimmt ob das Segment Lokal (LDT) oder global (GDT) ist. Zwei Bits sind für den Schutzcode. 13 Bits enthalten die Nummer des Eintrags in der LDT oder GDT.
+Um auf Segmente zuzugreifen, lädt der x86-32 zunächst einen Sektor für das
+Segment in ein Segmentregister. Jeder Sektor ist eine 16-Bit Zahl. Ein Sektor
+Bit bestimmt ob das Segment Lokal (LDT) oder global (GDT) ist. Zwei Bits sind
+für den Schutzcode. 13 Bits enthalten die Nummer des Eintrags in der LDT oder
+GDT.
 
-Wird ein Sektor in ein Segmentregister geladen, wird der zugehörigte Deskriptor aus der LDT/GDT geholt und in ein Mikroprogrammregister geladen. Der Dateideskriptor besteht aus 8 Bytes und enthält die Basisadresse des Segments, die Größe und weitere Informationen.
+Wird ein Sektor in ein Segmentregister geladen, wird der zugehörigte Deskriptor
+aus der LDT/GDT geholt und in ein Mikroprogrammregister geladen. Der
+Dateideskriptor besteht aus 8 Bytes und enthält die Basisadresse des Segments,
+die Größe und weitere Informationen.
 
 \subsubsection{Zugriff auf Deskriptor}
 
-Die Auswahl der LDT bzw GDT basiert auf dem Selektor Bit. Der Selektor wird in ein internes Register kopiert und die niederwertigen drei Bits werden auf Null gesetzt. LDT- bzw GDT-Adresse wird auf den Wert des Selektors addiert, um Zeiger auf Deskriptor zu erhalten. 
+Die Auswahl der LDT bzw GDT basiert auf dem Selektor Bit. Der Selektor wird in
+ein internes Register kopiert und die niederwertigen drei Bits werden auf Null
+gesetzt. LDT- bzw GDT-Adresse wird auf den Wert des Selektors addiert, um
+Zeiger auf Deskriptor zu erhalten.
 
 \subsubsection{Erzeugung der Physikalsichen Adresse durch verwendung eines (Selektor, Offset)- Paars}
 
-Mikroprogramme erkennen, auf welchem logischen Segment durch verwendung des entsprechenden Segmentregisters zugegriffen wird. Entsprechender Deskriptor wird aus dem internen Registern geholt. Falls der Deskriptor nicht existiert oder ausgelagert ist, löst das Mikroprogramm einen einsprung in das Betriebssystem aus. Die Hardware benutzt das Limit-Feld, um zu überprüfen, ob der Offset innerhalb des Segmentes liegt.
+Mikroprogramme erkennen, auf welchem logischen Segment durch verwendung des
+entsprechenden Segmentregisters zugegriffen wird. Entsprechender Deskriptor
+wird aus dem internen Registern geholt. Falls der Deskriptor nicht existiert
+oder ausgelagert ist, löst das Mikroprogramm einen einsprung in das
+Betriebssystem aus. Die Hardware benutzt das Limit-Feld, um zu überprüfen, ob
+der Offset innerhalb des Segmentes liegt.
 

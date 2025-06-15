@@ -1,100 +1,152 @@
 \chapter{Kapitel 1}
 
-Was ist ein Betriebssystem überhaupt? Diese Frage klingt zunächst trivial, ist aber gar nicht so einfach zu beantworten. Wesentlich einfacher lässt sich die Frage nach den Aufgaben eines Betriebssystems beantworten. Die direkte Interaktion mit Hardware ist oft komplex und wenig intuitiv, besonders wenn es um die Programmierung geht. Aus diesem Grund sollen Betriebssysteme die \textit{Hardwarekomplexität abstrahieren und verbergen}.
+Was ist ein Betriebssystem überhaupt? Diese Frage klingt zunächst trivial, ist
+aber gar nicht so einfach zu beantworten. Wesentlich einfacher lässt sich die
+Frage nach den Aufgaben eines Betriebssystems beantworten. Die direkte
+Interaktion mit Hardware ist oft komplex und wenig intuitiv, besonders wenn es
+um die Programmierung geht. Aus diesem Grund sollen Betriebssysteme die
+\textit{Hardwarekomplexität abstrahieren und verbergen}.
 
-Betriebssysteme haben zudem die Aufgabe, \textit{Ressourcen zu verwalten} und \textit{Interessenkonflikte zu lösen}. Wenn beispielsweise mehrere Benutzer gleichzeitig Dokumente drucken möchten, wäre es ineffizient und chaotisch, alle Seiten gleichzeitig zu drucken. Das Betriebssystem muss hier entscheiden, welcher Druckauftrag zuerst ausgeführt wird und welche warten müssen. Es sorgt also für eine geordnete und faire Zuteilung von Systemressourcen.
+Betriebssysteme haben zudem die Aufgabe, \textit{Ressourcen zu verwalten} und
+\textit{Interessenkonflikte zu lösen}. Wenn beispielsweise mehrere Benutzer
+gleichzeitig Dokumente drucken möchten, wäre es ineffizient und chaotisch, alle
+Seiten gleichzeitig zu drucken. Das Betriebssystem muss hier entscheiden,
+welcher Druckauftrag zuerst ausgeführt wird und welche warten müssen. Es sorgt
+also für eine geordnete und faire Zuteilung von Systemressourcen.
 
 \section{Einführung}
 
 \begin{tikzpicture}[
-    node distance=0mm,
-    box/.style={draw, minimum height=1.1cm, align=center},
-    fullwidthbox/.style={box, minimum width=8cm},
-    thirdwidthbox/.style={box, text width={(8cm/3) - 2*0.3333em}},
-]
+        node distance=0mm,
+        box/.style={draw, minimum height=1.1cm, align=center},
+        fullwidthbox/.style={box, minimum width=8cm},
+        thirdwidthbox/.style={box, text width={(8cm/3) - 2*0.3333em}},
+    ]
 
-% Hardware Layer (von unten nach oben aufbauend)
-\node[fullwidthbox] (geraete) {Physische Geräte};
-\node[fullwidthbox, above=of geraete] (mikro) {Mikroarchitektur};
-\node[fullwidthbox, above=of mikro] (maschine) {Maschinensprache};
+    % Hardware Layer (von unten nach oben aufbauend)
+    \node[fullwidthbox] (geraete) {Physische Geräte};
+    \node[fullwidthbox, above=of geraete] (mikro) {Mikroarchitektur};
+    \node[fullwidthbox, above=of mikro] (maschine) {Maschinensprache};
 
-% Betriebssystem Layer
-\node[fullwidthbox, above=of maschine] (bs) {Betriebssystem};
+    % Betriebssystem Layer
+    \node[fullwidthbox, above=of maschine] (bs) {Betriebssystem};
 
-% Systemprogramme - Teil 2 (Compiler, Editoren, Kommando-Interpreter)
-\node[thirdwidthbox, anchor=south west, at=(bs.north west)] (compiler) {Compiler};
-\node[thirdwidthbox, anchor=south west, at=(compiler.south east)] (editoren) {Editoren};
-\node[thirdwidthbox, anchor=south west, at=(editoren.south east)] (kommando) {Kommando-\\Interpreter};
+    % Systemprogramme - Teil 2 (Compiler, Editoren, Kommando-Interpreter)
+    \node[thirdwidthbox, anchor=south west, at=(bs.north west)] (compiler) {Compiler};
+    \node[thirdwidthbox, anchor=south west, at=(compiler.south east)] (editoren) {Editoren};
+    \node[thirdwidthbox, anchor=south west, at=(editoren.south east)] (kommando) {Kommando-\\Interpreter};
 
-% Anwendungsprogramme Layer
-\node[thirdwidthbox, anchor=south west, at=(compiler.north west)] (banken) {Banken-system};
-\node[thirdwidthbox, anchor=south west, at=(banken.south east)] (flug) {Flug-buchungen};
-\node[thirdwidthbox, anchor=south west, at=(flug.south east)] (web) {Web-Browser};
+    % Anwendungsprogramme Layer
+    \node[thirdwidthbox, anchor=south west, at=(compiler.north west)] (banken) {Banken-system};
+    \node[thirdwidthbox, anchor=south west, at=(banken.south east)] (flug) {Flug-buchungen};
+    \node[thirdwidthbox, anchor=south west, at=(flug.south east)] (web) {Web-Browser};
 
-% Rechte Seitenklammern und Beschriftungen
-\def\braceshift{6mm}
-\def\braceamplitude{5pt}
+    % Rechte Seitenklammern und Beschriftungen
+    \def\braceshift{6mm}
+    \def\braceamplitude{5pt}
 
-% Hardware Klammer
-\coordinate (hw_brace_start_point) at ([xshift=\braceshift]geraete.south east);
-\coordinate (hw_brace_end_point) at ([xshift=\braceshift]maschine.north east);
-\draw [decorate, decoration={calligraphic brace, amplitude=\braceamplitude, mirror}, thick]
+    % Hardware Klammer
+    \coordinate (hw_brace_start_point) at ([xshift=\braceshift]geraete.south east);
+    \coordinate (hw_brace_end_point) at ([xshift=\braceshift]maschine.north east);
+    \draw [decorate, decoration={calligraphic brace, amplitude=\braceamplitude, mirror}, thick]
     (hw_brace_start_point) -- (hw_brace_end_point)
     node[midway, right=6pt, align=left] {Hardware};
 
-% Systemprogramme Klammer
-\coordinate (sys_brace_start_point) at ([xshift=\braceshift]bs.south east);
-\coordinate (sys_brace_end_point) at ([xshift=\braceshift]kommando.north east);
-\draw [decorate, decoration={calligraphic brace, amplitude=\braceamplitude, mirror}, thick]
+    % Systemprogramme Klammer
+    \coordinate (sys_brace_start_point) at ([xshift=\braceshift]bs.south east);
+    \coordinate (sys_brace_end_point) at ([xshift=\braceshift]kommando.north east);
+    \draw [decorate, decoration={calligraphic brace, amplitude=\braceamplitude, mirror}, thick]
     (sys_brace_start_point) -- (sys_brace_end_point)
     % Label "System-programme" noch weiter nach oben verschoben mit pos=0.9
     node[midway, right=6pt, align=left] {System-programme};
 
-% Anwendungsprogramme Klammer
-\coordinate (app_brace_start_point) at ([xshift=\braceshift]web.south east);
-\coordinate (app_brace_end_point) at ([xshift=\braceshift]web.north east);
-\draw [decorate, decoration={calligraphic brace, amplitude=\braceamplitude, mirror}, thick]
+    % Anwendungsprogramme Klammer
+    \coordinate (app_brace_start_point) at ([xshift=\braceshift]web.south east);
+    \coordinate (app_brace_end_point) at ([xshift=\braceshift]web.north east);
+    \draw [decorate, decoration={calligraphic brace, amplitude=\braceamplitude, mirror}, thick]
     (app_brace_start_point) -- (app_brace_end_point)
     node[midway, right=6pt, align=left] {Anwendungs-programme};
 
 \end{tikzpicture}
 
-Die Abbildung 1.1 illustriert den schichtweisen Aufbau eines typischen Rechnersystems. Ganz unten befindet sich die Hardware-Ebene, die aus den physischen Geräten (z.B. CPU, Speicher, Festplatten), der Mikroarchitektur und der Maschinensprache besteht. Direkt darüber liegt das Betriebssystem. Es bildet die Schnittstelle zwischen der Hardware und der darüberliegenden Software. Auf dem Betriebssystem setzen die Systemprogramme auf. Dazu gehören Werkzeuge wie Compiler, Editoren und Kommando-Interpreter, die für die Entwicklung und Ausführung von Software notwendig sind. Die oberste Schicht bilden die Anwendungsprogramme, wie beispielsweise Bankensysteme, Flugbuchungssysteme oder Web-Browser, mit denen der Endbenutzer interagiert. Diese hierarchische Struktur ermöglicht eine klare Trennung der Zuständigkeiten und Abstraktionsebenen.
+Die Abbildung 1.1 illustriert den schichtweisen Aufbau eines typischen
+Rechnersystems. Ganz unten befindet sich die Hardware-Ebene, die aus den
+physischen Geräten (z.B. CPU, Speicher, Festplatten), der Mikroarchitektur und
+der Maschinensprache besteht. Direkt darüber liegt das Betriebssystem. Es
+bildet die Schnittstelle zwischen der Hardware und der darüberliegenden
+Software. Auf dem Betriebssystem setzen die Systemprogramme auf. Dazu gehören
+Werkzeuge wie Compiler, Editoren und Kommando-Interpreter, die für die
+Entwicklung und Ausführung von Software notwendig sind. Die oberste Schicht
+bilden die Anwendungsprogramme, wie beispielsweise Bankensysteme,
+Flugbuchungssysteme oder Web-Browser, mit denen der Endbenutzer interagiert.
+Diese hierarchische Struktur ermöglicht eine klare Trennung der Zuständigkeiten
+und Abstraktionsebenen.
 
 \subsection{Betriebssystemarten}
 
-Man unterscheidet verschiedene Arten von Betriebssystemen anhand ihrer primären Einsatzgebiete und Funktionsweisen. Zu den grundlegenden Kategorien gehören:
+Man unterscheidet verschiedene Arten von Betriebssystemen anhand ihrer primären
+Einsatzgebiete und Funktionsweisen. Zu den grundlegenden Kategorien gehören:
 
 \begin{itemize}
-\item \textbf{Dialogsysteme:} Diese Systeme sind auf die kontinuierliche Interaktion mit dem Benutzer ausgelegt. Sie stellen eine grafische Benutzeroberfläche (GUI) oder eine Kommandozeilenschnittstelle (CLI) bereit und ermöglichen eine direkte Steuerung und Rückmeldung. Typische Beispiele sind Desktop-Betriebssysteme wie Windows, macOS und Linux-Distributionen sowie mobile Betriebssysteme wie Android und iOS.
-\item \textbf{Stapelverarbeitungssysteme (Batch-Betriebssysteme):} Bei diesen Systemen wird eine Folge von Aufträgen (Jobs), die jeweils aus Programmen und Daten bestehen, sequenziell und ohne direkte Benutzerinteraktion abgearbeitet. Früher wurden solche Systeme häufig mit Lochkartenstapeln gespeist. Heutzutage finden sich Prinzipien der Stapelverarbeitung noch in der automatisierten Ausführung von Hintergrundaufgaben oder bei der Verarbeitung großer Datenmengen.
-\item \textbf{Echtzeitbetriebssysteme (Real-Time Operating Systems, RTOS):} Diese Betriebssysteme sind darauf spezialisiert, Aufgaben innerhalb garantierter Zeitgrenzen (Deadlines) zu erledigen. Sie sind essenziell für zeitkritische Anwendungen, bei denen eine verspätete Reaktion zu Systemversagen oder schwerwiegenden Fehlern führen kann. Beispiele hierfür sind Steuerungsanlagen in der Industrie (z.B. bei Robotern, in der Prozessautomatisierung), medizinische Geräte oder Systeme in der Luft- und Raumfahrt.
+    \item \textbf{Dialogsysteme:} Diese Systeme sind auf die kontinuierliche Interaktion mit dem Benutzer ausgelegt. Sie stellen eine grafische Benutzeroberfläche (GUI) oder eine Kommandozeilenschnittstelle (CLI) bereit und ermöglichen eine direkte Steuerung und Rückmeldung. Typische Beispiele sind Desktop-Betriebssysteme wie Windows, macOS und Linux-Distributionen sowie mobile Betriebssysteme wie Android und iOS.
+    \item \textbf{Stapelverarbeitungssysteme (Batch-Betriebssysteme):} Bei diesen Systemen wird eine Folge von Aufträgen (Jobs), die jeweils aus Programmen und Daten bestehen, sequenziell und ohne direkte Benutzerinteraktion abgearbeitet. Früher wurden solche Systeme häufig mit Lochkartenstapeln gespeist. Heutzutage finden sich Prinzipien der Stapelverarbeitung noch in der automatisierten Ausführung von Hintergrundaufgaben oder bei der Verarbeitung großer Datenmengen.
+    \item \textbf{Echtzeitbetriebssysteme (Real-Time Operating Systems, RTOS):} Diese Betriebssysteme sind darauf spezialisiert, Aufgaben innerhalb garantierter Zeitgrenzen (Deadlines) zu erledigen. Sie sind essenziell für zeitkritische Anwendungen, bei denen eine verspätete Reaktion zu Systemversagen oder schwerwiegenden Fehlern führen kann. Beispiele hierfür sind Steuerungsanlagen in der Industrie (z.B. bei Robotern, in der Prozessautomatisierung), medizinische Geräte oder Systeme in der Luft- und Raumfahrt.
 \end{itemize}
-
 
 \subsection{Was ist ein Betriebssystem?}
 
-Ein Betriebssystem (BS) ist eine Softwareschicht, die grundlegende, hardwarespezifische Dienste bereitstellt und diese für Anwendungsprogramme abstrahiert und zugänglich macht. Eine zentrale Aufgabe des Betriebssystems ist der Schutz von Benutzerdaten und Systemressourcen vor unberechtigtem Zugriff und fehlerhaften Operationen. Es \textit{verwaltet den Speicher} effizient, indem es Speicherbereiche Prozessen zuweist und wieder freigibt, und schützt den Speicherbereich eines Prozesses vor Zugriffen durch andere Prozesse oder Benutzer.
+Ein Betriebssystem (BS) ist eine Softwareschicht, die grundlegende,
+hardwarespezifische Dienste bereitstellt und diese für Anwendungsprogramme
+abstrahiert und zugänglich macht. Eine zentrale Aufgabe des Betriebssystems ist
+der Schutz von Benutzerdaten und Systemressourcen vor unberechtigtem Zugriff
+und fehlerhaften Operationen. Es \textit{verwaltet den Speicher} effizient,
+indem es Speicherbereiche Prozessen zuweist und wieder freigibt, und schützt
+den Speicherbereich eines Prozesses vor Zugriffen durch andere Prozesse oder
+Benutzer.
 
-Darüber hinaus ist ein Betriebssystem für die \textit{Fehlererkennung und -behandlung} zuständig. Solche Fehler können vielfältiger Natur sein:
+Darüber hinaus ist ein Betriebssystem für die \textit{Fehlererkennung und
+    -behandlung} zuständig. Solche Fehler können vielfältiger Natur sein:
 \begin{itemize}
-\item \textbf{Hardwarefehler:} z.B. Defekte an Speicherbausteinen, Festplattenausfälle oder Probleme mit Peripheriegeräten.
-\item \textbf{Programmierfehler:} z.B. Fehler in der Zeigerarithmetik, die zu Speicherzugriffsverletzungen (Segmentation Faults) führen, oder Endlosschleifen.
-\item \textbf{Verletzungen von Zugriffsrechten:} z.B. der Versuch eines Prozesses, auf eine Datei oder einen Speicherbereich zuzugreifen, für den keine Berechtigung besteht.
-\item \textbf{Rechenfehler:} z.B. eine Division durch Null oder arithmetische Überläufe.
+    \item \textbf{Hardwarefehler:} z.B. Defekte an Speicherbausteinen, Festplattenausfälle oder Probleme mit Peripheriegeräten.
+    \item \textbf{Programmierfehler:} z.B. Fehler in der Zeigerarithmetik, die zu Speicherzugriffsverletzungen (Segmentation Faults) führen, oder Endlosschleifen.
+    \item \textbf{Verletzungen von Zugriffsrechten:} z.B. der Versuch eines Prozesses, auf eine Datei oder einen Speicherbereich zuzugreifen, für den keine Berechtigung besteht.
+    \item \textbf{Rechenfehler:} z.B. eine Division durch Null oder arithmetische Überläufe.
 \end{itemize}
 
 \subsubsection{Prozesssynchronisation und -kommunikation}
 
-In modernen Betriebssystemen werden oft mehrere Aufgaben scheinbar gleichzeitig durch verschiedene Prozesse oder Threads ausgeführt. Um eine korrekte und effiziente Zusammenarbeit dieser nebenläufigen Ausführungseinheiten zu gewährleisten, müssen Mechanismen zur \textit{Prozesssynchronisation} und \textit{Prozesskommunikation} (Inter-Process Communication, IPC) bereitgestellt werden. Die Synchronisation dient dazu, den Zugriff auf gemeinsame Ressourcen zu koordinieren und Race Conditions zu vermeiden. Die Kommunikation ermöglicht den Austausch von Daten und Steuersignalen zwischen Prozessen. Gängige Techniken hierfür umfassen beispielsweise Pipes, Shared Memory, Nachrichtenwarteschlangen und Semaphore. Eine detailliertere Betrachtung dieser Mechanismen ist für das Verständnis komplexer Systeminteraktionen unerlässlich.
+In modernen Betriebssystemen werden oft mehrere Aufgaben scheinbar gleichzeitig
+durch verschiedene Prozesse oder Threads ausgeführt. Um eine korrekte und
+effiziente Zusammenarbeit dieser nebenläufigen Ausführungseinheiten zu
+gewährleisten, müssen Mechanismen zur \textit{Prozesssynchronisation} und
+\textit{Prozesskommunikation} (Inter-Process Communication, IPC) bereitgestellt
+werden. Die Synchronisation dient dazu, den Zugriff auf gemeinsame Ressourcen
+zu koordinieren und Race Conditions zu vermeiden. Die Kommunikation ermöglicht
+den Austausch von Daten und Steuersignalen zwischen Prozessen. Gängige
+Techniken hierfür umfassen beispielsweise Pipes, Shared Memory,
+Nachrichtenwarteschlangen und Semaphore. Eine detailliertere Betrachtung dieser
+Mechanismen ist für das Verständnis komplexer Systeminteraktionen unerlässlich.
 
-Ein Betriebssystem ermöglicht zudem den \textit{Mehrbenutzerbetrieb} (Multi-User-System), sodass mehrere Benutzer gleichzeitig und voneinander isoliert am selben Rechnersystem arbeiten können. Es unterstützt ferner die \textit{parallele bzw. quasi-parallele Ausführung mehrerer Programme} (Multitasking/Multiprogramming), wodurch die Systemauslastung optimiert und die wahrgenommene Produktivität der Benutzer gesteigert wird.
+Ein Betriebssystem ermöglicht zudem den \textit{Mehrbenutzerbetrieb}
+(Multi-User-System), sodass mehrere Benutzer gleichzeitig und voneinander
+isoliert am selben Rechnersystem arbeiten können. Es unterstützt ferner die
+\textit{parallele bzw. quasi-parallele Ausführung mehrerer Programme}
+(Multitasking/Multiprogramming), wodurch die Systemauslastung optimiert und die
+wahrgenommene Produktivität der Benutzer gesteigert wird.
 
 \subsection{Das Betriebssystem als erweiterte Maschine - Top-down-Sicht}
 
-Die Architektur der meisten Rechner ist sehr simpel, aber gleichzeitig sehr komplex zu programmieren. Insbesondere \texttt{I/O} Geräte, welche ca. 450 Seiten spezifikation für Programmierer der S-ATA Schnittstelle haben. Treiber helfen, Hardwarekomplexität zu verbergen. Es wird eine Abstraktion der Maschine auf hohem Niveau (z.B. Festplatte enthält Dateien und keine Spuren und Sektoren) erwartet.
+Die Architektur der meisten Rechner ist sehr simpel, aber gleichzeitig sehr
+komplex zu programmieren. Insbesondere \texttt{I/O} Geräte, welche ca. 450
+Seiten spezifikation für Programmierer der S-ATA Schnittstelle haben. Treiber
+helfen, Hardwarekomplexität zu verbergen. Es wird eine Abstraktion der Maschine
+auf hohem Niveau (z.B. Festplatte enthält Dateien und keine Spuren und
+Sektoren) erwartet.
 
-Das Betriebssystem soll dem Benutzer eine virtuelle Maschine präsentieren, welche eine schöne schnittstelle ist und die hässliche hardware hinter dieser verbirgt. Nutzer des Betriebssystems können dann in drei Arten unterteilt werden
+Das Betriebssystem soll dem Benutzer eine virtuelle Maschine präsentieren,
+welche eine schöne schnittstelle ist und die hässliche hardware hinter dieser
+verbirgt. Nutzer des Betriebssystems können dann in drei Arten unterteilt
+werden
 
 \subsubsection*{Systemprogrammierer}
 Ein Systemprogrammierer entwickelt, wartet und erweitert Komponenten des Betriebssystems selbst oder systemnahe Software wie Compiler und Treiber. Die Perspektive ist stark hardwareorientiert und erfordert detaillierte Kenntnisse der Betriebssysteminterna sowie exzellente Hardwarekenntnisse.
@@ -107,9 +159,14 @@ Ein Anwender interagiert mit den vom Anwendungsprogrammierer erstellten Programm
 
 \subsection{Betriebssystem als Ressourcenverwalter - Bottom-up-Sicht}
 
-Das Betriebssystem verwaltet alle komplexen Bestandteile eines komplexen Systems. Bei modernen Betriebssystemen können mehrere Programme von mehreren Nutzern gleichzeitig im Speicher sein und ausgeführt werden. Das Betriebssystem weist die Ressourcen den Programmen zu und schützt Programme und Nutzer vor gegenseitiger störung.
+Das Betriebssystem verwaltet alle komplexen Bestandteile eines komplexen
+Systems. Bei modernen Betriebssystemen können mehrere Programme von mehreren
+Nutzern gleichzeitig im Speicher sein und ausgeführt werden. Das Betriebssystem
+weist die Ressourcen den Programmen zu und schützt Programme und Nutzer vor
+gegenseitiger störung.
 
-Die Ressourcenverwaltung beinhaltet mehrfach genutzte Betriebsmittel. Hier unterscheidet man zwischen zwei:
+Die Ressourcenverwaltung beinhaltet mehrfach genutzte Betriebsmittel. Hier
+unterscheidet man zwischen zwei:
 
 \begin{enumerate}
     \item \textbf{Zeitlich mehrfach genutzte}: Programme/Anwender wechseln sich bei der Benutzung ab, z.B. CPU, Drucker.
@@ -119,18 +176,23 @@ Die Ressourcenverwaltung beinhaltet mehrfach genutzte Betriebsmittel. Hier unter
 \section{Geschickte der Betriebssysteme (nur passiv prüfungsrelevant)}
 
 \begin{quotation}
-I think there is a world market for maybe five computers.
+    I think there is a world market for maybe five computers.
 
-\medskip
-\noindent
---- Thomas J. Watson, Sr., president of IBM, 1943
+    \medskip
+    \noindent
+    --- Thomas J. Watson, Sr., president of IBM, 1943
 \end{quotation}
 \textit{Eine der berühmtesten Fehleinschätzungen der Technologiegeschichte, die eindrucksvoll zeigt, wie rasant und unvorhersehbar sich die Computerwelt entwickeln sollte.}
 
-
 \subsection{1. Generation: Die Ära der Elektronenröhren (ca. 1940er - Mitte 1950er)}
 
-Die Computer der ersten Generation waren durch den Einsatz von \textbf{Elektronenröhren} und \textbf{Steckkarten} charakterisiert. Diese Systeme waren sehr groß dimensioniert und beanspruchten oft \textbf{gesamte Räume}. Die Programmierung erfolgte entweder direkt in \textbf{absoluter Maschinensprache} oder erforderte eine physische \textbf{Anpassung der Verdrahtung} für unterschiedliche Aufgaben. Ein \textbf{Betriebssystem war nicht vorhanden}; die Interaktion erfolgte unmittelbar mit der Hardware.
+Die Computer der ersten Generation waren durch den Einsatz von
+\textbf{Elektronenröhren} und \textbf{Steckkarten} charakterisiert. Diese
+Systeme waren sehr groß dimensioniert und beanspruchten oft \textbf{gesamte
+    Räume}. Die Programmierung erfolgte entweder direkt in \textbf{absoluter
+    Maschinensprache} oder erforderte eine physische \textbf{Anpassung der
+    Verdrahtung} für unterschiedliche Aufgaben. Ein \textbf{Betriebssystem war
+    nicht vorhanden}; die Interaktion erfolgte unmittelbar mit der Hardware.
 
 Zu den bekannten Systemen dieser Ära zählten:
 \begin{itemize}
@@ -144,7 +206,15 @@ Diese frühen Systeme bildeten die technologische Grundlage für nachfolgende En
 
 \subsection{2. Generation: Der Übergang zum Transistor (ca. Mitte 1950er - Mitte 1960er)}
 
-Die zweite Computergeneration war durch den Einsatz von \textbf{Transistoren} anstelle von Elektronenröhren gekennzeichnet. Dies führte zu einer signifikanten \textbf{Steigerung der Zuverlässigkeit}, einer \textbf{Reduktion des Energieverbrauchs} und ermöglichte erstmals die \textbf{Serienfertigung} von Computern. In dieser Phase etablierte sich eine zunehmende \textbf{Arbeitsteilung} zwischen Entwicklung, Betrieb (Operator), Programmierung und Wartung. Die Rechner, oft als \textbf{Großrechner (Mainframes)} bezeichnet, wurden in speziell \textbf{klimatisierten Räumen} betrieben und von Fachpersonal bedient.
+Die zweite Computergeneration war durch den Einsatz von \textbf{Transistoren}
+anstelle von Elektronenröhren gekennzeichnet. Dies führte zu einer
+signifikanten \textbf{Steigerung der Zuverlässigkeit}, einer \textbf{Reduktion
+    des Energieverbrauchs} und ermöglichte erstmals die \textbf{Serienfertigung}
+von Computern. In dieser Phase etablierte sich eine zunehmende
+\textbf{Arbeitsteilung} zwischen Entwicklung, Betrieb (Operator),
+Programmierung und Wartung. Die Rechner, oft als \textbf{Großrechner
+    (Mainframes)} bezeichnet, wurden in speziell \textbf{klimatisierten Räumen}
+betrieben und von Fachpersonal bedient.
 
 \subsubsection*{Programmverarbeitung und -bedienung:}
 Der typische Arbeitsablauf gestaltete sich wie folgt:
@@ -153,15 +223,30 @@ Der typische Arbeitsablauf gestaltete sich wie folgt:
     \item Übertragung des Programmcodes auf Lochkartenstapel.
     \item Abgabe der Lochkarten im Eingabebereich des Rechenzentrums.
     \item Der Operator führte den Job (das Programm) auf dem Mainframe aus.
-    \item Nach Beendigung des Jobs holte der Operator die gedruckte Ausgabe (Listings) ab und stellte sie im Ausgabebereich bereit.
+    \item Nach Beendigung des Jobs holte der Operator die gedruckte Ausgabe (Listings) ab
+          und stellte sie im Ausgabebereich bereit.
     \item Das Ergebnis konnte vom Programmierer im Ausgabebereich abgeholt werden.
 \end{enumerate}
 
 \subsection{3. Generation: Integrierte Schaltkreise und Mehrprogrammbetrieb (ca. Mitte 1960er - Mitte 1970er)}
 
-Die dritte Generation war geprägt durch die Einführung von \textbf{Integrierten Schaltkreisen (ICs)} und dem Konzept des \textbf{Mehrprogrammbetriebs}. Ein bedeutendes Beispiel hierfür ist das \textbf{IBM System/360}, dessen Architektur es erlaubte, dieselbe Software und dasselbe Betriebssystem (OS/360) auf unterschiedlich leistungsfähigen Modellen der Serie einzusetzen. Computer dieser Generation fanden breite Anwendung sowohl in \textbf{technisch-wissenschaftlichen als auch in kommerziellen Bereichen}. Das Betriebssystem \textbf{OS/360}, bestehend aus Millionen Zeilen Assemblercode, war komplex und dementsprechend fehleranfällig. Dennoch wurden in dieser Zeit Schlüsseltechnologien für Betriebssysteme eingeführt, darunter \textbf{Multiprogrammierung}, \textbf{Spooling} und \textbf{Timesharing}.
+Die dritte Generation war geprägt durch die Einführung von \textbf{Integrierten
+    Schaltkreisen (ICs)} und dem Konzept des \textbf{Mehrprogrammbetriebs}. Ein
+bedeutendes Beispiel hierfür ist das \textbf{IBM System/360}, dessen
+Architektur es erlaubte, dieselbe Software und dasselbe Betriebssystem (OS/360)
+auf unterschiedlich leistungsfähigen Modellen der Serie einzusetzen. Computer
+dieser Generation fanden breite Anwendung sowohl in
+\textbf{technisch-wissenschaftlichen als auch in kommerziellen Bereichen}. Das
+Betriebssystem \textbf{OS/360}, bestehend aus Millionen Zeilen Assemblercode,
+war komplex und dementsprechend fehleranfällig. Dennoch wurden in dieser Zeit
+Schlüsseltechnologien für Betriebssysteme eingeführt, darunter
+\textbf{Multiprogrammierung}, \textbf{Spooling} und \textbf{Timesharing}.
 
-Die Zielsetzung war, die CPU-Auslastung zu maximieren und zu verhindern, dass auf \texttt{I/O}-Operationen wartende oder fehlerhafte Programme die Ausführung anderer Prozesse blockieren. Insbesondere bei kommerziellen Anwendungen konnten \texttt{I/O}-Wartezeiten einen erheblichen Anteil (bis zu 80-90\%) der Gesamtverarbeitungszeit ausmachen, was Optimierungsbedarf signalisierte.
+Die Zielsetzung war, die CPU-Auslastung zu maximieren und zu verhindern, dass
+auf \texttt{I/O}-Operationen wartende oder fehlerhafte Programme die Ausführung
+anderer Prozesse blockieren. Insbesondere bei kommerziellen Anwendungen konnten
+\texttt{I/O}-Wartezeiten einen erheblichen Anteil (bis zu 80-90\%) der
+Gesamtverarbeitungszeit ausmachen, was Optimierungsbedarf signalisierte.
 
 \subsubsection*{Multiprogrammierung}
 Der Speicher wurde in mehrere Partitionen unterteilt, wobei jeder Job eine eigene Partition zugewiesen bekam. Wenn ein Job auf den Abschluss einer \texttt{I/O}-Operation wartete, konnte das Betriebssystem die CPU einem anderen, rechenbereiten Job in einer anderen Partition zuweisen. Dies diente der Reduktion von CPU-Leerlaufzeiten.
@@ -169,80 +254,128 @@ Der Speicher wurde in mehrere Partitionen unterteilt, wobei jeder Job eine eigen
 \subsubsection*{Spooling (Simultaneous Peripheral Operation On-Line)}
 Zur Effizienzsteigerung wurden Ein- und Ausgabedaten auf schnellen Festplatten zwischengespeichert, anstatt sie direkt von langsameren Peripheriegeräten (z.B. Lochkartenleser, Drucker) zu verarbeiten. Eingabejobs wurden von Lochkarten auf die Platte gelesen und in einer Warteschlange verwaltet. Nach Beendigung eines Jobs konnte der nächste Job aus der Warteschlange von der Platte in eine freie Speicherpartition geladen und gestartet werden. Ausgabedaten wurden ebenfalls auf die Platte geschrieben und konnten zeitversetzt gedruckt werden, was die CPU entlastete.
 
-Trotz dieser Fortschritte konnten die Antwortzeiten bei Systemen der dritten Generation, insbesondere bei fehlerhaften Programmen, mehrere Stunden betragen. Timesharing bot hier eine Lösung für interaktivere Nutzungsszenarien.
+Trotz dieser Fortschritte konnten die Antwortzeiten bei Systemen der dritten
+Generation, insbesondere bei fehlerhaften Programmen, mehrere Stunden betragen.
+Timesharing bot hier eine Lösung für interaktivere Nutzungsszenarien.
 
 \subsubsection*{Timesharing}
 Timesharing stellte eine Variante der Multiprogrammierung dar, die Nutzern den direkten Online-Zugriff über Terminals ermöglichte. Da die CPU-Auslastung bei interaktiver Nutzung aufgrund häufiger Wartezeiten auf Benutzereingaben (\texttt{I/O}) tendenziell gering war, teilte das Betriebssystem die verfügbare CPU-Zeit in kurze Zeitscheiben (Time Slices) auf und wies diese reihum den verschiedenen aktiven Jobs zu. Durch den schnellen Wechsel zwischen den Jobs entstand für den einzelnen Nutzer der Eindruck, interaktiv mit einem dedizierten System zu arbeiten.
 
 \subsection{4. Generation: Mikroprozessoren und Personal Computer (ca. Mitte 1970er - heute)}
 
-Die vierte Generation ist durch die Entwicklung und Verbreitung von \textbf{Personal Computern (PCs)} gekennzeichnet, deren Realisierung maßgeblich durch die Verfügbarkeit von \textbf{Mikroprozessoren} (gesamte CPUs auf einem Chip) ermöglicht wurde. Dies leitete die Ära des individuellen Computings ein. Es entstand eine Vielzahl von Betriebssystemen für diese neue Rechnerklasse:
+Die vierte Generation ist durch die Entwicklung und Verbreitung von
+\textbf{Personal Computern (PCs)} gekennzeichnet, deren Realisierung maßgeblich
+durch die Verfügbarkeit von \textbf{Mikroprozessoren} (gesamte CPUs auf einem
+Chip) ermöglicht wurde. Dies leitete die Ära des individuellen Computings ein.
+Es entstand eine Vielzahl von Betriebssystemen für diese neue Rechnerklasse:
 
 \begin{itemize}
     \item \textbf{CP/M:} Ein frühes Standardbetriebssystem für Mikrocomputer.
     \item \textbf{DOS (später MS-DOS):} Bildete die Grundlage für IBM-PC-kompatible Systeme und erlangte weite Verbreitung.
-    \item \textbf{Apple-Betriebssysteme (z.B. Apple II OS, klassisches Mac OS):} Leisteten Pionierarbeit bei der Einführung grafischer Benutzeroberflächen (GUIs). Neuere Versionen (macOS) basieren auf Unix.
+    \item \textbf{Apple-Betriebssysteme (z.B. Apple II OS, klassisches Mac OS):} Leisteten Pionierarbeit bei der Einführung grafischer Benutzeroberflächen (GUIs). Neuere Versionen (macOS) basieren auf UNIX.
     \item \textbf{Microsoft Windows:} Entwickelte sich zu einem dominierenden Betriebssystem im Desktop-Bereich mit zahlreichen Versionen (z.B. Windows 95, XP, 7, 10, 11).
-    \item \textbf{Unix und seine Derivate (z.B. Linux, FreeBSD):} Etablierten sich als leistungsfähige Betriebssysteme für Server, Workstations und Multiuser-Umgebungen, oft mit grafischen Oberflächen basierend auf dem X Window System (X11) oder neueren Technologien.
+    \item \textbf{UNIX und seine Derivate (z.B. Linux, FreeBSD):} Etablierten sich als leistungsfähige Betriebssysteme für Server, Workstations und Multiuser-Umgebungen, oft mit grafischen Oberflächen basierend auf dem X Window System (X11) oder neueren Technologien.
 \end{itemize}
 
 \subsection{5. Generation: Mobile Endgeräte und Vernetzung (ca. späte 1990er - Zukunft)}
 
-Die fünfte Generation ist charakterisiert durch den Aufstieg \textbf{mobiler Computer} und eine \textbf{zunehmende Vernetzung}. Die Entwicklung von \textbf{Smartphones} ab Mitte der 1990er Jahre ermöglichte mobile Konnektivität und ständigen Informationszugriff. Parallel dazu verlagerte sich der Forschungsschwerpunkt verstärkt auf Bereiche wie \textbf{künstliche Intelligenz (KI)}, \textbf{Parallelverarbeitung} und die Entwicklung neuer Computerarchitekturen. Diese Entwicklungsphase ist weiterhin im Gange.
+Die fünfte Generation ist charakterisiert durch den Aufstieg \textbf{mobiler
+    Computer} und eine \textbf{zunehmende Vernetzung}. Die Entwicklung von
+\textbf{Smartphones} ab Mitte der 1990er Jahre ermöglichte mobile Konnektivität
+und ständigen Informationszugriff. Parallel dazu verlagerte sich der
+Forschungsschwerpunkt verstärkt auf Bereiche wie \textbf{künstliche Intelligenz
+    (KI)}, \textbf{Parallelverarbeitung} und die Entwicklung neuer
+Computerarchitekturen. Diese Entwicklungsphase ist weiterhin im Gange.
 
 \section{Betriebssystemfamilien}
 
-Der Gedanke eines Betriebssystems für alle Anwendungsfälle klingt erst einaml gut, ist aber in der realität eine sehr schlechte Idee. Unterschiedliche anwendungsfälle haben unterschiedliche anforderungen an das Betriebssystem, dementsprechend gibt es für jede Betriebssystemfamilie auch eigene Betriebssysteme.
+Der Gedanke eines Betriebssystems für alle Anwendungsfälle klingt erst einaml
+gut, ist aber in der realität eine sehr schlechte Idee. Unterschiedliche
+anwendungsfälle haben unterschiedliche anforderungen an das Betriebssystem,
+dementsprechend gibt es für jede Betriebssystemfamilie auch eigene
+Betriebssysteme.
 
 \subsection{Betriebssysteme für Großrechner}
 
-Systeme enormer größe, welche ein ganzen Raum beanspruchen können. Sie besitzen eine enorme \texttt{I/O} Leistung mit 1000 oder mehr Festplatten. Ihr ziel ist es, viele Prozesse gleichzeitig auszuführen. Hier sind typische Betriebssysteme OS/390, OS/360 und Linux.
+Systeme enormer größe, welche ein ganzen Raum beanspruchen können. Sie besitzen
+eine enorme \texttt{I/O} Leistung mit 1000 oder mehr Festplatten. Ihr ziel ist
+es, viele Prozesse gleichzeitig auszuführen. Hier sind typische Betriebssysteme
+OS/390, OS/360 und Linux.
 
 \subsection{Betriebssysteme für Server}
 
-Server sollen viele Nutzer gleichzeitig über das Netzwerk bedienen. Sie verteilen ihre Hardware und Software Ressourcen an die Anwender. Server können Druck-, Datei-, und/oder Web-Dienste anbieren. Typische Betriebssysteme sind hier Solaris, FreeBSD, Linux und Windows Server 20xx.
+Server sollen viele Nutzer gleichzeitig über das Netzwerk bedienen. Sie
+verteilen ihre Hardware und Software Ressourcen an die Anwender. Server können
+Druck-, Datei-, und/oder Web-Dienste anbieren. Typische Betriebssysteme sind
+hier Solaris, FreeBSD, Linux und Windows Server 20xx.
 
 \subsection{Betriebssysteme für Multiprozessorsysteme}
 
-Multiprozessorsysteme sind Rechner mit mehreren Prozessoren. Das größte Problem solcher Rechnern sind Anwendungen, die Prarallelisiert werden müssen. Betriebssysteme sind hier beispielsweise Windows und Linux.
+Multiprozessorsysteme sind Rechner mit mehreren Prozessoren. Das größte Problem
+solcher Rechnern sind Anwendungen, die Prarallelisiert werden müssen.
+Betriebssysteme sind hier beispielsweise Windows und Linux.
 
 \subsection{Betriebssysteme für PCs}
 
-Das Betriebssystem muss bei Betriebssystemen für PCs den Anwender sehr gut unterstützen. Auf PCs wird eine große vielfalt an Anwendungen ausgeführt, wie z.B. Tabellenkalkulation, Textverarbeitung, Spiele uvm. Hier sind Typische Betriebssysteme Linux, FreeBSD, Windows und OS X.
+Das Betriebssystem muss bei Betriebssystemen für PCs den Anwender sehr gut
+unterstützen. Auf PCs wird eine große vielfalt an Anwendungen ausgeführt, wie
+z.B. Tabellenkalkulation, Textverarbeitung, Spiele uvm. Hier sind Typische
+Betriebssysteme Linux, FreeBSD, Windows und OS X.
 
 \subsection{Betriebssysteme für Handheld Computer}
 
-Handheld Computer sind Smartphones, Tablets, PDAs u.ä. Diese Computer besitzen meist Mehrkern-CPUs, Kameras, Sensoren und begrenzten Speicherplatz. Hier werden viele Anwendungen von Drittanbietern installiert $\Rightarrow$ Apps. Übliche Betriebssysteme sind hier Android, ISO und Blackberry OS.
+Handheld Computer sind Smartphones, Tablets, PDAs u.ä. Diese Computer besitzen
+meist Mehrkern-CPUs, Kameras, Sensoren und begrenzten Speicherplatz. Hier
+werden viele Anwendungen von Drittanbietern installiert $\Rightarrow$ Apps.
+Übliche Betriebssysteme sind hier Android, ISO und Blackberry OS.
 
 \subsection{Betriebssysteme für eingebettete Systeme}
 
-Eigebettete Systeme steuern andere Geräte wie z.B. Mikrowellen, TVs, Autos, Waschmaschinen uvm. Der Benutzer darf hier keine eigene Software installieren, dementsprechend wird nur vertrauenswürdige Software ausgeführt. Eingebettete Systeme haben aus diesem keine Schutzmechanismen zwischen den Anwendungen, da dies den Entwurf des Betriebssystems vereinfacht. Beispiele sind hier Embedded Linux, UNX und VxWorks.
+Eigebettete Systeme steuern andere Geräte wie z.B. Mikrowellen, TVs, Autos,
+Waschmaschinen uvm. Der Benutzer darf hier keine eigene Software installieren,
+dementsprechend wird nur vertrauenswürdige Software ausgeführt. Eingebettete
+Systeme haben aus diesem keine Schutzmechanismen zwischen den Anwendungen, da
+dies den Entwurf des Betriebssystems vereinfacht. Beispiele sind hier Embedded
+Linux, UNX und VxWorks.
 
 \subsection{Betriebssysteme für Sensorknoten}
 
-Sensorknoten sind winzige, aber vollständige Rechner mit Sensoren. Sie werden beispielsweise für Gebäudeschutz und Temperaturmessungen eingesetzt. Auf ihnen ist eine kleine Anzahl an Programmen Vorinstalliert. Ein Typisches Betriebssystem ist hier TinyOS.
+Sensorknoten sind winzige, aber vollständige Rechner mit Sensoren. Sie werden
+beispielsweise für Gebäudeschutz und Temperaturmessungen eingesetzt. Auf ihnen
+ist eine kleine Anzahl an Programmen Vorinstalliert. Ein Typisches
+Betriebssystem ist hier TinyOS.
 
 \subsection{Echtzeitbetriebssysteme}
 
-Bei Echtzeitbetriebssystemen wird zwischen \textit{Harten Echtzeitbetriebssystemen} und \textit{Weichen Echtzeitbetriebssystemen} unterschieden.
+Bei Echtzeitbetriebssystemen wird zwischen \textit{Harten
+    Echtzeitbetriebssystemen} und \textit{Weichen Echtzeitbetriebssystemen}
+unterschieden.
 
 \subsubsection*{Harte Echtzeitbetriebssysteme}
 
-Bei Harten Echtzeitbetriebssystemen müssen die Aktionen innerhalb eines bestimmten Zeitraumes passieren. Wenn die Aktion verzögert kommt, wird das Betriebssystem ein Fehler werfen und den Prozess beenden. Hier gibt es kein Schutz zwischen den Software Teilen. Ein Beispiel wäre eCos.
+Bei Harten Echtzeitbetriebssystemen müssen die Aktionen innerhalb eines
+bestimmten Zeitraumes passieren. Wenn die Aktion verzögert kommt, wird das
+Betriebssystem ein Fehler werfen und den Prozess beenden. Hier gibt es kein
+Schutz zwischen den Software Teilen. Ein Beispiel wäre eCos.
 
 \subsubsection*{Weiche Echtzeitbetriebssysteme}
 
-Bei Weichen Echtzeitbetriebssystemen ist ein verpassen der Deadline nicht erwünscht, wird aber tolleriert. Dies ist beispielsweise bei Audio- und Multimediasystemen der Fall. Ein Beispiel hier ist OS9.
+Bei Weichen Echtzeitbetriebssystemen ist ein verpassen der Deadline nicht
+erwünscht, wird aber tolleriert. Dies ist beispielsweise bei Audio- und
+Multimediasystemen der Fall. Ein Beispiel hier ist OS9.
 
 \subsection{Betriebssysteme für Smartcards}
 
-Smartcards haben meist die Größe von Kreditkarten. Sie besitzen einen eigenen Prozessor und werden meist über Induktion mit dem Lesegerät mit Strom versorgt. Sie haben meist nur eine oder wenige Funktionen.
+Smartcards haben meist die Größe von Kreditkarten. Sie besitzen einen eigenen
+Prozessor und werden meist über Induktion mit dem Lesegerät mit Strom versorgt.
+Sie haben meist nur eine oder wenige Funktionen.
 
 \section{Betriebssystemkonzepte}
 
 \subsection{Prozesse}
 
-Der Prozess ist das Schlüsselkonzept in allen Betriebssystemen. Ein Prozess ist ein Programm in ausführung. Zu einem Prozess gehören:
+Der Prozess ist das Schlüsselkonzept in allen Betriebssystemen. Ein Prozess ist
+ein Programm in ausführung. Zu einem Prozess gehören:
 
 \begin{itemize}
     \item Das ausführbare Programm
@@ -255,43 +388,64 @@ Der Prozess ist das Schlüsselkonzept in allen Betriebssystemen. Ein Prozess ist
     \item Zusatzinformationen
 \end{itemize}
 
-Diese Informationen werden auch Kontext genannt. Ein Prozess besteht aus Adressraum und einem Prozesstabelleneintrag.
+Diese Informationen werden auch Kontext genannt. Ein Prozess besteht aus
+Adressraum und einem Prozesstabelleneintrag.
 
 \subsection{Speicherverwaltung}
 
-Das Betriebssystem versorgt Prozesse mit Betriebsmitteln. Es schützt Prozesse vor gegenseitigen Storungen. Dies erfolgt durch \nameref{swapping} und \nameref{paging}.
+Das Betriebssystem versorgt Prozesse mit Betriebsmitteln. Es schützt Prozesse
+vor gegenseitigen Storungen. Dies erfolgt durch \nameref{swapping} und
+\nameref{paging}.
 
 \subsubsection{Swapping}
 
-Das Speicherabbild eines Prozesses besteht aus Segmenten. Diese sind die Speicherzellen zwischen Anfangs- und End-Adresse. Diese Segmente können bei bedarf vollständig in den Massenspeicher übertragen werden. Die Anzahl dieser Segmente ist idr. klein, wohingegen die größe dieser Segmente beliebig groß sein kann.
+Das Speicherabbild eines Prozesses besteht aus Segmenten. Diese sind die
+Speicherzellen zwischen Anfangs- und End-Adresse. Diese Segmente können bei
+bedarf vollständig in den Massenspeicher übertragen werden. Die Anzahl dieser
+Segmente ist idr. klein, wohingegen die größe dieser Segmente beliebig groß
+sein kann.
 
 \subsubsection{Paging}
 
-Das Speicherabbild eines Prozesses besteht aus Seiten. Alle Seiten haben eine feste größe (z.B. $4KB$). Es müssen nur die benötigten Seiten im Speicher sein. Die Seitengröße ist idr. klein, wohingegen die Anzahl der Seiten größ ist. Nicht geladene Seiten, welche Addressiert werden, müssen nachgeladen werden.
+Das Speicherabbild eines Prozesses besteht aus Seiten. Alle Seiten haben eine
+feste größe (z.B. $4KB$). Es müssen nur die benötigten Seiten im Speicher sein.
+Die Seitengröße ist idr. klein, wohingegen die Anzahl der Seiten größ ist.
+Nicht geladene Seiten, welche Addressiert werden, müssen nachgeladen werden.
 
 \subsubsection{Virtuelle Adressen}
 
-Jeder Prozess darf alle Adressen verwenden, die auf grund der Hardware möglich sind. Unabhängig von der größe des Arbeitsspeichers. Beispielsweise kann der Adressraum $256TB$ betragen, wärend der tatsächliche Physikalischer Speicher nur $8GB$ beträgt.
+Jeder Prozess darf alle Adressen verwenden, die auf grund der Hardware möglich
+sind. Unabhängig von der größe des Arbeitsspeichers. Beispielsweise kann der
+Adressraum $256TB$ betragen, wärend der tatsächliche Physikalischer Speicher
+nur $8GB$ beträgt.
 
 \subsubsection{Reele Adressierung}
 
-Jeder Prozess bekommt sein eigenen Speichersegment zugewiesen. Dieser darf nur die Adressen in seinem Segment benutzen. Bei mehreren Prozessen wird der Hauptspeicher in mehreren Segmente aufgeteilt. Jeder Prozess bekommt sein eigenes Segment. 
+Jeder Prozess bekommt sein eigenen Speichersegment zugewiesen. Dieser darf nur
+die Adressen in seinem Segment benutzen. Bei mehreren Prozessen wird der
+Hauptspeicher in mehreren Segmente aufgeteilt. Jeder Prozess bekommt sein
+eigenes Segment.
 
 \subsection{Dateien}
 
-Dateien verbergen die Einzelheiten des Platten bzw. \texttt{I/O} Zugriffs. \textbf{Daten $\neq$ Dateien}, Daten sind der Inhalt von Dateien.
+Dateien verbergen die Einzelheiten des Platten bzw. \texttt{I/O} Zugriffs.
+\textbf{Daten $\neq$ Dateien}, Daten sind der Inhalt von Dateien.
 
-Um eine Datei zu lesen oder zu schreiben, muss sie geöffnet werden. Vor dem öffnen einer Datei werden berechtigungen überprüft. Der Systemaufruf zum Datei öffnen liefert einen ganzzahligen Dateideskriptor oder einen Fehlercode. 
+Um eine Datei zu lesen oder zu schreiben, muss sie geöffnet werden. Vor dem
+öffnen einer Datei werden berechtigungen überprüft. Der Systemaufruf zum Datei
+öffnen liefert einen ganzzahligen Dateideskriptor oder einen Fehlercode.
 
-Eingebundene Dateisysteme wie beispielsweise Wechseldatenträger müssen vor verwendung gemounted werden. Nach dem mount sind Dateien teil der Dateihierarchie. 
+Eingebundene Dateisysteme wie beispielsweise Wechseldatenträger müssen vor
+verwendung gemounted werden. Nach dem mount sind Dateien teil der
+Dateihierarchie.
 
 \subsubsection{Verzeichnisse}
 
-Verzeichnisse gruppieren Dateien. Diese geben den Ort der Datei an. 
+Verzeichnisse gruppieren Dateien. Diese geben den Ort der Datei an.
 
 \subsubsection{\texttt{I/O} unter UNIX}
 
-\texttt{I/O} Geräte sind unter Unix Spezialdateien. Auf sie kann über den selben Systemaufruf wie für Dateien zugegriffen werden. Diese Spezialdateien liegen im \texttt{/dev}-Verzeichnis. Es gibt zwei Arten von Spezialdateien
+\texttt{I/O} Geräte sind unter UNIX Spezialdateien. Auf sie kann über den selben Systemaufruf wie für Dateien zugegriffen werden. Diese Spezialdateien liegen im \texttt{/dev}-Verzeichnis. Es gibt zwei Arten von Spezialdateien
 
 \begin{enumerate}
     \item \textbf{Blockdateien}: Blockdateien sammeln Daten in einem Block, bis dieser voll ist. Blöcke haben eine feste größe. Diese sind beispielsweise Plattenlaufwerke oder Bandgeräte
@@ -300,11 +454,20 @@ Verzeichnisse gruppieren Dateien. Diese geben den Ort der Datei an.
 
 \subsection{Schutzmechanismen}
 
-Dateien müssen vor anderen Personen am Computer vor unbefugten Zugriff geschützt werden. Unter UNIX besteht der Schutz Code aus \textit{drei Bits}: \texttt{rwx}. Diese stehen für Eigentümer, Gruppe und Andere. Beispielsweise steht der Schutzcode \texttt{rwxr--x}, dass der Eigentümer Lesen, Schreiben und Ausführen, Mitglieder der Gruppe nur Lesen und Ausführen, und andere nur Ausführen dürfen.
+Dateien müssen vor anderen Personen am Computer vor unbefugten Zugriff
+geschützt werden. Unter UNIX besteht der Schutz Code aus \textit{drei Bits}:
+\texttt{rwx}. Diese stehen für Eigentümer, Gruppe und Andere. Beispielsweise
+steht der Schutzcode \texttt{rwxr--x}, dass der Eigentümer Lesen, Schreiben und
+Ausführen, Mitglieder der Gruppe nur Lesen und Ausführen, und andere nur
+Ausführen dürfen.
 
 \subsection{Shell}
 
-Die Shell dient zur ausführung von Benutzerkomandos. Die Shell ist \textit{kein} teil des Betriebssystems. Sie wird nach dem Login gestartet und nutzt ein Terminal als standard Ein- und Ausgabe. Bei der eingabe erzeugt die Shell einen Kindprozess und wartet auf dessen Terminierung. Nachdem der erzeugte Kindprozess terminiert, wird wieder zur Eingabe aufgefordert.
+Die Shell dient zur ausführung von Benutzerkomandos. Die Shell ist
+\textit{kein} teil des Betriebssystems. Sie wird nach dem Login gestartet und
+nutzt ein Terminal als standard Ein- und Ausgabe. Bei der eingabe erzeugt die
+Shell einen Kindprozess und wartet auf dessen Terminierung. Nachdem der
+erzeugte Kindprozess terminiert, wird wieder zur Eingabe aufgefordert.
 
 \subsection*{Typische Shell-Funktionen}
 
@@ -317,11 +480,15 @@ Die Shell dient zur ausführung von Benutzerkomandos. Die Shell ist \textit{kein
 
 \subsubsection{Pipes}
 
-Eine Pipe ist eine Pseudodatei. Sie verbindet zwei Prozesse miteinander, sodass diese miteinander kommunizieren werden. Vor der Kommunikation zwischen Dateien muss der Kanal eingerichtet werden. Der Prozess A schickt seine Ausgabe als eingabe an den Prozess B.
+Eine Pipe ist eine Pseudodatei. Sie verbindet zwei Prozesse miteinander, sodass
+diese miteinander kommunizieren werden. Vor der Kommunikation zwischen Dateien
+muss der Kanal eingerichtet werden. Der Prozess A schickt seine Ausgabe als
+eingabe an den Prozess B.
 
 \subsection{Systemaufrufe}
 
-Ein Systemaufruf ist ein Dienst des Betriebssystems, welche durch Benutzerprogramme angefordert werden können. Ablauf eines Systemaufrufes:
+Ein Systemaufruf ist ein Dienst des Betriebssystems, welche durch
+Benutzerprogramme angefordert werden können. Ablauf eines Systemaufrufes:
 
 \begin{enumerate}
     \item Programm ruft eine Biliotheksprozedur auf
@@ -333,44 +500,63 @@ Ein Systemaufruf ist ein Dienst des Betriebssystems, welche durch Benutzerprogra
     \item Rücksprung aus Prozedur
 \end{enumerate}
 
-Bibliotheksprozeduren kommen von dem Compiler. Durch eine Bibliotheksprozedur werden details der Trap-Funktion versteckt. 
+Bibliotheksprozeduren kommen von dem Compiler. Durch eine Bibliotheksprozedur
+werden details der Trap-Funktion versteckt.
 
 \section{Betriebssystemstrukturen}
 
-Strukturen von Betriebssystemen beleuchten den inneren Aufbau von Betriebssystemen.
+Strukturen von Betriebssystemen beleuchten den inneren Aufbau von
+Betriebssystemen.
 
 \subsection{Monolithische Systeme}
 
-Das Betriebssystem läuft als einziges Programm im Kernmodus. Das Betriebssystem besteht aus einer Menge von Prozeduren. Jede Prozedur ist für jede andere sichtbar. Monolithische Systeme sind sehr effizient, können unter Umständen jedoch sehr kkomplex werden. Ein Fehler in einer Prozedur kann zum Absturz des gesammten Betriebssystems führen.
+Das Betriebssystem läuft als einziges Programm im Kernmodus. Das Betriebssystem
+besteht aus einer Menge von Prozeduren. Jede Prozedur ist für jede andere
+sichtbar. Monolithische Systeme sind sehr effizient, können unter Umständen
+jedoch sehr kkomplex werden. Ein Fehler in einer Prozedur kann zum Absturz des
+gesammten Betriebssystems führen.
 
 \subsection{Geschichtete Systeme}
 
-Betriebssystem besteht aus einer Hierarchie von Schichten. Jede Ebene ruft nächsttiefere auf. Tiefere Ebenen werden vor Übergriffen durch höhere geschützt. Die unterste Ebene teilt die CPU zu.
+Betriebssystem besteht aus einer Hierarchie von Schichten. Jede Ebene ruft
+nächsttiefere auf. Tiefere Ebenen werden vor Übergriffen durch höhere
+geschützt. Die unterste Ebene teilt die CPU zu.
 
 \begin{tabular}{ | c | c | }
     \hline
-    Schicht & Funktion \\\hline
-    5 & Der Operator \\
-    4 & Benutzerprogramm \\
-    3 & \texttt{I/O}-Verwaltung \\
-    2 & Operator-Prozess-Kommunikation \\
-    1 & Speicherverwaltung \\
-    0 & Prozessorzuteulung und Multiprogrammierung \\\hline
+    Schicht & Funktion                                   \\\hline
+    5       & Der Operator                               \\
+    4       & Benutzerprogramm                           \\
+    3       & \texttt{I/O}-Verwaltung                    \\
+    2       & Operator-Prozess-Kommunikation             \\
+    1       & Speicherverwaltung                         \\
+    0       & Prozessorzuteulung und Multiprogrammierung \\\hline
 \end{tabular}
 
 \subsection{Mikrokerne}
 
-Monolitische Betriebssysteme bestehen aus ca. $5 Millionen$ Code Zeilen. Man rechnet mit 2 bis 10 Fehlern pro $1000$ Zeilen Code. Dies führt zu $10000$ bis $50000$ Fehlern. Programmfehler im Kern führen zu Absturz des gesamten Programms. Deshalb wird bei Mikrokernen das Betriebssystem in kleine Modelle aufgeteilt. Nur ein Modul wird im Kernmodus ausgeführt. Stürzt beispielsweise ein Gerätetreiber ab, so stürzt nicht das gesamte System ab. 
+Monolitische Betriebssysteme bestehen aus ca. $5 Millionen$ Code Zeilen. Man
+rechnet mit 2 bis 10 Fehlern pro $1000$ Zeilen Code. Dies führt zu $10000$ bis
+$50000$ Fehlern. Programmfehler im Kern führen zu Absturz des gesamten
+Programms. Deshalb wird bei Mikrokernen das Betriebssystem in kleine Modelle
+aufgeteilt. Nur ein Modul wird im Kernmodus ausgeführt. Stürzt beispielsweise
+ein Gerätetreiber ab, so stürzt nicht das gesamte System ab.
 
 \subsection{Client-Server-Modell}
 
-Server stellt Dienste zur verfügung, der Client nutzt diese. Client und Server können über Nachrichtenaustausch miteinander kommunizieren. Client und Server können, müssen aber nicht auf einer maschine sein.
+Server stellt Dienste zur verfügung, der Client nutzt diese. Client und Server
+können über Nachrichtenaustausch miteinander kommunizieren. Client und Server
+können, müssen aber nicht auf einer maschine sein.
 
 \subsection{Virtuelle Maschinen}
 \label{virtuelle_maschine}
 
-Virtuelle Maschinen sind durch Programme realisierte Duplikate von realen Mschinen. Sie werden durch den \textit{VM-Monitor} realisiert.
+Virtuelle Maschinen sind durch Programme realisierte Duplikate von realen
+Mschinen. Sie werden durch den \textit{VM-Monitor} realisiert.
 
 \subsection{Exokerne}
 
-Jedem Benutzer wird eine Teilmenge der Betriebsmittel zugeteilt. Auf der untersten Ebene läuft ein Programm im Kernmodus, der Exokern. Dieser belegt den einzelnen Maschinen ressourcen und passtauf, dass keine \nameref{virtuelle_maschine} die Ressourcen einer anderer nutzt.
+Jedem Benutzer wird eine Teilmenge der Betriebsmittel zugeteilt. Auf der
+untersten Ebene läuft ein Programm im Kernmodus, der Exokern. Dieser belegt den
+einzelnen Maschinen ressourcen und passtauf, dass keine
+\nameref{virtuelle_maschine} die Ressourcen einer anderer nutzt.
