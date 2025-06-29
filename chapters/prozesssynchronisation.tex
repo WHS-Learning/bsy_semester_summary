@@ -1,0 +1,125 @@
+\chapter{Prozesssynchronisation (Sehr klausurrelevant!)}
+
+\section{Zwei Prozesse synchronisieren}
+
+\begin{lstlisting}[language=C]
+#define TRUE 1
+typedef int semaphore;// semaphore_A: Initial auf 1, damit processA zuerst starten kann
+
+semaphore semaphore_A = 1;// semaphore_B: Initial auf 0, damit processB warten muss
+semaphore semaphore_B = 0;
+
+void processA () {
+    while (TRUE) {
+        down(&semaphore_A); // Warte, bis A an der Reihe ist
+        // Kritischer Abschnitt oder Arbeit von Prozess A
+        up(&semaphore_B);   // Signalisiere, dass B an der Reihe ist
+    }
+}
+
+void processB () {
+    while (TRUE) {
+        down(&semaphore_B); // Warte, bis B an der Reihe ist
+        // Kritischer Abschnitt oder Arbeit von Prozess B
+        up(&semaphore_A);   // Signalisiere, dass A an der Reihe ist
+    }
+}
+\end{lstlisting}
+
+\newpage
+
+\section{Drei Prozesse synchronisieren}
+
+\begin{lstlisting}[language=C]
+#define TRUE 1
+
+typedef int semaphore;
+
+semaphore semaphore_A_to_B = 1;
+semaphore semaphore_B_to_C = 0;
+semaphore semaphore_C_to_A = 0;
+
+void processA() {
+    while (TRUE) {
+        down(&semaphore_A_to_B);
+        // Kritischer Abschnitt oder Arbeit von Prozess A
+        up(&semaphore_B_to_C);
+    }
+}
+
+void processB() {
+    while (TRUE) {
+        down(&semaphore_B_to_C);        
+        // Kritischer Abschnitt oder Arbeit von Prozess B      
+        up(&semaphore_C_to_A);
+    }
+}
+
+void processC() {
+    while (TRUE) {
+        down(&semaphore_C_to_A);
+        // Kritischer Abschnitt oder Arbeit von Prozess C
+        up(&semaphore_A_to_B);
+    }
+}
+\end{lstlisting}
+
+\newpage
+
+\section{Prozesse synchronisieren nach Reihenfolge}
+
+Reihenfolge hier: $P_1, P_2, P_1, P_2, P_3, P_1, P_2, P_1, P_2, P_3 \dots$
+
+\begin{lstlisting}[language=C]
+#define TRUE 1
+
+typedef int semaphore;
+
+semaphore semaphore_P1_can_run = 1;
+semaphore semaphore_P2_can_run = 0;
+semaphore semaphore_P3_can_run = 0;
+semaphore semaphore_P1_P2_counter_mutex = 1;
+
+int P1_P2_count = 0; 
+
+void processP1() {
+    while (TRUE) {
+        down(&semaphore_P1_can_run);
+        // Kritischer Abschnitt von Prozess P1
+        down(&semaphore_P1_P2_counter_mutex);
+        P1_P2_count++;
+        if (P1_P2_count < 2) {
+            up(&semaphore_P2_can_run);
+        } else {
+            up(&semaphore_P3_can_run);
+        }
+        up(&semaphore_P1_P2_counter_mutex);
+    }
+}
+
+void processP2() {
+    while (TRUE) {
+        down(&semaphore_P2_can_run);
+        // Kritischer Abschnitt von Prozess P2
+        down(&semaphore_P1_P2_counter_mutex);
+        P1_P2_count++;
+        if (P1_P2_count < 2) {
+            up(&semaphore_P1_can_run);
+        } else {
+            up(&semaphore_P3_can_run);
+        }
+        up(&semaphore_P1_P2_counter_mutex);
+    }
+}
+
+void processP3() {
+    while (TRUE) {
+        down(&semaphore_P3_can_run);
+        // Kritischer Abschnitt von Prozess P3
+        down(&semaphore_P1_P2_counter_mutex);
+        P1_P2_count = 0;
+        up(&semaphore_P1_can_run);
+        up(&semaphore_P1_P2_counter_mutex);
+    }
+}
+\end{lstlisting}

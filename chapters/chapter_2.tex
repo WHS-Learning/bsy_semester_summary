@@ -322,7 +322,7 @@ mehreren CPUs wird jeder Semaphor durch Sperrvariablen unter verwendung von
 
 \begin{lstlisting}[language=C]
 # define N 100
-typedef int semaphore
+# typedef int semaphore
 semaphore mutex = 1;
 semaphore empty = N;
 semaphore full = 0;
@@ -671,7 +671,7 @@ Deadlock.
 #define THINKING 0
 #define HUNGRY 1
 #define EATING 2
-typedef int semaphore;
+#typedef int semaphore;
 int state[N];
 semaphore mutex = 1;
 semaphore s[N];
@@ -719,7 +719,7 @@ die Datenbank zugreifen, egal ob lesend oder schreibend.
 \subsubsection{Eine Lösung des Leser-Schreiber Problems}
 
 \begin{lstlisting}[language=C]
-typedef int semaphore;
+#typedef int semaphore;
 semaphore mutex = 1;
 semaphore db = 1;
 int rc = 0;
